@@ -1,0 +1,227 @@
+%%   This needs a lot more comments!
+%%
+%%Creator: CNRI Grail, HTML2PS.PY by the Holy Grailers.
+%%   Modified underlining to user 'UnderLineString' from pg. 140 of
+%%	POSTSCRIPT BY EXAMPLE, by Henry McGilton and Mary Campione,
+%%	pub. by Addison Wesley, 1992.
+%%   Adapted from the Public Domain NCSA Mosaic,
+%%   Postscript templates by Ameet Raval & Frans van Hoesel
+%%Pages: (atend)
+%%EndComments
+%%BeginProlog
+%%
+%%   Add an error handler to support limited debugging:
+%%
+/SimpleErrorDict 20 dict def
+SimpleErrorDict begin
+  /arraytype { pop (--array--) } def
+  /booleantype { { (true) }{ (false) } ifelse } def
+  /dicttype { pop (--dictionary--) } def
+  /filetype { pop (--file--) } def
+  /fonttype { pop (--font--) } def
+  /integertype { =string cvs } def
+  /marktype { pop (--mark--) } def
+  /nametype { (/) exch =string cvs GrCatstrings } def
+  /nulltype { pop (--null--) } def
+  /operatortype { pop (--operator--) } def
+  /packedarraytype { pop (--packed array--) } def
+  /realtype { =string cvs } def
+  /savetype { pop (--save type--) } def
+  /stringtype { (\() exch GrCatstrings (\)) GrCatStrings } def
+end % SimpleErrorDict
+
+/ErrBaseLine 732 def
+/ErrNewLine {
+  /ErrBaseLine ErrBaseLine 12 sub def
+  300 ErrBaseLine moveto
+} def
+/ErrDisplayValue { %% value ErrDisplayValue -
+  dup type SimpleErrorDict exch get exec
+  show ErrNewLine
+} def
+
+errordict begin
+  /handleerror {
+  systemdict begin
+    userdict begin
+      initgraphics
+      /Courier findfont 10 scalefont setfont
+      ErrNewLine (PostScript problem: ) show
+      $error /errorname get =string cvs show
+      ErrNewLine (Command: ) show
+      $error /command get =string cvs show
+      ErrNewLine (Stack:) show
+      ErrNewLine
+      $error /ostack get aload
+      length {
+	ErrDisplayValue
+      } repeat
+      systemdict /showpage get exec
+      end % userdict
+    end % systemdict
+  } def
+end % errordict
+%%
+%%   General PostScript stuff:
+%%
+/D {def} def
+/E {exch} D
+/M {moveto} D				%% absolute move
+/S {show} D				%% show a string
+/R {rmoveto} D				%% relative move
+/RL {rlineto} D				%% line to relative coords
+
+%% "carriage return" to the current indentation;
+%%   no vertical motion
+/CR { %% - CR -
+  grIndentMargin currentpoint E pop M
+} D
+
+%% display an underlined string:
+/U { %% string U -
+  currentfont dup /FontMatrix get E /FontInfo get dup
+  /UnderlinePosition get E /UnderlineThickness get
+  3 -1 roll dtransform /UnderThick E D /UnderPos E D
+  currentpoint pop /Start_x E D S currentpoint /End_y E D /End_x E D
+  0 UnderPos R Start_x End_x sub 0 RL currentlinewidth
+  UnderThick setlinewidth stroke setlinewidth End_x End_y M
+} D
+
+%% horizontal rule:
+/HR { %% width x length HR -
+  /l E D /s E D gsave currentpoint s E M pop setlinewidth
+  l 0 RL stroke grestore
+} D
+
+%% change the font size:
+/SF { %% fontname pointsize SF -
+  scalefont setfont
+} D
+/Symbol dup findfont D
+/ZapfDingbats dup findfont D
+
+%% display a string right-justified at the current vertical position
+/EDGE { %% string EDGE -
+  0 currentpoint E pop M dup stringwidth pop GrImageWidth exch sub 0 R S
+} D
+
+%% new page
+/NP { %% indentmargin fontname pointsize pageno NP -
+  pop
+  GrRotation 0.0 ne {
+    GrRotation 90.0 eq {
+      GrPaperHeight 0.0
+    }{
+      GrRotation 180.0 eq {
+        GrPaperWidth GrPaperHeight
+      }{
+        %% 270 degrees
+	0.0 GrPaperWidth
+      } ifelse
+    } ifelse
+    translate
+    GrRotation rotate
+  } if
+  GrLeftMargin GrPaperHeight GrTopMargin sub translate scalfac dup scale
+  % this is where we consume the arguments
+  SF
+  /grIndentMargin exch D
+  % and position to start the page
+  0 0 M CR
+} D
+
+%% end page
+/EP { %% url title pageno EP -
+  dup 2 mod 0 eq {
+    %% odd pages
+    GrDecorateEvenPage
+  }{
+    %% even pages
+    GrDecorateOddPage
+  } ifelse
+  restore showpage
+} D
+
+/GrDecorateOddPage { %% url title pageno GrDecorateOddPage -
+  =string cvs /TempPageno E D
+  % get a flag indicating that one of the top two string is non-empty
+  2 copy length E length or 0 ne {
+    FONTV 8 SF
+    0 GrHeaderPos M S			% display title
+    0 GrFooterPos M S			% display URL
+  }{
+    pop pop
+    0 GrFooterPos M
+  } ifelse
+  % display the page number
+  FONTVI 12 SF
+  (Page ) TempPageno GrCatstrings EDGE
+} D
+
+/GrDecorateEvenPage { %% url title pageno GrDecorateEvenPage -
+  GrDecorateOddPage
+} D
+
+%% strcat() for PostScript!
+/GrCatstrings { %% first second GrCatstrings third
+					% STACK:
+  E /TempCatFirst E D			% second
+  dup length TempCatFirst length add	% second #3
+  string dup				% second third third
+  TempCatFirst length 3 index		% second third third #1 second
+  putinterval				% second third
+  dup TempCatFirst 0 E			% second third third 0 first
+  putinterval				% second third
+  E pop					% third
+} D
+
+%% PSinit_latin1 - handle ISO encoding
+%%
+%% print out initializing PostScript text for ISO Latin1 font encoding
+%% This code is copied from the Idraw program (from Stanford's InterViews
+%% package), courtesy of Steinar Kjaernsr|d, steinar@ifi.uio.no
+%%
+/reencodeISO {
+  dup dup findfont dup length dict begin {
+    1 index /FID ne { def }{ pop pop } ifelse
+  } forall
+  /Encoding ISOLatin1Encoding D
+  currentdict end definefont
+} D
+
+/ISOLatin1Encoding 
+[
+  /.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef
+  /.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef
+  /.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef
+  /.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef
+  /space/exclam/quotedbl/numbersign/dollar/percent/ampersand/quoteright
+  /parenleft/parenright/asterisk/plus/comma/minus/period/slash
+  /zero/one/two/three/four/five/six/seven/eight/nine/colon/semicolon
+  /less/equal/greater/question/at/A/B/C/D/E/F/G/H/I/J/K/L/M/N
+  /O/P/Q/R/S/T/U/V/W/X/Y/Z/bracketleft/backslash/bracketright
+  /asciicircum/underscore/quoteleft/a/b/c/d/e/f/g/h/i/j/k/l/m
+  /n/o/p/q/r/s/t/u/v/w/x/y/z/braceleft/bar/braceright/asciitilde
+  /.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef
+  /.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef/.notdef
+  /.notdef/dotlessi/grave/acute/circumflex/tilde/macron/breve
+  /dotaccent/dieresis/.notdef/ring/cedilla/.notdef/hungarumlaut
+  /ogonek/caron/space/exclamdown/cent/sterling/currency/yen/brokenbar
+  /section/dieresis/copyright/ordfeminine/guillemotleft/logicalnot
+  /hyphen/registered/macron/degree/plusminus/twosuperior/threesuperior
+  /acute/mu/paragraph/periodcentered/cedilla/onesuperior/ordmasculine
+  /guillemotright/onequarter/onehalf/threequarters/questiondown
+  /Agrave/Aacute/Acircumflex/Atilde/Adieresis/Aring/AE/Ccedilla
+  /Egrave/Eacute/Ecircumflex/Edieresis/Igrave/Iacute/Icircumflex
+  /Idieresis/Eth/Ntilde/Ograve/Oacute/Ocircumflex/Otilde/Odieresis
+  /multiply/Oslash/Ugrave/Uacute/Ucircumflex/Udieresis/Yacute
+  /Thorn/germandbls/agrave/aacute/acircumflex/atilde/adieresis
+  /aring/ae/ccedilla/egrave/eacute/ecircumflex/edieresis/igrave
+  /iacute/icircumflex/idieresis/eth/ntilde/ograve/oacute/ocircumflex
+  /otilde/odieresis/divide/oslash/ugrave/uacute/ucircumflex/udieresis
+  /yacute/thorn/ydieresis
+] D
+
+%%
+%% end of header.ps
+%%

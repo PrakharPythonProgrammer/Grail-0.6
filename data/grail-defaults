@@ -1,0 +1,322 @@
+# For format info, see 'htdocs/info/extending/prefs.html'.
+#
+#
+# Landmarks (various well-known URLs built into Grail)
+#
+# Empty home page, for user to set in their own preferences file:
+landmarks--home-page:
+# Default home page if home-page is empty:
+landmarks--default-home-page:	grail:data/about.html
+# Help pages root (used by preferences dialogs)
+landmarks--grail-help-root:	http://grail.cnri.reston.va.us/grail/
+#
+# Browser defaults
+#
+browser--default-height:	40
+browser--default-width:		80
+browser--load-images:		1
+browser--show-logo:		1
+browser--load-initial-page:	1
+# Empty initial geometry implies manual placement with most window managers:
+browser--initial-geometry:
+browser--show-splash:		1
+browser--smooth-scroll-hack:	0
+browser--enable-pil:		1
+browser--license-agreed-to:	0
+#
+# Help menu contents
+#
+# - Entries are two lines.
+# - First line is label to be displayed in menu.
+# - Second line is URL to be loaded.
+# - If the label is a single hyphen, this creates a menu separator
+#   and no second line should be given.
+#
+browser--help-menu:
+	About Grail
+		grail:data/about.html
+	Grail License
+		grail:LICENSE
+	-
+	Grail Home Page
+		http://grail.cnri.reston.va.us/grail/
+	Python Home Page
+		http://www.python.org/
+	Python Software Activity (PSA)
+		http://www.python.org/psa/
+	CNRI Home Page
+		http://www.cnri.reston.va.us/
+#
+# Presentation defaults
+#
+presentation--show-link-titles:	1
+presentation--hover-on-links:	1
+presentation--hover-foreground: #604055
+presentation--hover-underline: 1
+presentation--message-font:
+	-*-helvetica-medium-r-normal-*-*-100-100-*-*-*-*-*
+#
+# Viewer stylesheets:
+#
+# System will revert to this style if a bad one is selected:
+styles--default-size: medium
+styles--default-family: helvetica
+# Identify current one:
+styles--size: medium
+styles--family: helvetica
+# Size ranges:
+styles--all-sizes: tiny small medium large huge
+# Font families:
+# (To include another font, add an entry to all-families and include a
+#  'styles--<font>-italic' entry designating the char for the italic stroke,
+#  eg "i" for times and "o" for helvetica and courier, and also the
+#  designator for bold as 'styles--<font>-bold'.  Typically this is "bold"
+#  but for lucidabright is "demibold".)
+styles--all-families: helvetica lucida lucidabright times courier
+# Font style oblique designator, according to font family:
+styles--times-italic: i
+styles--helvetica-italic: o
+styles--courier-italic: o
+styles--lucida-italic: i
+styles--lucidabright-italic: i
+# Font style bold designator, according to font family:
+styles--times-bold: bold
+styles--helvetica-bold: bold
+styles--courier-bold: bold
+styles--lucida-bold: bold
+styles--lucidabright-bold: demibold
+# Font size names which will be associated with tags in the text widget:
+styles--size-names:
+	default h1_b h2_b h3_b h4_b h5_b h6_b
+	_b  _i  _b_i _tt _tt_i _tt_b _tt_b_i
+# Font size values, corresponding to the tag names:
+styles--tiny-sizes:
+	10      18   12   10   8    8    8
+	10  10  10   10  10    10    10
+styles--small-sizes:
+	12      18   14   12   10   10   10
+	12  12  12   12  12    12    12
+styles--medium-sizes:
+	14      20   18   14   12   12   12
+	14  14  14   14  14    14    14
+styles--large-sizes:
+	18      25   20   18   14   14   14
+	18  18  18   18  18    18    18
+styles--huge-sizes:
+	25      34   25   20   20   20   20
+	25  25  25   25  25    25    25
+#
+# History Anchors:
+styles-common--history-a-foreground: #0000EE
+styles-common--history-a-underline: 1
+styles-common--history-ahist-foreground: #551A8B
+styles-common--history-ahist-underline: 1
+styles-common--history-atemp-foreground: #FF0000
+#
+# Font templates - these are combined with the respective family and
+# size components to dictate the actual font spec.  These should not
+# be changed unless you are adding a new tag entity to Grail.
+#
+# Plain text font:
+styles-fonts--default-font:
+	-*-%(family)s-medium-r-normal-*-%(default)d-*-*-*-*-*-*-*
+# Header fonts:
+styles-fonts--styles-h1_b-font:
+	-*-%(family)s-%(bold)s-r-normal-*-%(h1_b)d-*-*-*-*-*-*-*
+styles-fonts--styles-h1_b_sym-font:
+	-*-*symbol*-*-*-*-*-%(h1_b)d-*-*-*-*-*-*-*
+styles-fonts--styles-h1_b-underline: 0
+styles-fonts--styles-h2_b-font:
+	-*-%(family)s-%(bold)s-r-normal-*-%(h2_b)d-*-*-*-*-*-*-*
+styles-fonts--styles-h2_b_sym-font:
+	-*-*symbol*-*-*-*-*-%(h2_b)d-*-*-*-*-*-*-*
+styles-fonts--styles-h3_b-font:
+	-*-%(family)s-%(bold)s-r-normal-*-%(h3_b)d-*-*-*-*-*-*-*
+styles-fonts--styles-h3_b_sym-font:
+	-*-*symbol*-*-*-*-*-%(h3_b)d-*-*-*-*-*-*-*
+styles-fonts--styles-h4_b-font:
+	-*-%(family)s-%(bold)s-r-normal-*-%(h4_b)d-*-*-*-*-*-*-*
+styles-fonts--styles-h4_b_sym-font:
+	-*-*symbol*-*-*-*-*-%(h4_b)d-*-*-*-*-*-*-*
+styles-fonts--styles-h5_b-font:
+	-*-%(family)s-%(bold)s-r-normal-*-%(h5_b)d-*-*-*-*-*-*-*
+styles-fonts--styles-h5_b_sym-font:
+	-*-*symbol*-*-*-*-*-%(h5_b)d-*-*-*-*-*-*-*
+styles-fonts--styles-h6_b-font:
+	-*-%(family)s-%(bold)s-r-normal-*-%(h6_b)d-*-*-*-*-*-*-*
+styles-fonts--styles-h6_b_sym-font:
+	-*-*symbol*-*-*-*-*-%(h6_b)d-*-*-*-*-*-*-*
+# Distinctive non-header fonts
+styles-fonts--styles-_sym-font:
+	-*-*symbol*-*-*-*-*-%(default)d-*-*-*-*-*-*-*
+styles-fonts--styles-_ding-font:
+	-*-*dingbat*-*-*-*-*-%(default)d-*-*-*-*-*-*-*
+styles-fonts--styles-_i-font:
+	-*-%(family)s-medium-%(italic)s-normal-*-%(_i)d-*-*-*-*-*-*-*
+styles-fonts--styles-_i_sym-font:
+	-*-*symbol*-*-*-*-*-%(_i)d-*-*-*-*-*-*-*
+styles-fonts--styles-_b-font:
+	-*-%(family)s-%(bold)s-r-normal-*-%(_b)d-*-*-*-*-*-*-*
+styles-fonts--styles-_b_sym-font:
+	-*-*symbol*-*-*-*-*-%(_b)d-*-*-*-*-*-*-*
+styles-fonts--styles-_b_i-font:
+	-*-%(family)s-%(bold)s-%(italic)s-normal-*-%(_b_i)d-*-*-*-*-*-*-*
+styles-fonts--styles-_b_i_sym-font:
+	-*-*symbol*-*-*-*-*-%(_b_i)d-*-*-*-*-*-*-*
+# Typewriter fonts:
+styles-fonts--styles-_tt-font:
+	-*-courier-medium-r-normal-*-%(_tt)d-*-*-*-*-*-*-*
+styles-fonts--styles-_tt_sym-font:
+	-*-*symbol*-*-*-*-*-%(_tt)d-*-*-*-*-*-*-*
+styles-fonts--styles-_tt_i-font:
+	-*-courier-medium-o-normal-*-%(_tt_i)d-*-*-*-*-*-*-*
+styles-fonts--styles-_tt_i_sym-font:
+	-*-*symbol*-*-*-*-*-%(_tt_i)d-*-*-*-*-*-*-*
+styles-fonts--styles-_tt_b-font:
+	-*-courier-bold-r-normal-*-%(_tt_b)d-*-*-*-*-*-*-*
+styles-fonts--styles-_tt_b_sym-font:
+	-*-*symbol*-*-*-*-*-%(_tt_b)d-*-*-*-*-*-*-*
+styles-fonts--styles-_tt_b_i-font:
+	-*-courier-bold-o-normal-*-%(_tt_b_i)d-*-*-*-*-*-*-*
+styles-fonts--styles-_tt_b_i_sym-font:
+	-*-*symbol*-*-*-*-*-%(_tt_b_i)d-*-*-*-*-*-*-*
+# Italic & typewriter fonts for headers:
+styles-fonts--styles-h1_b_i-font:
+	-*-%(family)s-%(bold)s-%(italic)s-normal-*-%(h1_b)d-*-*-*-*-*-*-*
+styles-fonts--styles-h1_tt_b-font:
+	-*-courier-bold-r-normal-*-%(h1_b)d-*-*-*-*-*-*-*
+styles-fonts--styles-h1_tt_b_i-font:
+	-*-courier-bold-%(italic)s-normal-*-%(h1_b)d-*-*-*-*-*-*-*
+styles-fonts--styles-h2_b_i-font:
+	-*-%(family)s-%(bold)s-%(italic)s-normal-*-%(h2_b)d-*-*-*-*-*-*-*
+styles-fonts--styles-h2_tt_b-font:
+	-*-courier-bold-r-normal-*-%(h2_b)d-*-*-*-*-*-*-*
+styles-fonts--styles-h2_tt_b_i-font:
+	-*-courier-bold-%(italic)s-normal-*-%(h2_b)d-*-*-*-*-*-*-*
+styles-fonts--styles-h3_b_i-font:
+	-*-%(family)s-%(bold)s-%(italic)s-normal-*-%(h3_b)d-*-*-*-*-*-*-*
+styles-fonts--styles-h3_tt_b-font:
+	-*-courier-bold-r-normal-*-%(h3_b)d-*-*-*-*-*-*-*
+styles-fonts--styles-h3_tt_b_i-font:
+	-*-courier-bold-%(italic)s-normal-*-%(h3_b)d-*-*-*-*-*-*-*
+styles-fonts--styles-h4_b_i-font:
+	-*-%(family)s-%(bold)s-%(italic)s-normal-*-%(h4_b)d-*-*-*-*-*-*-*
+styles-fonts--styles-h4_tt_b-font:
+	-*-courier-bold-r-normal-*-%(h4_b)d-*-*-*-*-*-*-*
+styles-fonts--styles-h4_tt_b_i-font:
+	-*-courier-bold-%(italic)s-normal-*-%(h4_b)d-*-*-*-*-*-*-*
+styles-fonts--styles-h5_b_i-font:
+	-*-%(family)s-%(bold)s-%(italic)s-normal-*-%(h5_b)d-*-*-*-*-*-*-*
+styles-fonts--styles-h5_tt_b-font:
+	-*-courier-bold-r-normal-*-%(h5_b)d-*-*-*-*-*-*-*
+styles-fonts--styles-h5_tt_b_i-font:
+	-*-courier-bold-%(italic)s-normal-*-%(h5_b)d-*-*-*-*-*-*-*
+styles-fonts--styles-h6_b_i-font:
+	-*-%(family)s-%(bold)s-%(italic)s-normal-*-%(h6_b)d-*-*-*-*-*-*-*
+styles-fonts--styles-h6_tt_b-font:
+	-*-courier-bold-r-normal-*-%(h6_b)d-*-*-*-*-*-*-*
+styles-fonts--styles-h6_tt_b_i-font:
+	-*-courier-bold-%(italic)s-normal-*-%(h6_b)d-*-*-*-*-*-*-*
+# 
+#
+# Bookmarks defaults
+#
+# add-location can be `file-append', `file-prepend', `as-child-or-sib'
+bookmarks--add-location: file-prepend
+# aggressive-collapse can be 0=false, 1=true
+bookmarks--aggressive-collapse: 0
+# add-to-pulldown can be 0=false, 1=true
+bookmarks--include-in-pulldown: 1
+# default-save-format can be `html', `pickle', `pickle-binary'
+bookmarks--default-save-format: html
+# open-details-on-add can be 0=false, 1=true
+bookmarks--open-details-on-add: 0
+# show-optional-buttons can be 0=false, 1=true
+bookmarks--show-navigation-buttons: 1
+# name of the "current" bookmark file;
+# empty if it should be selected automatcally.
+bookmarks--bookmark-file:
+#
+# History defaults
+#
+# view-by can be 'titles', 'urls'
+history--view-by: titles
+#
+# Parsing preferences:
+#
+parsing-html--strict:		0
+parsing-html--honor-colors:	1
+# setting override-builtin-tags to 1 can slow us down a little,
+# so don't by default:
+parsing-html--override-builtin-tags:	0
+parsing-html--format-h1:	""
+parsing-html--format-h2:	"%(h2)d. "
+parsing-html--format-h3:	"%(h2)d.%(h3)d. "
+parsing-html--format-h4:	"%(h2)d.%(h3)d.%(h4)d. "
+parsing-html--format-h5:	"%(h2)d.%(h3)d.%(h4)d.%(h5)d. "
+parsing-html--format-h6:	"%(h2)d.%(h3)d.%(h4)d.%(h5)d.%(h6)d. "
+#
+# Printing preferences
+# See <URL:http://grail.cnri.reston.va.us/grail/help/printing.html> for info.
+#
+printing--images:		1
+printing--greyscale:		1
+printing--to-file:		0
+printing--command:		lpr
+printing--underline-anchors:	1
+printing--footnote-anchors:	1
+printing--skip-leading-blank-lines: 0
+printing--font-size:		10.0 / 10.7
+printing--margins:		72 72 72 72
+printing--paper-size:		letter
+printing--orientation:		portrait
+printing--user-header:
+printing--postscript-level:	1
+printing--paragraph-indent:	0.0
+printing--paragraph-skip:	0.9
+#
+# Applet preferences
+#
+applets--groups:
+applets--load: all
+#
+# Security preferences
+#
+security--enable-ilu: 0
+#
+# Disk Cache preferences:
+# (directory is relative to $GRAILDIR unless absolute)
+#
+disk-cache--size: 1024
+disk-cache--directory: cache
+disk-cache--freshness-test-type: periodic
+disk-cache--freshness-test-period: 4.0
+disk-cache--checkpoint: 1
+#                                             
+# Preference panel preferences                
+#                                             
+preferences--panel-order: General Style Cache Applets
+# Setting of 1 (should be in developers prefs file) enables
+# prefspanels buttons for panel and prefs reloads:
+preferences--panel-debugging: 0
+#
+# Proxy default preferences:
+#
+proxies--no_proxy_enabled: -1
+proxies--manual_proxy_enabled: -1
+proxies--no_proxy:
+proxies--ftp_proxy:
+proxies--http_proxy:
+#
+# Sockets per application
+#
+sockets--number: 5
+#
+# ietf: URN resolution templates
+#
+ietf-resolver--document-template:
+    http://info.internet.isi.edu/in-notes/%(type)s/files/%(type)s%(number)s.txt
+ietf-resolver--meeting-template:
+    ftp://ftp.ietf.org/ietf/%(wg)s/%(wg)s-minutes-%(date)s.txt
+ietf-resolver--internet-draft-template:
+    ftp://ftp.ietf.org/internet-drafts/draft-%(draft)s.%(format)s
