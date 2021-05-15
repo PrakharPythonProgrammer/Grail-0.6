@@ -1,0 +1,60 @@
+%%
+%%  Sample PostScript for duplexed headers and footers.
+%%  Also adds a thin rule above the URL and page number in the footer,
+%%  and a datestamp telling when the document was printed.
+%%
+
+%%  Cache the font we're going to use:
+/EdgeFont /Helvetica findfont 8 scalefont D
+
+%%  Move the footer up a little since it takes more vertical space
+%%  than the standard footer:
+/GrFooterPos GrFooterPos 16 add D
+
+%%  0-based
+/DayNames [
+  (Monday) (Tuesday) (Wednesday) (Thursday) (Friday) (Saturday) (Sunday)
+] D
+%%  1-based
+/MonthNames [
+  () (January) (February) (March) (April) (May) (June)
+  (July) (August) (September) (October) (November) (December)
+] D
+
+%%  Build this now; it doesn't change from page to page:
+/PrintedOnString
+(Printed on ) DayNames GrWeekday get GrCatstrings (, ) GrCatstrings
+GrDay =string cvs GrCatstrings ( ) GrCatstrings 
+MonthNames GrMonth get GrCatstrings ( ) GrCatstrings
+GrYear =string cvs GrCatstrings D
+
+%%
+%%  Replace the actual page decoration functions:
+%%
+/GrDecorateOddPage { %% url title pageno GrDecorateOddPage -
+  /TempPageno E D
+  EdgeFont setfont
+  0 GrHeaderPos M S			% display title
+  0 GrFooterPos M
+  0.1 0 GrImageWidth HR			% display a rule
+  0 GrFooterPos 9 sub M S		% display URL
+  % display the page number
+  (Page ) TempPageno =string cvs GrCatstrings EDGE
+  % add a "printed on" date on the first page
+  TempPageno 1 eq {
+    0 GrFooterPos 18 sub M
+    PrintedOnString S
+  } if
+} D
+
+/GrDecorateEvenPage { %% url title pageno GrDecorateEvenPage -
+  EdgeFont setfont
+  0 GrHeaderPos M E EDGE		% show title, ... url p#
+  0 GrFooterPos M 0.1 0 GrImageWidth HR	% display a rule
+  0 GrFooterPos 9 sub M			% url p#
+  (Page ) S =string cvs S		% show pageno, ... url
+  EDGE
+} D
+
+%%
+%%  end of file
