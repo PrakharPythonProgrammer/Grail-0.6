@@ -4,7 +4,7 @@ __version__ = '$Id: table.py,v 2.62 1999/03/05 21:55:36 fdrake Exp $'
 ATTRIBUTES_AS_KEYWORDS = 1
 
 import string
-import regex
+import re as regex
 import grailutil
 from Tkinter import *
 from formatter import AbstractWriter, AbstractFormatter

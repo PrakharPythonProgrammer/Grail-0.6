@@ -30,7 +30,7 @@ import getopt
 import socket
 import tempfile
 import os
-import regex
+import re as regex
 
 
 # The file structure.  Modeled after X11

@@ -3,7 +3,7 @@
 __version__ = '$Revision: 1.5 $'
 
 import grailutil
-import regex
+import re as regex
 import string
 import Tkinter
 import token

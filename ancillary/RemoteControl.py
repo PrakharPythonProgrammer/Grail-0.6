@@ -126,7 +126,7 @@ def unregister_loads():
 import tempfile
 import os
 import socket
-import regex
+import re as regex
 import string
 from Tkinter import tkinter
 from grailutil import *

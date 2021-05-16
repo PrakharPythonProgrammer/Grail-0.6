@@ -807,7 +807,7 @@ class Viewer(formatter.AbstractWriter):
         try:
             p = self.range_pattern
         except AttributeError:
-            import regex
+            import re as regex
             p = regex.compile('#\([0-9]+\.[0-9]+\)-\([0-9]+\.[0-9]+\)')
             self.range_pattern = p
         if p.match(fragment) == len(fragment):

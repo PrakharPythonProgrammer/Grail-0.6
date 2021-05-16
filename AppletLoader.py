@@ -1,7 +1,7 @@
 """Implement applet loading, possibly asynchronous."""
 
 import os
-import regex
+import re as regex
 import string
 import urllib
 import urlparse

@@ -34,7 +34,7 @@ VI = "="                                # value indicator
 # data -- only char and entity references and end tags are special)
 # and CDATA (character data -- only end tags are special).
 
-import regex
+import re as regex
 import string
 
 try:

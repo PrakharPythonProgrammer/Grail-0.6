@@ -23,7 +23,7 @@ from Assert import Assert
 import grailutil
 import select
 import Reader
-import regex
+import re as regex
 import StringIO
 import socket
 import sys

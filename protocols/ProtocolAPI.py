@@ -19,7 +19,7 @@ non-proxy usage, the url parameter is a string.)
 
 """
 
-import regsub
+# import regsub
 import string
 import socket
 from urllib import splittype, splithost, splitport

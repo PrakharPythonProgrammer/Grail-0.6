@@ -20,7 +20,7 @@ TBD:
 """
 
 import os
-import regex
+import re as regex
 import string
 import sys
 import time

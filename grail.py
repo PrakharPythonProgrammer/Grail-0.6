@@ -41,7 +41,7 @@ import grailbase.utils
 grailbase.utils._grail_root = grail_root
 import grailutil
 from Tkinter import *
-import tktools
+# import tktools
 import BaseApplication
 import grailbase.GrailPrefs
 import Stylesheet

@@ -2,7 +2,7 @@
 
 __version__ = '$Revision: 2.16 $'
 
-import regex
+import re as regex
 import string
 import Tkinter
 import tktools

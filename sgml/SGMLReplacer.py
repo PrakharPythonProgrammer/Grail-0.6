@@ -1,7 +1,7 @@
 """Simple parser that handles only what's allowed in attribute values."""
 __version__ = '$Revision: 1.12 $'
 
-import regex
+import re as regex
 import string
 from SGMLLexer import *
 

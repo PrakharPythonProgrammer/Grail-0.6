@@ -10,7 +10,7 @@ from Tkinter import *
 import tktools
 from BaseReader import BaseReader
 import copy
-import regex
+import re as regex
 import time
 
 # mailcap dictionary

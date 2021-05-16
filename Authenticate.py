@@ -4,11 +4,11 @@ To start, this is used by the HTTP api to perform basic access authorization.
 """
 
 from Tkinter import *
-import tktools
+# import tktools
 import string
 import urlparse
 import base64
-import regex
+import re as regex
 
 class AuthenticationManager:
     """Handles HTTP access authorization.

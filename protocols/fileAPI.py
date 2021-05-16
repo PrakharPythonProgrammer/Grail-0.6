@@ -118,7 +118,7 @@ class file_access:
         lines = fp.readlines()
         fp.close()
         import StringIO
-        import regex
+        import re as regex
         from urllib import quote
         from urlparse import urljoin
         import regsub

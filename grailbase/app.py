@@ -3,7 +3,7 @@ __version__ = '$Revision: 2.2 $'
 
 import os
 import mimetypes
-import regex
+import re as regex
 import string
 import utils
 
@@ -51,7 +51,7 @@ class Application:
 
 
     __data_scheme_re = regex.compile(
-        "data:\([^,;]*\)\(;\([^,]*\)\|\),", regex.casefold)
+        "data:\([^,;]*\)\(;\([^,]*\)\|\),", regex.I)
 
     def guess_type(self, url):
         """Guess the type of a file based on its URL.
