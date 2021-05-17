@@ -25,7 +25,7 @@ this can be slow.
 """
 
 import string
-from Tkinter import *
+from tkinter import *
 import ColorDB
 
 # Load this script into the Tcl interpreter and call it in

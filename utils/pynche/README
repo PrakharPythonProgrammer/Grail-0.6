@@ -11,7 +11,7 @@ Introduction
     editor was called ICE, the Interactive Color Editor.  I'd always
     wanted to port this program to X but didn't feel like hacking X
     and C code to do it.  Fast forward many years, to where Python +
-    Tkinter provides such a nice programming environment, with enough
+    tkinter provides such a nice programming environment, with enough
     power, that I finally buckled down and re-implemented it.  I
     changed the name because these days, too many other systems have
     the acronym `ICE'.
@@ -69,7 +69,7 @@ Running Standalone
 Running as a Modal Dialog
 
     Pynche can be run as a modal dialog, inside another application.
-    It supports the API implemented by the Tkinter standard
+    It supports the API implemented by the tkinter standard
     tkColorChooser module, with a few changes.  By importing
     pyColorChooser from the Pynche package, you can run
 
@@ -101,7 +101,7 @@ Running as a Modal Dialog
         master[*]
             the master window to use as the parent of the modal
             dialog.  Without this argument, pyColorChooser will create 
-            it's own Tkinter.Tk instance as the master.  This may not
+            it's own tkinter.Tk instance as the master.  This may not
             be what you want.
 
         databasefile[*]

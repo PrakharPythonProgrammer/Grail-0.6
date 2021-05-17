@@ -22,7 +22,7 @@ class Chooser:
 
     def show(self, color=None):
         if not self.__master:
-            from Tkinter import Tk
+            from tkinter import Tk
             self.__master = Tk()
         if not self.__pw:
             self.__pw, self.__sb = \
@@ -82,7 +82,7 @@ def save():
 if __name__ == '__main__':
     class Tester:
         def __init__(self):
-            from Tkinter import *
+            from tkinter import *
             self.__root = tk = Tk()
             b = Button(tk, text='Choose Color...', command=self.__choose)
             b.pack()

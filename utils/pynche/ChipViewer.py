@@ -14,7 +14,7 @@ selected and nearest ChipWidgets.
 """
 
 from types import StringType
-from Tkinter import *
+from tkinter import *
 import ColorDB
 
 

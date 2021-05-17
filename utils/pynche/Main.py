@@ -8,11 +8,11 @@ Pynche is based largely on a similar color editor I wrote years ago for the
 Sunview window system.  That editor was called ICE: the Interactive Color
 Editor.  I'd always wanted to port the editor to X but didn't feel like
 hacking X and C code to do it.  Fast forward many years, to where Python +
-Tkinter provides such a nice programming environment, with enough power, that
+tkinter provides such a nice programming environment, with enough power, that
 I finally buckled down and implemented it.  I changed the name because these
 days, too many other systems have the acronym `ICE'.
 
-This program currently requires Python 1.5 with Tkinter.  It has only been
+This program currently requires Python 1.5 with tkinter.  It has only been
 tested on Solaris 2.6.  Feedback is greatly appreciated.  Send email to
 bwarsaw@python.org
 

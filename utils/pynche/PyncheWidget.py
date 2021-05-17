@@ -7,7 +7,7 @@ It is used to bring up other windows.
 import sys
 import os
 import string
-from Tkinter import *
+from tkinter import *
 import tkMessageBox
 
 # Milliseconds between interrupt checks
@@ -38,7 +38,7 @@ class PyncheWidget:
             # import fails or _default_root is None.
             tkroot = None
             try:
-                from Tkinter import _default_root
+                from tkinter import _default_root
                 tkroot = self.__tkroot = _default_root
             except ImportError:
                 pass
