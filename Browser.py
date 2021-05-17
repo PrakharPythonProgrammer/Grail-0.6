@@ -6,8 +6,8 @@ import string
 import sys
 import grailutil
 
-from Tkinter import *
-import tktools
+from tkinter import *
+import tk_tools
 
 from Viewer import Viewer
 
@@ -20,7 +20,7 @@ FIRST_LOGO_IMAGE = LOGO_IMAGES + "T1.gif"
 TITLE_PREFIX = "Grail: "
 
 
-# If we have an icon file, replace tktools.make_toplevel so that it gets
+# If we have an icon file, replace tk_tools.make_toplevel so that it gets
 # set up as the icon, otherwise don't do anything magic.
 #
 _mydir = os.path.dirname(grailutil.abspath(__file__))
@@ -32,7 +32,7 @@ if _iconxbm_file:
     if not os.path.isfile(_iconmask_file):
         _iconmask_file = None
     def make_toplevel(*args, **kw):
-        w = apply(tktools_make_toplevel, args, kw)
+        w = apply(tk_tools_make_toplevel, args, kw)
         # icon set up
         try: w.iconbitmap('@' + _iconxbm_file)
         except TclError: pass
@@ -41,8 +41,8 @@ if _iconxbm_file:
             except TclError: pass
         return w
     #
-    tktools_make_toplevel = tktools.make_toplevel
-    tktools.make_toplevel = make_toplevel
+    tk_tools_make_toplevel = tk_tools.make_toplevel
+    tk_tools.make_toplevel = make_toplevel
 
 
 class Browser:
@@ -74,7 +74,7 @@ class Browser:
         # sure what the correct thing to do is.  Setting it to `grail'
         # is definitely *not* the right thing to do since this causes
         # all sorts of problems.
-        self.root = tktools.make_toplevel(self.master, class_='Grail')
+        self.root = tk_tools.make_toplevel(self.master, class_='Grail')
         self._window_title("Grail: New Browser")
         if geometry:
             self.root.geometry(geometry)

@@ -3,8 +3,8 @@
 To start, this is used by the HTTP api to perform basic access authorization.
 """
 
-from Tkinter import *
-# import tktools
+from tkinter import *
+import tk_tools
 import string
 import urlparse
 import base64
@@ -134,17 +134,17 @@ class AuthenticationManager:
 class LoginDialog:
 
     def __init__(self, master, netloc, realmvalue):
-        self.root = tktools.make_toplevel(master,
+        self.root = tk_tools.make_toplevel(master,
                                           title="Authentication Dialog")
         self.prompt = Label(self.root,
                             text="Enter user authentication\nfor %s on %s" %
                             (realmvalue, netloc))
         self.prompt.pack(side=TOP)
-        self.user_entry, dummy = tktools.make_form_entry(self.root, "User:")
+        self.user_entry, dummy = tk_tools.make_form_entry(self.root, "User:")
         self.user_entry.focus_set()
         self.user_entry.bind('<Return>', self.user_return_event)
         self.passwd_entry, dummy = \
-                           tktools.make_form_entry(self.root, "Password:")
+                           tk_tools.make_form_entry(self.root, "Password:")
         self.passwd_entry.config(show="*")
         self.passwd_entry.bind('<Return>', self.ok_command)
         self.ok_button = Button(self.root, text="OK", command=self.ok_command)
@@ -155,7 +155,7 @@ class LoginDialog:
 
         self.user_passwd = None
 
-        tktools.set_transient(self.root, master)
+        tk_tools.set_transient(self.root, master)
 
         self.root.grab_set()
 

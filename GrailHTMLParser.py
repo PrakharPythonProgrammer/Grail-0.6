@@ -5,12 +5,12 @@
 # XXX supports embedded applets.
 
 
-from Tkinter import *
+from tkinter import *
 import os
 import urllib
 import urlparse
 import string
-import tktools
+import tk_tools
 import formatter
 import Viewer
 import grailutil

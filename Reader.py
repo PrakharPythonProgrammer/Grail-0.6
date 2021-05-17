@@ -6,8 +6,8 @@ import os
 import sys
 import string
 import urlparse
-from Tkinter import *
-import tktools
+from tkinter import *
+import tk_tools
 from BaseReader import BaseReader
 import copy
 import re as regex
@@ -764,17 +764,17 @@ class Reader(BaseReader):
 class LoginDialog:
 
     def __init__(self, master, netloc, realmvalue):
-        self.root = tktools.make_toplevel(master,
+        self.root = tk_tools.make_toplevel(master,
                                           title="Authentication Dialog")
         self.prompt = Label(self.root,
                             text="Enter user authentication\nfor %s on %s" %
                             (realmvalue, netloc))
         self.prompt.pack(side=TOP)
-        self.user_entry, dummy = tktools.make_form_entry(self.root, "User:")
+        self.user_entry, dummy = tk_tools.make_form_entry(self.root, "User:")
         self.user_entry.focus_set()
         self.user_entry.bind('<Return>', self.user_return_event)
         self.passwd_entry, dummy = \
-                           tktools.make_form_entry(self.root, "Password:")
+                           tk_tools.make_form_entry(self.root, "Password:")
         self.passwd_entry.config(show="*")
         self.passwd_entry.bind('<Return>', self.ok_command)
         self.ok_button = Button(self.root, text="OK", command=self.ok_command)
@@ -785,7 +785,7 @@ class LoginDialog:
 
         self.user_passwd = None
 
-        tktools.set_transient(self.root, master)
+        tk_tools.set_transient(self.root, master)
 
         self.root.grab_set()
 
@@ -853,7 +853,7 @@ class TransferDisplay:
         url = old_context.get_url()
         headers = old_context.get_headers()
         self.app = old_context.browser.app
-        self.root = tktools.make_toplevel(
+        self.root = tk_tools.make_toplevel(
             old_context.browser.master, class_="GrailTransfer")
         self.root.protocol("WM_DELETE_WINDOW", self.stop)
         import Context
@@ -879,7 +879,7 @@ class TransferDisplay:
         if restart:
             reader.restart(reader.url)
         reader.bufsize = 8096
-        tktools.set_transient(self.root, old_context.browser.master)
+        tk_tools.set_transient(self.root, old_context.browser.master)
         history = old_context.app.global_history
         if not history.inhistory_p(url):
             history.remember_url(url)
@@ -887,7 +887,7 @@ class TransferDisplay:
 
     def create_widgets(self, url, filename, content_length):
         """Create the widgets in the Toplevel instance."""
-        fr, topfr, botfr = tktools.make_double_frame(self.root)
+        fr, topfr, botfr = tk_tools.make_double_frame(self.root)
         Label(topfr, text="Downloading %s" % os.path.basename(filename)
               ).pack(anchor=W, pady='1m')
         Frame(topfr, borderwidth=1, height=2, relief=SUNKEN

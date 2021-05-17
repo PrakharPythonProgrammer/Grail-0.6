@@ -2,7 +2,7 @@
 
 
 import SafeDialog
-import SafeTkinter
+import Safetkinter
 import os
 from rexec import RExec, RHooks
 import string
@@ -141,7 +141,7 @@ class AppletRExec(RExec):
         if not hooks: hooks = AppletRHooks(self, verbose)
         RExec.__init__(self, hooks, verbose)
         self.modules['Dialog'] = SafeDialog
-        self.modules['Tkinter'] = SafeTkinter
+        self.modules['tkinter'] = Safetkinter
         self.special_modules = self.modules.keys()
         self.save_files()
         self.set_files()

@@ -1,5 +1,5 @@
 from FileReader import TempFileReader
-from Tkinter import *
+from tkinter import *
 import grailutil
 import os
 import string

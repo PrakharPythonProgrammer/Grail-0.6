@@ -4,8 +4,7 @@ import os
 import re as regex
 import string
 import urllib
-import urlparse
-from Tkinter import *
+from tkinter import *
 from BaseReader import BaseReader
 from Bastion import Bastion
 

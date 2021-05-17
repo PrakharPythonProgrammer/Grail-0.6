@@ -40,8 +40,8 @@ import grailbase.utils
 # TBD: hack!
 grailbase.utils._grail_root = grail_root
 import grailutil
-from Tkinter import *
-# import tktools
+from tkinter import *
+import tk_tools
 import BaseApplication
 import grailbase.GrailPrefs
 import Stylesheet
@@ -120,10 +120,10 @@ def main(args=None):
         load_images_vis_prefs()
     prefs.AddGroupCallback('browser', load_images_vis_prefs)
 
-    import SafeTkinter
-    SafeTkinter._castrate(app.root.tk)
+    import Safetkinter
+    Safetkinter._castrate(app.root.tk)
 
-    tktools.install_keybindings(app.root)
+    tk_tools.install_keybindings(app.root)
 
     # Make everybody who's still using urllib.urlopen go through the cache
     urllib.urlopen = app.open_url_simple

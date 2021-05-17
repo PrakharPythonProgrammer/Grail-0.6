@@ -1,8 +1,8 @@
 """Viewer class."""
 
 import sys
-from Tkinter import *
-import tktools
+from tkinter import *
+import tk_tools
 import formatter
 import string
 from string import strip
@@ -204,7 +204,7 @@ class Viewer(formatter.AbstractWriter):
                                                       height=height,
                                                       hbar=bars, vbar=bars)
         else:
-            self.text, self.frame = tktools.make_text_box(self.master,
+            self.text, self.frame = tk_tools.make_text_box(self.master,
                                                       width=width,
                                                       height=height,
                                                       hbar=bars, vbar=bars,

@@ -2,7 +2,7 @@
 
 import sys
 import string
-from Tkinter import *
+from tkinter import *
 import urlparse
 import grailutil
 
