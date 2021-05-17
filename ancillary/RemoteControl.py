@@ -128,7 +128,7 @@ import os
 import socket
 import re as regex
 import string
-from Tkinter import tkinter
+from tkinter import tkinter
 from grailutil import *
 
 # The file structure.  Modeled after X11

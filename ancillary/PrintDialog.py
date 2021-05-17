@@ -30,7 +30,7 @@ be assumed, giving the option to cancel.
 """
 
 from Cursors import CURSOR_WAIT
-from Tkinter import *
+from tkinter import *
 import grailutil
 import os
 import printing.paper
@@ -38,7 +38,7 @@ import printing.settings
 import Reader
 import string
 import sys
-import tktools
+import tk_tools
 
 
 USER_DATA_DIR = grailutil.abspath(
@@ -98,9 +98,9 @@ plain text if you elect to continue."""
         self.__url = url
         self.__title = title
         self.__infp = infp
-        top = self.__top = tktools.make_toplevel(context.browser.root)
+        top = self.__top = tk_tools.make_toplevel(context.browser.root)
         top.title("Print Action")
-        fr, topfr, botfr = tktools.make_double_frame(top)
+        fr, topfr, botfr = tk_tools.make_double_frame(top)
         Label(topfr, bitmap="warning", foreground='red'
               ).pack(side=LEFT, fill=Y, padx='2m')
         # font used by the Tk4 dialog.tcl script:
@@ -118,8 +118,8 @@ plain text if you elect to continue."""
         b1.pack(side=RIGHT)
         b2 = Button(botfr, text="Print", command=self.doit)
         b2.pack(side=LEFT)
-        tktools.unify_button_widths(b1, b2)
-        tktools.set_transient(top, context.browser.root)
+        tk_tools.unify_button_widths(b1, b2)
+        tk_tools.set_transient(top, context.browser.root)
 
     def doit(self, event=None):
         self.__top.destroy()
@@ -141,7 +141,7 @@ plain text if you elect to continue."""
 class RealPrintDialog:
 
     def __init__(self, context, url, title, infp, ctype):
-        import tktools
+        import tk_tools
         #
         self.infp = infp
         self.ctype = ctype
@@ -155,7 +155,7 @@ class RealPrintDialog:
         #
         self.title = title
         self.master = self.context.root
-        self.root = tktools.make_toplevel(self.master,
+        self.root = tk_tools.make_toplevel(self.master,
                                           title="Print Dialog",
                                           class_="PrintDialog")
         # do this early in case we're debugging:
@@ -164,13 +164,13 @@ class RealPrintDialog:
         self.root.bind("<Alt-W>", self.cancel_event)
         self.cursor_widgets = [self.root]
 
-        fr, top, botframe = tktools.make_double_frame(self.root)
+        fr, top, botframe = tk_tools.make_double_frame(self.root)
 
         #  Print to file controls:
-        generalfr = tktools.make_group_frame(
+        generalfr = tk_tools.make_group_frame(
             top, "general", "General options:", fill=X)
 
-        self.cmd_entry, dummyframe = tktools.make_form_entry(
+        self.cmd_entry, dummyframe = tk_tools.make_form_entry(
             generalfr, "Print command:")
         self.cmd_entry.insert(END, settings.printcmd)
         self.add_entry(self.cmd_entry)
@@ -226,9 +226,9 @@ class RealPrintDialog:
         cancel_button = Button(botframe, text="Cancel",
                                command=self.cancel_command)
         cancel_button.pack(side=RIGHT)
-        tktools.unify_button_widths(ok_button, cancel_button)
+        tk_tools.unify_button_widths(ok_button, cancel_button)
 
-        tktools.set_transient(self.root, self.master)
+        tk_tools.set_transient(self.root, self.master)
         self.check_command()
 
     def get_type_extension(self):

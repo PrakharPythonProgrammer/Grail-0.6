@@ -4,8 +4,8 @@ __version__ = '$Revision: 2.16 $'
 
 import re as regex
 import string
-import Tkinter
-import tktools
+import tkinter
+import tk_tools
 import urlparse
 
 FIELD_BREAKER = string.maketrans("&", "\n")
@@ -14,7 +14,7 @@ MAX_TEXT_FIELD_LINES = 10
 
 class DocumentInfoDialog:
     def __init__(self, master, context, class_="DocumentInfo"):
-        root = tktools.make_toplevel(master, class_=class_,
+        root = tk_tools.make_toplevel(master, class_=class_,
                                      title="Document Info")
         self.root = root
         self.app = context.app
@@ -25,7 +25,7 @@ class DocumentInfoDialog:
         for seq in ("<Alt-W>", "<Alt-w>", "<Return>"):
             root.bind(destroy)
         root.protocol("WM_DELETE_WINDOW", destroy)
-        frame, self.__topfr, botfr = tktools.make_double_frame(root)
+        frame, self.__topfr, botfr = tk_tools.make_double_frame(root)
         #
         # Info display
         #
@@ -60,15 +60,15 @@ class DocumentInfoDialog:
         #
         # Bottom button
         #
-        fr = Tkinter.Frame(botfr, borderwidth=1, relief=Tkinter.SUNKEN)
+        fr = tkinter.Frame(botfr, borderwidth=1, relief=tkinter.SUNKEN)
         fr.pack()
-        btn = Tkinter.Button(fr, text="OK", command=destroy)
+        btn = tkinter.Button(fr, text="OK", command=destroy)
         # '2m' is the value from the standard Tk 'tk_dialog' command
         btn.pack(padx='2m', pady='2m')
         btn.focus_set()
         #
         del self.__topfr                # loose the reference
-        tktools.set_transient(root, master)
+        tk_tools.set_transient(root, master)
         root.update_idletasks()
         reqwidth = root.winfo_reqwidth()
         reqheight = root.winfo_reqheight()
@@ -80,18 +80,18 @@ class DocumentInfoDialog:
         self.root.destroy()
 
     def add_field(self, label, name):
-        fr = Tkinter.Frame(self.__topfr, name=name, class_="Dataitem")
-        fr.pack(fill=Tkinter.X)
+        fr = tkinter.Frame(self.__topfr, name=name, class_="Dataitem")
+        fr.pack(fill=tkinter.X)
         if label: label = label + ": "
-        Tkinter.Label(fr, text=label, width=17, anchor=Tkinter.E, name="label"
-                      ).pack(anchor=Tkinter.NE, side=Tkinter.LEFT)
+        tkinter.Label(fr, text=label, width=17, anchor=tkinter.E, name="label"
+                      ).pack(anchor=tkinter.NE, side=tkinter.LEFT)
         return fr
 
     __boldpat = regex.compile("-\([a-z]*bold\|demi\)-", regex.casefold)
     __datafont = None
     def add_label_field(self, label, value, name):
         fr = self.add_field(label, name)
-        label = Tkinter.Label(fr, text=value, anchor=Tkinter.W, name="value")
+        label = tkinter.Label(fr, text=value, anchor=tkinter.W, name="value")
         datafont = self.__datafont
         if datafont is None:
             # try to get a medium-weight version of the font if bold:
@@ -107,7 +107,7 @@ class DocumentInfoDialog:
         if datafont:
             try: label['font'] = datafont
             except TclError: DocumentInfoDialog.__datafont = ''
-        label.pack(anchor=Tkinter.W, fill=Tkinter.X, expand=1)
+        label.pack(anchor=tkinter.W, fill=tkinter.X, expand=1)
         return label
 
     def add_text_field(self, label, value, name):
@@ -116,13 +116,13 @@ class DocumentInfoDialog:
         if value and value[-1] != "\n":
             value = value + "\n"
         maxlines = 1 + map(None, value).count("\n")
-        text, frame = tktools.make_text_box(
+        text, frame = tk_tools.make_text_box(
             fr, takefocus=0, width=60, vbar=1,
             height=min(MAX_TEXT_FIELD_LINES, maxlines))
-        frame.pack(side=Tkinter.LEFT, expand=1, fill=Tkinter.BOTH)
-        fr.pack(expand=1, fill=Tkinter.BOTH)
-        text.insert(Tkinter.END, value)
-        text["state"] = Tkinter.DISABLED
+        frame.pack(side=tkinter.LEFT, expand=1, fill=tkinter.BOTH)
+        fr.pack(expand=1, fill=tkinter.BOTH)
+        text.insert(tkinter.END, value)
+        text["state"] = tkinter.DISABLED
         return maxlines > MAX_TEXT_FIELD_LINES
 
 

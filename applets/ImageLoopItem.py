@@ -1,6 +1,6 @@
 # Java compatibility :-)
 
-from Tkinter import *
+from tkinter import *
 
 class ImageLoopItem:
 

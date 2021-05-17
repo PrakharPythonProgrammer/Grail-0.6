@@ -1,10 +1,10 @@
 """Modeless dialog displaying exception and traceback."""
 
 import string
-import tktools
+import tk_tools
 import traceback
 
-from Tkinter import *
+from tkinter import *
 
 
 class TracebackDialog:
@@ -14,7 +14,7 @@ class TracebackDialog:
         self.exc = exc
         self.val = val
         self.tb = tb
-        self.root = tktools.make_toplevel(self.master,
+        self.root = tk_tools.make_toplevel(self.master,
                                           title="Traceback Dialog")
         close = self.close_command
         self.close_button = Button(self.root, text="Close",
@@ -23,14 +23,14 @@ class TracebackDialog:
         self.root.bind("<Alt-W>", close)
         self.root.bind("<Alt-w>", close)
         anchor = None
-        if tktools._inTkStep(self.root):
+        if tk_tools._inTkStep(self.root):
             anchor = E
         self.close_button.pack(side=BOTTOM, pady='1m', padx='1m',
                                anchor=anchor)
         self.close_button.focus_set()
         self.label = Label(self.root, text="%s: %s" % (exc, str(val)))
         self.label.pack(fill=X)
-        self.text, self.text_frame = tktools.make_text_box(self.root, width=90)
+        self.text, self.text_frame = tk_tools.make_text_box(self.root, width=90)
         lines = traceback.format_exception(exc, val, tb)
         lines.append('')
         tb = string.join(map(string.rstrip, lines), '\n')

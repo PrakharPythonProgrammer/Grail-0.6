@@ -1,7 +1,7 @@
 """Modal dialog to prompt for a URI to open."""
 
-from Tkinter import *
-import tktools
+from tkinter import *
+import tk_tools
 import string
 
 
@@ -11,13 +11,13 @@ class OpenURIDialog:
 
     def __init__(self, master, title=None, new=1):
         # create widgets
-        self.__frame = tktools.make_toplevel(
+        self.__frame = tk_tools.make_toplevel(
             master, title=title or "Open Location Dialog")
         #
-        fr, top, btnframe = tktools.make_double_frame(
+        fr, top, btnframe = tk_tools.make_double_frame(
             self.__frame, relief=FLAT)
         #
-        self.__entry, frame, label = tktools.make_labeled_form_entry(
+        self.__entry, frame, label = tk_tools.make_labeled_form_entry(
             top, 'URI:', 40)
         self.__entry.insert(0, self.__lasturi)
         #
@@ -25,7 +25,7 @@ class OpenURIDialog:
         newbtn = Button(btnframe, text='New', command=self.newcmd)
         clearbtn = Button(btnframe, text='Clear', command=self.clearcmd)
         cancelbtn = Button(btnframe, text='Cancel', command=self.cancelcmd)
-        tktools.unify_button_widths(okbtn, newbtn, clearbtn, cancelbtn)
+        tk_tools.unify_button_widths(okbtn, newbtn, clearbtn, cancelbtn)
         #
         okbtn.pack(side=LEFT)
         if new:
@@ -33,7 +33,7 @@ class OpenURIDialog:
         cancelbtn.pack(side=RIGHT)
         clearbtn.pack(side=RIGHT, padx='1m')
         #
-        tktools.set_transient(self.__frame, master)
+        tk_tools.set_transient(self.__frame, master)
         #
         self.__entry.bind('<Return>', self.okaycmd)
         self.__entry.bind('<Control-C>', self.cancelcmd)

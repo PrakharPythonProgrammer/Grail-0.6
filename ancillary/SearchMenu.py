@@ -1,6 +1,6 @@
 """Search menu extension for Grail."""
 
-from Tkinter import *
+from tkinter import *
 
 
 class SearchMenu:
@@ -52,18 +52,18 @@ class SearchDialog:
 
     def __init__(self, rootwin, searchable):
         self._searchable = searchable
-        import tktools
-        self._root = tktools.make_toplevel(rootwin, title="Search Dialog",
+        import tk_tools
+        self._root = tk_tools.make_toplevel(rootwin, title="Search Dialog",
                                            class_="Search")
         self.create_widgets()
-        tktools.set_transient(self._root, rootwin, rely=0.0)
+        tk_tools.set_transient(self._root, rootwin, rely=0.0)
         self.__rootwin = rootwin
 
     def create_widgets(self):
-        import tktools
-        x, f, self.bot_frame = tktools.make_double_frame(self._root)
+        import tk_tools
+        x, f, self.bot_frame = tk_tools.make_double_frame(self._root)
         self.pat_entry, self.pat_frame = \
-                        tktools.make_form_entry(f, None, name="entry")
+                        tk_tools.make_form_entry(f, None, name="entry")
         self.pat_entry['exportselection'] = 0
         self.pat_entry.bind('<Return>', self.return_event)
         self.pat_entry.focus_set()

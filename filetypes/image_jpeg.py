@@ -2,7 +2,7 @@ import tempfile
 import os
 import string
 from grailutil import getenv, which
-from Tkinter import *
+from tkinter import *
 from formatter import AS_IS
 
 _FILTERCMD = 'djpeg'

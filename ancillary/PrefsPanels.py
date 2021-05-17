@@ -17,8 +17,8 @@ import grailbase.GrailPrefs
 typify = grailbase.GrailPrefs.typify
 
 import urlparse
-from Tkinter import *
-import tktools
+from tkinter import *
+import tk_tools
 import grailutil
 import string, regex, regsub
 from types import StringType
@@ -177,7 +177,7 @@ class Framework:
             if variable:
                 raise ValueError, \
                       "multi-line entry fields may not specify a variable"
-            entry, garbage = tktools.make_text_box(frame,
+            entry, garbage = tk_tools.make_text_box(frame,
                                                    width=entry_width,
                                                    height=entry_height,
                                                    vbar=1)
@@ -300,11 +300,11 @@ class Framework:
         self.poll_modified()
 
     def create_widget(self):
-        widget = self.widget = tktools.make_toplevel(
+        widget = self.widget = tk_tools.make_toplevel(
             self.frame, class_='Preferences')
         widget.title(self.title)
         widget.iconname("Grail Prefs")
-        tktools.install_keybindings(widget)
+        tk_tools.install_keybindings(widget)
         widget.bind('<Return>', self.done_cmd)
         widget.bind('<Key>', self.poll_modified)
         widget.bind("<Alt-w>", self.cancel_cmd)
@@ -317,7 +317,7 @@ class Framework:
 
         width=80                        # Of the settings frame.
 
-        fr, container, self.dispose_bar = tktools.make_double_frame(widget)
+        fr, container, self.dispose_bar = tk_tools.make_double_frame(widget)
 
         # Do this before the panel container, so the buttons are squoze last:
         self.create_disposition_bar(self.dispose_bar)
@@ -355,7 +355,7 @@ class Framework:
         self.factory_defaults_btn = Button(barbottom,
                                            command=self.factory_defaults_cmd,
                                            text="Defaults")
-        tktools.unify_button_widths(done_btn, help_btn, cancel_btn,
+        tk_tools.unify_button_widths(done_btn, help_btn, cancel_btn,
                                     self.apply_btn, self.revert_btn,
                                     self.factory_defaults_btn)
         done_btn.pack(side=LEFT)

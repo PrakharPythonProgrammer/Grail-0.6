@@ -1,5 +1,5 @@
-from Tkinter import *
-import tktools
+from tkinter import *
+import tk_tools
 
 class IOStatusPanel:
 
@@ -10,14 +10,14 @@ class IOStatusPanel:
         self.update()
 
     def create_widgets(self):
-        self.top = tktools.make_toplevel(self.app.root,
+        self.top = tk_tools.make_toplevel(self.app.root,
                                          title="Grail: I/O Status",
                                          class_="IOStatusPanel")
         self.closebutton = Button(self.top, name="close", command=self.close,
                                   default="active")
         self.closebutton.pack(side=BOTTOM, pady='1m', padx='1m', anchor=E)
         self.closebutton.focus_set()
-        self.infobox, self.frame = tktools.make_list_box(self.top, width=40)
+        self.infobox, self.frame = tk_tools.make_list_box(self.top, width=40)
         self.infobox.pack(expand=1, fill=BOTH, side=TOP)
         self.top.protocol('WM_DELETE_WINDOW', self.close)
         self.top.bind("<Alt-w>", self.close)

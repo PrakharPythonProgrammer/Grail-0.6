@@ -1,7 +1,7 @@
 """Data structures for History manipulation"""
 
-from Tkinter import *
-import tktools
+from tkinter import *
+import tk_tools
 import string
 import re as regex
 import os
@@ -134,7 +134,7 @@ class HistoryDialog:
         #
         self._context = context
         self._history.set_dialog(self)
-        self._frame = tktools.make_toplevel(self._context.viewer.frame,
+        self._frame = tk_tools.make_toplevel(self._context.viewer.frame,
                                             class_="History",
                                             title="History Dialog")
         self._frame.protocol("WM_DELETE_WINDOW", self._close)
@@ -156,7 +156,7 @@ class HistoryDialog:
         gotobtn.pack(side=LEFT, padx='1m', pady='1m', in_=btnbar)
         closebtn = Button(self._frame, name='close', command=self._close)
         closebtn.pack(side=LEFT, in_=btnbar)
-        tktools.unify_button_widths(gotobtn, closebtn)
+        tk_tools.unify_button_widths(gotobtn, closebtn)
         # radio button for view option
         rbframe = Frame(btnbar)
         rbframe.pack()
@@ -171,7 +171,7 @@ class HistoryDialog:
         rb1.pack(anchor='w', in_=rbframe)
         rb2.pack(anchor='w', in_=rbframe)
         # create listbox
-        self._listbox, frame = tktools.make_list_box(
+        self._listbox, frame = tk_tools.make_list_box(
             self._frame, 40, 24, 1, 1, name="list")
         self.refresh()
         self._listbox.config(takefocus=0, exportselection=0)
@@ -197,7 +197,7 @@ class HistoryDialog:
         self._frame.bind("<Return>", self._goto)
         self._frame.bind('<Alt-W>', self._close)
         self._frame.bind('<Alt-w>', self._close)
-        tktools.set_transient(self._frame, self._context.root)
+        tk_tools.set_transient(self._frame, self._context.root)
 
     def history(self): return self._history
 

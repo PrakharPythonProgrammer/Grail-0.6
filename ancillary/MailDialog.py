@@ -16,9 +16,9 @@ import os
 import rfc822
 import string
 import time
-import tktools
+import tk_tools
 
-from Tkinter import *
+from tkinter import *
 from urlparse import urlparse, urlunparse
 from __main__ import GRAILVERSION
 from Context import LAST_CONTEXT
@@ -75,13 +75,13 @@ class MailDialog:
         headers = cgi.parse_qs(query)
         # create widgets
         self.master = master
-        self.root = tktools.make_toplevel(self.master,
+        self.root = tk_tools.make_toplevel(self.master,
                                           title="Mail Dialog")
         self.root.protocol("WM_DELETE_WINDOW", self.cancel_command)
         self.root.bind("<Alt-w>", self.cancel_command)
         self.root.bind("<Alt-W>", self.cancel_command)
-        fr, top, botframe = tktools.make_double_frame(self.root)
-        self.text, fr = tktools.make_text_box(top, 80, 24)
+        fr, top, botframe = tk_tools.make_double_frame(self.root)
+        self.text, fr = tk_tools.make_text_box(top, 80, 24)
         self.text.tag_config('SUSPICIOUS_HEADER', foreground='red')
         self.send_button = Button(botframe,
                                   text="Send",
@@ -91,7 +91,7 @@ class MailDialog:
                                     text="Cancel",
                                     command=self.cancel_command)
         self.cancel_button.pack(side=RIGHT)
-        tktools.unify_button_widths(self.send_button, self.cancel_button)
+        tk_tools.unify_button_widths(self.send_button, self.cancel_button)
         hinfo = _make_sequence_dict(COMMON_HEADERS)
         variables = {
             'to':       address,
