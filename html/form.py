@@ -3,9 +3,9 @@
 ATTRIBUTES_AS_KEYWORDS = 1
 
 import string
-from Tkinter import *
+from tkinter import *
 import urllib
-import tktools
+import tk_tools
 import ImageWindow
 
 # ------ Forms
@@ -655,7 +655,7 @@ class Select:
     def make_list(self, size):
         self.v = None
         needvbar = len(self.options) > size
-        self.w, self.frame = tktools.make_list_box(self.viewer.text,
+        self.w, self.frame = tk_tools.make_list_box(self.viewer.text,
                                                    height=size,
                                                    vbar=needvbar, pack=0)
         self.w['exportselection'] = 0
@@ -762,7 +762,7 @@ class Textarea:
         self.parser.pop_nofill()
         if data[:1] == '\n': data = data[1:]
         if data[-1:] == '\n': data = data[:-1]
-        self.w, self.frame = tktools.make_text_box(self.viewer.text,
+        self.w, self.frame = tk_tools.make_text_box(self.viewer.text,
                                                    width=self.cols,
                                                    height=self.rows,
                                                    hbar=1, vbar=1, pack=0)

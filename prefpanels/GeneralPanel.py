@@ -5,7 +5,7 @@ __version__ = "$Revision: 1.20 $"
 # Base class for the panel:
 import PrefsPanels
 
-from Tkinter import *
+from tkinter import *
 
 
 class GeneralPanel(PrefsPanels.Framework):

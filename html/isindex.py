@@ -1,4 +1,4 @@
-from Tkinter import Entry
+from tkinter import Entry
 from grailutil import extract_keyword
 import string
 import urllib

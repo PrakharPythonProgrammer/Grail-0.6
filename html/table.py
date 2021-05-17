@@ -6,7 +6,7 @@ ATTRIBUTES_AS_KEYWORDS = 1
 import string
 import re as regex
 import grailutil
-from Tkinter import *
+from tkinter import *
 from formatter import AbstractWriter, AbstractFormatter
 from Viewer import Viewer
 from types import *

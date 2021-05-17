@@ -2,9 +2,9 @@
 
 import string
 import urlparse
-from Tkinter import *
+from tkinter import *
 
-import tktools
+import tk_tools
 
 import PrefsPanels
 
@@ -43,7 +43,7 @@ class AppletsPanel(PrefsPanels.Framework):
         self.label = Label(frame, text=LABEL, anchor=W)
         self.label.pack(fill=X)
 
-        self.textbox, self.textframe = tktools.make_text_box(frame,
+        self.textbox, self.textframe = tk_tools.make_text_box(frame,
                                                              width=40,
                                                              height=10)
         self.textbox.bind('<Return>', self.return_in_textbox)

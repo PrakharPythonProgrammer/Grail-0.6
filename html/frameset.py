@@ -2,7 +2,7 @@
 
 
 import string
-from Tkinter import *
+from tkinter import *
 
 
 def start_frameset(parser, attrs):
