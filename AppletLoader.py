@@ -575,8 +575,8 @@ def _get_key(context):
     groups = []
     for length, group in list:
         groups.append(group)
-    scheme, netloc, path, params, query, fragment = urlparse.urlparse(url)
-    if scheme and netloc and scheme in urlparse.uses_netloc:
+    scheme, netloc, path, params, query, fragment = urllib.urllib(url)
+    if scheme and netloc and scheme in urllib.uses_netloc:
         netloc = string.lower(netloc)
         user, host = urllib.splituser(netloc)
         if user: return netloc          # User:passwd present -- don't mess

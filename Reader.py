@@ -5,7 +5,7 @@ import ht_time
 import os
 import sys
 import string
-import urlparse
+import urllib
 from tkinter import *
 import tk_tools
 from BaseReader import BaseReader
@@ -124,7 +124,7 @@ class QuotedPrintableWrapper:
                 except KeyError:
                     s = s + '='
                     data = data[1:]
-                    print "invalid quoted-printable encoding -- skipping '='"
+                    print("invalid quoted-printable encoding -- skipping '='")
                 else:
                     s = s + chr(v)
                     data = data[3:]
@@ -134,7 +134,7 @@ class QuotedPrintableWrapper:
             else:
                 s = s + '='
                 data = data[1:]
-                print "invalid quoted-printable encoding -- skipping '='"
+                print("invalid quoted-printable encoding -- skipping '='")
             # now look for the next '=':
             pos = string.find(data, '=')
             if pos == -1:
@@ -257,7 +257,7 @@ class GzipWrapper:
         if not self.__header:
             if len(data) >= self.BASE_HEADER_LENGTH:
                 if data[:3] != '\037\213\010':
-                    raise RuntimeError, "invalid gzip header"
+                    raise RuntimeError("invalid gzip header")
                 self.__flag = ord(data[3])
                 self.__header = 1
                 data = data[10:]
@@ -365,7 +365,7 @@ content_decoding_wrappers = {}
 try:
     import zlib
     import gzip
-except ImportError, error:
+except ImportError as error:
     pass
 else:
     content_decoding_wrappers["deflate"] = DeflateWrapper
@@ -454,14 +454,14 @@ class Reader(BaseReader):
 
         self.parser = None
 
-        tuple = urlparse.urlparse(url)
+        tuple = urllib.urllib(url)
         # it's possible that the url send in a 301 or 302 error is a
         # relative URL.  if there's no scheme or netloc in the
         # returned tuple, try joining the URL with the previous URL
         # and retry parsing it.
         if not (tuple[0] and tuple[1]):
-            url = urlparse.urljoin(self.url, url)
-            tuple = urlparse.urlparse(url)
+            url = urllib.urljoin(self.url, url)
+            tuple = urllib.urllib(url)
         self.url = url
 
         self.fragment = tuple[-1]
@@ -472,7 +472,7 @@ class Reader(BaseReader):
             if i >= 0: netloc = netloc[i+1:]
             netloc = self.user_passwd + '@' + netloc
             tuple = (tuple[0], netloc) + tuple[2:]
-        realurl = urlparse.urlunparse(tuple)
+        realurl = urllib.urlunparse(tuple)
 
         # Check first to see if the previous Context has any protocol handlers
         api = self.last_context.get_local_api(realurl, self.method,
@@ -649,7 +649,7 @@ class Reader(BaseReader):
             # Always save in binary mode.
             try:
                 self.save_file = open(fn, "wb")
-            except IOError, msg:
+            except IOError as msg:
                 context.error_dialog(IOError, msg)
                 return
             TransferDisplay(context, fn, self)
@@ -709,7 +709,7 @@ class Reader(BaseReader):
             return
         try:
             self.parser.feed(data)
-        except IOError, msg:
+        except IOError as msg:
             self.stop()
             try:
                 errno, errmsg = msg
@@ -751,7 +751,7 @@ class Reader(BaseReader):
         command = "(%s; rm -f %s)&" % (command, self.save_filename)
         sts = os.system(command)
         if sts:
-            print "Exit status", sts, "from command", command
+            print("Exit status", sts, "from command", command)
 
     def find_parser_extension(self, content_type):
         app = self.context.app
@@ -901,7 +901,7 @@ class TransferDisplay:
         frame.pack(fill=X)
         self.__bytes = self.make_labeled_field(frame, "Bytes:", "0", LEFT)
         if content_length:
-            self.__bytes['width'] = len(`content_length`) + 2
+            self.__bytes['width'] = len(repr(content_length)) + 2
             self.__percent = self.make_labeled_field(
                 frame, "Complete:", self.__bytespat % 0.0, LEFT)
         else:
@@ -949,7 +949,7 @@ class TransferDisplay:
         self.close()
         if os.path.isfile(self.__filename):
             try: os.unlink(self.__filename)
-            except IOError, msg: self.context.error_dialog(IOError, msg)
+            except IOError as msg: self.context.error_dialog(IOError, msg)
 
     # file-like methods; these allow us to intercept the close() method
     # on the reader's save file object

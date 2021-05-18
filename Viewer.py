@@ -2,6 +2,7 @@
 
 import sys
 from tkinter import *
+from typing import Tuple
 import tk_tools
 import formatter
 import string
@@ -9,7 +10,7 @@ from string import strip
 from Context import Context, SimpleContext
 from Cursors import *
 from types import StringType
-from urlparse import urljoin, urlparse
+from urllib import urljoin, urllib
 from Stylesheet import UndefinedStyle
 
 
@@ -284,7 +285,7 @@ class Viewer(formatter.AbstractWriter):
             for tag in ['_ding'] + self.__fonttags_built.keys():
                 try:
                     self.configure_fonttag(tag)
-                except TclError, err:
+                except TclError as err:
                     # This extra logic is needed to switch to gif-based
                     # dingbats if the font is not available in the current
                     # size.
@@ -374,7 +375,7 @@ class Viewer(formatter.AbstractWriter):
             if interests[i] == func:
                 found = i
         if found < 0:
-            print "resize interest", func, "not registered"
+            print("resize interest", func, "not registered")
             return
         del interests[found]
 
@@ -514,7 +515,7 @@ class Viewer(formatter.AbstractWriter):
             self.fonttag = tag
         self.new_tags()
 
-    def make_fonttag(self, (tag, i, b, tt)):
+    def make_fonttag(self, tag, i, b, tt):
         tag = tag or ''
         if tt: tag = tag + '_tt'
         if b: tag = tag + '_b'
@@ -589,7 +590,7 @@ class Viewer(formatter.AbstractWriter):
             self.text.insert(END, self.pendingdata, self.flowingtags,
                              '\t%s\t' % data, tags)
             self.pendingdata = ''
-        elif data_type is TupleType:
+        elif data_type is Tuple:
             #  (string, fonttag) pair
             data, fonttag = data
             if fonttag:
@@ -602,7 +603,7 @@ class Viewer(formatter.AbstractWriter):
                 self.text.insert(END, self.pendingdata, self.flowingtags,
                                  '\t%s\t' % data, tags)
                 self.pendingdata = ''
-        elif data_type is InstanceType:
+        elif data_type is isinstance:
             #  Some sort of image specified by DINGBAT or SRC
             self.text.insert(END, self.pendingdata, self.flowingtags,
                              '\t', tags)
@@ -789,7 +790,7 @@ class Viewer(formatter.AbstractWriter):
                     return              # unknown mark
                 #  Highlight the entire line:
                 r = (first,
-                     `1 + string.atoi(string.splitfields(first,'.')[0])` \
+                     repr(1 + int(first.split('.')[0])) \
                      + '.0')
         else:
             r = self.parse_range(fragment)
@@ -951,7 +952,7 @@ class ViewerMenu:
         url = self.__context.get_baseurl(url)
         if len(url) < 5 or string.lower(url[:5]) != "data:":
             from posixpath import basename
-            self.__image_file = basename(urlparse(url)[2])
+            self.__image_file = basename(urllib(url)[2])
         else:
             self.__image_file = ""
 

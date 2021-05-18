@@ -80,5 +80,5 @@ class TempFileReader(FileReader):
                 raise IOError, "pipelines not supported"
             try:
                 return os.popen(self.pipeline + ">" + self.filename, "wb")
-            except os.error, msg:
+            except os.error as msg:
                 raise IOError, msg, sys.exc_traceback

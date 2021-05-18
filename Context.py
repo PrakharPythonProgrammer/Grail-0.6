@@ -11,7 +11,7 @@ import regsub
 
 from Cursors import *
 from grailbase.uricontext import URIContext
-from urlparse import urljoin, urlparse, urlunparse, urldefrag
+from urllib import urljoin, urllib, urlunparse, urldefrag
 
 
 VALID_TARGET_STARTS = string.letters + '_'

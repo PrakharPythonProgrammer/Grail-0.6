@@ -10,11 +10,11 @@ import sys
 import tempfile
 import types
 import urllib
-import urlparse
+import urllib
 
 
 def is_url(p):
-    u = urlparse.urlparse(p)
+    u = urllib.urllib(p)
     #
     # Unfortunately path names on the MAC and Windows parse
     # similarly to URL's.  We currently have to not recognize
@@ -33,7 +33,7 @@ class AppletRHooks(RHooks):
             if '/' not in p2 and '.' not in p2:
                 # Assume it's a directory -- needed for package loading
                 p2 = p2 + "/"
-            return urlparse.urljoin(p1, p2)
+            return urllib.urljoin(p1, p2)
         else:
             return RHooks.path_join(self, p1, p2)
 

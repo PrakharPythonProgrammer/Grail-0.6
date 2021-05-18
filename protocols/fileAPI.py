@@ -120,7 +120,7 @@ class file_access:
         import StringIO
         import re as regex
         from urllib import quote
-        from urlparse import urljoin
+        from urllib import urljoin
         import regsub
         def escape(s, regsub=regsub):
             if not s: return ""

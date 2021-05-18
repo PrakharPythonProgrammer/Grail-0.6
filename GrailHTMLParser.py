@@ -7,8 +7,8 @@
 
 from tkinter import *
 import os
+from typing import Tuple
 import urllib
-import urlparse
 import string
 import tk_tools
 import formatter
@@ -559,7 +559,7 @@ class GrailHTMLParser(HTMLParser):
 
     def make_format(self, format, default='disc', listtype=None):
         fmt = format or default
-        if type(fmt) is StringType:
+        if type(fmt) is StringVar:
             fmt = string.lower(fmt)
         if fmt in ('disc', 'circle', 'square'):
             if listtype == 'ul':
@@ -582,7 +582,7 @@ class GrailHTMLParser(HTMLParser):
             return
         img = self.load_dingbat(entname)
         if img:
-            if type(img) is TupleType:
+            if type(img) is Tuple:
                 s, tag = img
                 if tag:
                     if tag != "_ding":

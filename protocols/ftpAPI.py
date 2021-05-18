@@ -20,7 +20,7 @@ import regsub
 import ftplib
 from urllib import unquote, splithost, splitport, splituser, \
      splitpasswd, splitattr, splitvalue, quote
-from urlparse import urljoin
+from urllib import urljoin
 import mimetools
 from Assert import Assert
 import grailutil

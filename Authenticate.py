@@ -6,7 +6,7 @@ To start, this is used by the HTTP api to perform basic access authorization.
 from tkinter import *
 import tk_tools
 import string
-import urlparse
+import urllib
 import base64
 import re as regex
 
@@ -71,7 +71,7 @@ class AuthenticationManager:
 
         if data.has_key('realm') and data.has_key('request-uri'):
             scheme, netloc, path, nil, nil, nil = \
-                    urlparse.urlparse(data['request-uri'])
+                    urllib.urllib(data['request-uri'])
             key = (netloc, data['realm'])
             if self.basic_realms.has_key(key):
                 cookie = self.basic_cookie(self.basic_realms[key])
@@ -89,7 +89,7 @@ class AuthenticationManager:
     def basic_invalidate_credentials(self, headers, credentials):
         if headers.has_key('realm') and headers.has_key('request-uri'):
             scheme, netloc, path, nil, nil, nil = \
-                    urlparse.urlparse(headers['request-uri'])
+                    urllib.urllib(headers['request-uri'])
             key = (netloc, headers['realm'])
             if self.basic_realms.has_key(key):
                 test = self.basic_cookie(self.basic_realms[key])
@@ -105,7 +105,7 @@ class AuthenticationManager:
 
     def basic_user_dialog(self, data):
         scheme, netloc, path, \
-                nil, nil, nil = urlparse.urlparse(data['request-uri'])
+                nil, nil, nil = urllib.urllib(data['request-uri'])
         login = LoginDialog(self.app.root, netloc,
                             data['realm'])
         return login.go()

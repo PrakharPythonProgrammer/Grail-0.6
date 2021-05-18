@@ -150,8 +150,8 @@ class ProtocolLoader(grailbase.extloader.ExtensionLoader):
             if hasattr(mod, joinername):
                 join = getattr(mod, joinername)
             else:
-                import urlparse
-                join = urlparse.urljoin
+                import urllib
+                join = urllib.urljoin
             ext = self.ProtocolInfo(name, access, join)
         return ext
 
@@ -193,8 +193,8 @@ def proxy_exception(host, list):
 def valid_proxy(proxy):
     """Return 1 if the proxy string looks like a valid url, for an
     proxy URL else return 0."""
-    import urlparse
-    scheme, netloc, url, params, query, fragment = urlparse.urlparse(proxy)
+    import urllib
+    scheme, netloc, url, params, query, fragment = urllib.urllib(proxy)
     if scheme != 'http' or params or query or fragment:
         return 0
     return 1

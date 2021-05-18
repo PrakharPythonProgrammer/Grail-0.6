@@ -1,6 +1,6 @@
 from Cache import SharedItem, SharedAPI
 from Assert import Assert
-import urlparse
+import urllib
 import string
 import os
 import time
@@ -299,7 +299,7 @@ class CacheManager:
             return 0
 
         (scheme, netloc, path, parm, query, frag) = \
-                 urlparse.urlparse(item.url)
+                 urllib.urllib(item.url)
 
         if query or scheme not in self.cache_protocols:
             return 0
@@ -361,7 +361,7 @@ class CacheManager:
         - get rid of the fragment identifier
 
         """
-        scheme, netloc, path, params, query, fragment = urlparse.urlparse(url)
+        scheme, netloc, path, params, query, fragment = urllib.urllib(url)
         i = string.find(netloc, '@')
         if i > 0:
             userpass = netloc[:i]
@@ -382,7 +382,7 @@ class CacheManager:
             netloc = netloc[:i]
         elif type(port) == type(0):
             netloc = netloc[:i] + ":%d" % port
-        return urlparse.urlunparse((scheme, netloc, path, params, query, ""))
+        return urllib.urlunparse((scheme, netloc, path, params, query, ""))
 
 
 class DiskCacheEntry:

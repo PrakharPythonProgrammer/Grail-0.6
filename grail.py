@@ -81,10 +81,10 @@ def main(args=None):
                                    ['display=', 'geometry=', 'noimages'])
         if len(args) > 1:
             raise getopt.error, "too many arguments"
-    except getopt.error, msg:
+    except getopt.error as msg:
         sys.stdout = sys.stderr
-        print "Command line error:", msg
-        print USAGE
+        print("Command line error:", msg)
+        print(USAGE)
         sys.exit(2)
 
     geometry = prefs.Get('browser', 'initial-geometry')
@@ -137,7 +137,7 @@ def main(args=None):
     # $GRAILDIR/user/grailrc.py if it exists.
     if user_init:
         try: import grailrc
-        except ImportError, e:
+        except ImportError as e:
             # Only catch this is grailrc itself doesn't import,
             # otherwise propogate.
             if string.split(e.args[0])[-1] != "grailrc":
@@ -396,8 +396,8 @@ class Application(BaseApplication.BaseApplication):
 
     def exc_dialog(self, message, exc, val, tb, root=None):
         if self.in_exception_dialog:
-            print
-            print "*** Recursive exception", message
+            print()
+            print("*** Recursive exception", message)
             import traceback
             traceback.print_exception(exc, val, tb)
             return

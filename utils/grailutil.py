@@ -25,8 +25,8 @@ except AttributeError:
 
 
 def complete_url(url):
-    import urlparse
-    scheme, netloc = urlparse.urlparse(url)[:2]
+    import urllib
+    scheme, netloc = urllib.urllib(url)[:2]
     if not scheme:
         if not netloc:
             # XXX url2pathname/pathname2url???
