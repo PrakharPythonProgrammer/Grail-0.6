@@ -7,7 +7,7 @@ configuration."""
 
 import string
 
-UndefinedStyle = 'UndefinedStyle'
+class UndefinedStyle(Exception): pass
 
 ## NOTE: Link colors are taken from Netscape 1.1's X app defaults
 
@@ -51,7 +51,7 @@ class Stylesheet:
             attr = string.splitfields(composite, '.')[0]
             return self.attrs[attr]
         except IndexError:
-            raise AttributeError, attr
+            raise AttributeError(attr)
 
     def get_sizes(self):
         """Get the size name and a dictionary of size name/values.
@@ -62,7 +62,7 @@ class Stylesheet:
         if sname not in allsizes:
             sname = self.prefs.Get('styles', 'default-size')
             if sname not in allsizes:
-                raise UndefinedStyle, ("Bad preferences file,"
+                raise UndefinedStyle("Bad preferences file,"
                                        + " can't get valid size.")
         sdict = {}
         slist = string.split(self.prefs.Get('styles', sname + '-sizes'))
@@ -89,7 +89,7 @@ class Stylesheet:
         if tname not in allfams:
             tname = self.prefs.Get('styles', 'default-family')
             if tname not in allfams:
-                raise UndefinedStyle, ("Bad preferences file,"
+                raise UndefinedStyle("Bad preferences file,"
                                        + " can't get valid family.")
         return tname
 
@@ -136,9 +136,9 @@ def test():
     import GrailPrefs
     prefs = GrailPrefs.AllPreferences()
     sheet = Stylesheet(prefs)
-    print sheet.styles['h5_b']['font']
-    print sheet.styles['pre']['wrap']
-    print sheet.styles['center']['justify']
+    print(sheet.styles['h5_b']['font'])
+    print(sheet.styles['pre']['wrap'])
+    print(sheet.styles['center']['justify'])
 
 if __name__ == "__main__":
     test()
