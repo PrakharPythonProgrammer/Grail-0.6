@@ -9,7 +9,7 @@
 #
 #    PYTHONPATH=./Lib ./python Lib/keyword.py
 #
-#  (this path allows the import of string.py and regexmodule.so
+#  (this path allows the import of string.py and remodule.so
 #  for a site with no installation in place)
 
 kwlist = [
@@ -52,7 +52,7 @@ for keyword in kwlist:
 iskeyword = kwdict.has_key
 
 def main():
-    import sys, regex, string
+    import sys, re, string
 
     args = sys.argv[1:]
     iptfile = args and args[0] or "Python/graminit.c"
@@ -61,7 +61,7 @@ def main():
 
     # scan the source file for keywords
     fp = open(iptfile)
-    strprog = regex.compile('"\([^"]+\)"')
+    strprog = re.compile('"\([^"]+\)"')
     lines = []
     while 1:
         line = fp.readline()

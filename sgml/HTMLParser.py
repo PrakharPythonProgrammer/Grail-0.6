@@ -1154,8 +1154,8 @@ class DummyTagInfo(SGMLParser.TagInfo):
 
 
 class NewlineScratcher:
-    import re as regex
-    __scratch_re = regex.compile("[ \t]*\n")
+    import re
+    __scratch_re = re.compile("[ \t]*\n")
 
     # for new version only:
 ##     __buffer = ''

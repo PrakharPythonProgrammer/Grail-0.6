@@ -34,7 +34,7 @@ VI = "="                                # value indicator
 # data -- only char and entity references and end tags are special)
 # and CDATA (character data -- only end tags are special).
 
-import re as regex
+import re
 import string
 
 try:
@@ -277,9 +277,9 @@ class SGMLLexer(SGMLLexerBase):
         self.literal = 1
         re = "%s%s[%s]*%s" % (ETAGO, tag, string.whitespace, TAGC)
         if self._normfunc is string.lower:
-            self._lit_etag_re = regex.compile(re, regex.casefold)
+            self._lit_etag_re = re.compile(re, re.casefold)
         else:
-            self._lit_etag_re = regex.compile(re)
+            self._lit_etag_re = re.compile(re)
 
     def setnomoretags(self):
         self.nomoretags = 1
@@ -648,57 +648,57 @@ class SGMLLexer(SGMLLexerBase):
 
 # Regular expressions used for parsing:
 OPTIONAL_WHITESPACE = "[%s]*" % string.whitespace
-interesting = regex.compile('[&<]')
-incomplete = regex.compile('&\([a-zA-Z][a-zA-Z0-9]*\|#[0-9]*\)?\|'
+interesting = re.compile('[&<]')
+incomplete = re.compile('&\([a-zA-Z][a-zA-Z0-9]*\|#[0-9]*\)?\|'
                            '<\([a-zA-Z][^<>]*\|'
                            '/\([a-zA-Z][^<>]*\)?\|'
                            '![^<>]*\)?')
 
-entityref = regex.compile(ERO + '\([a-zA-Z][-.a-zA-Z0-9]*\)[^-.a-zA-Z0-9]')
-simplecharref = regex.compile(CRO + '\([0-9]+[^0-9]\)')
+entityref = re.compile(ERO + '\([a-zA-Z][-.a-zA-Z0-9]*\)[^-.a-zA-Z0-9]')
+simplecharref = re.compile(CRO + '\([0-9]+[^0-9]\)')
 legalcharref \
-    = regex.compile(CRO + '\([0-9]+[^0-9]\|[a-zA-Z.-]+[^a-zA-Z.-]\)')
-processinginstruction = regex.compile('<\?\([^>]*\)' + PIC)
+    = re.compile(CRO + '\([0-9]+[^0-9]\|[a-zA-Z.-]+[^a-zA-Z.-]\)')
+processinginstruction = re.compile('<\?\([^>]*\)' + PIC)
 
-starttagopen = regex.compile(STAGO + '[>a-zA-Z]')
-shorttagopen = regex.compile(STAGO + '[a-zA-Z][a-zA-Z0-9.-]*'
+starttagopen = re.compile(STAGO + '[>a-zA-Z]')
+shorttagopen = re.compile(STAGO + '[a-zA-Z][a-zA-Z0-9.-]*'
                              + OPTIONAL_WHITESPACE + NET)
-shorttag = regex.compile(STAGO + '\([a-zA-Z][a-zA-Z0-9.-]*\)'
+shorttag = re.compile(STAGO + '\([a-zA-Z][a-zA-Z0-9.-]*\)'
                          + OPTIONAL_WHITESPACE + NET + '\([^/]*\)' + NET)
-endtagopen = regex.compile(ETAGO + '[<>a-zA-Z]')
-endbracket = regex.compile('[<>]')
-endtag = regex.compile(ETAGO +
+endtagopen = re.compile(ETAGO + '[<>a-zA-Z]')
+endbracket = re.compile('[<>]')
+endtag = re.compile(ETAGO +
                        '\([a-zA-Z][-.a-zA-Z0-9]*\)'
                        '\([^-.<>a-zA-Z0-9]?[^<>]*\)[<>]')
-special = regex.compile(MDO + '[^>]*' + MDC)
-markupdeclaration = regex.compile(MDO +
+special = re.compile(MDO + '[^>]*' + MDC)
+markupdeclaration = re.compile(MDO +
                                   '\(\([-.a-zA-Z0-9]+\|'
                                   + LIT + '[^"]*' + LIT + '\|'
                                   + LITA + "[^']*" + LITA + '\|'
                                   + COM + '\([^-]\|-[^-]\)*' + COM
                                   + '\)' + OPTIONAL_WHITESPACE
                                   + '\)*' + MDC)
-md_name = regex.compile('\([^>%s\'"]+\)' % string.whitespace
+md_name = re.compile('\([^>%s\'"]+\)' % string.whitespace
                         + OPTIONAL_WHITESPACE)
-md_string = regex.compile('\("[^"]*"\|\'[^\']*\'\)' + OPTIONAL_WHITESPACE)
-commentopen = regex.compile(MDO + COM)
-commentclose = regex.compile(COM + OPTIONAL_WHITESPACE + MDC)
-tagfind = regex.compile('[a-zA-Z][a-zA-Z0-9.-]*')
-attrfind = regex.compile(
+md_string = re.compile('\("[^"]*"\|\'[^\']*\'\)' + OPTIONAL_WHITESPACE)
+commentopen = re.compile(MDO + COM)
+commentclose = re.compile(COM + OPTIONAL_WHITESPACE + MDC)
+tagfind = re.compile('[a-zA-Z][a-zA-Z0-9.-]*')
+attrfind = re.compile(
     # comma is for compatibility
     ('[%s,]*\([a-zA-Z_][a-zA-Z_0-9.-]*\)' % string.whitespace)
     + '\(' + OPTIONAL_WHITESPACE + VI + OPTIONAL_WHITESPACE # VI
     + '\(' + LITA + "[^']*" + LITA
     + '\|' + LIT + '[^"]*' + LIT
     + '\|[-~a-zA-Z0-9,./:+*%?!()_#=]*\)\)?')
-tagend = regex.compile(OPTIONAL_WHITESPACE + '[<>/]')
+tagend = re.compile(OPTIONAL_WHITESPACE + '[<>/]')
 
 # used below in comment_match()
-comment_start = regex.compile(COM + "\([^-]*\)-\(.\|\n\)")
-comment_segment = regex.compile("\([^-]*\)-\(.\|\n\)")
-comment_whitespace = regex.compile(OPTIONAL_WHITESPACE)
+comment_start = re.compile(COM + "\([^-]*\)-\(.\|\n\)")
+comment_segment = re.compile("\([^-]*\)-\(.\|\n\)")
+comment_whitespace = re.compile(OPTIONAL_WHITESPACE)
 
-del regex
+del re
 
 def comment_match(rawdata, start):
     """Match a legal SGML comment.

@@ -118,7 +118,7 @@ class file_access:
         lines = fp.readlines()
         fp.close()
         import StringIO
-        import re as regex
+        import re
         from urllib import quote
         from urllib import urljoin
         import regsub
@@ -128,7 +128,7 @@ class file_access:
             s = regsub.gsub('<', '&lt;', s)
             s = regsub.gsub('>', '&gt;', s)
             return s
-        prog = regex.compile(self.listing_pattern)
+        prog = re.compile(self.listing_pattern)
         data = self.listing_header % {'url': self.url,
                                       'pathname': escape(self.pathname)}
         for line in lines:

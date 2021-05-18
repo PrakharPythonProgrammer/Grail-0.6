@@ -23,7 +23,7 @@ from Assert import Assert
 import grailutil
 import select
 import Reader
-import re as regex
+import re
 import StringIO
 import socket
 import sys
@@ -32,14 +32,14 @@ from __main__ import GRAILVERSION
 
 httplib.HTTP_VERSIONS_ACCEPTED = 'HTTP/1\.[0-9.]+'
 replypat = httplib.HTTP_VERSIONS_ACCEPTED + '[ \t]+\([0-9][0-9][0-9]\)\(.*\)'
-replyprog = regex.compile(replypat)
+replyprog = re.compile(replypat)
 
 httplib.replypat = replypat
 httplib.replyprog = replyprog
 
 
 # Search for blank line following HTTP headers
-endofheaders = regex.compile("\n[ \t]*\r?\n")
+endofheaders = re.compile("\n[ \t]*\r?\n")
 
 
 # Stages

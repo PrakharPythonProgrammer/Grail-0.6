@@ -30,7 +30,7 @@ import getopt
 import socket
 import tempfile
 import os
-import re as regex
+import re
 
 
 # The file structure.  Modeled after X11
@@ -46,7 +46,7 @@ GRAIL_ARGS = ('-c', GRAILCMD)
 
 def normalize_display(display):
     # normalize the display name
-    cre = regex.compile('\([^:]+\)?:\([0-9]+\)\(\.\([0-9]+\)\)?')
+    cre = re.compile('\([^:]+\)?:\([0-9]+\)\(\.\([0-9]+\)\)?')
     if cre.match(display):
         host, display, screen = cre.group(1, 2, 4)
         if not host:

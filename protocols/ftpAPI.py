@@ -14,7 +14,7 @@ XXX Main deficiencies:
 
 
 import string
-import re as regex
+import re
 import regsub
 
 import ftplib
@@ -205,7 +205,7 @@ class ftp_access:
             return ""
         lines, self.lines = self.lines[:-1], self.lines[-1:]
         data = ""
-        prog = regex.compile(self.listing_pattern)
+        prog = re.compile(self.listing_pattern)
         for line in lines:
             if self.debuglevel > 2:
                 print "*getl*", `line`
@@ -337,8 +337,8 @@ class GrailFTP(ftplib.FTP):
     #  Hackish subclass of ftplib.FTP to allow the transfer size to be
     #  available for the creation of a content-length header.
     #
-    import re as regex
-    _size_re = regex.compile("(\([0-9][0-9]*\) bytes)", regex.casefold)
+    import re
+    _size_re = re.compile("(\([0-9][0-9]*\) bytes)", re.casefold)
 
     _xfer_size = None
 
