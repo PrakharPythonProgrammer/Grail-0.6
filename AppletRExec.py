@@ -378,16 +378,16 @@ class OSPathSurrogate:
 
     for name in ('normcase', 'isabs', 'split', 'splitext',
                  'splitdrive', 'basename', 'dirname', 'normpath'):
-        exec TEMPLATE1 % {'name': name}
+        exec(TEMPLATE1 % {'name': name})
 
     for name in ('commonprefix', 'samestat'):
-        exec TEMPLATE2 % {'name': name}
+        exec(TEMPLATE2 % {'name': name})
 
     def join(self, *args):
         return apply(os.path.join, args)
 
     for name in ('exists', 'isdir', 'isfile', 'islink', 'ismount'):
-        exec TEMPLATE3 % {'name': name}
+        exec(TEMPLATE3 % {'name': name})
 
     def samefile(self, p1, p2):
         return os.path.samefile(self.os._path(p1), self.os._path(p2))
