@@ -293,7 +293,7 @@ class AppletLoader:
             m = rexec.hooks.add_module(mod)
             m.__file__ = filename
             m.__filename__ = filename
-            exec code in m.__dict__
+            exec(code in m.__dict__)
         elif type == imp.C_BUILTIN:
             m = imp.init_builtin(mod)
         elif type == ihooks.C_EXTENSION:
