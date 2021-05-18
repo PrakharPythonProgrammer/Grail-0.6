@@ -10,6 +10,7 @@ GRAILVERSION = __version__
 # Standard python imports (needed by path munging code)
 import os
 import sys
+from typing import List, Tuple
 
 # Path munging
 if __name__ == '__main__':
@@ -80,7 +81,7 @@ def main(args=None):
         opts, args = getopt.getopt(args, 'd:g:iq',
                                    ['display=', 'geometry=', 'noimages'])
         if len(args) > 1:
-            raise getopt.error, "too many arguments"
+            raise getopt.error("too many arguments")
     except getopt.error as msg:
         sys.stdout = sys.stderr
         print("Command line error:", msg)
@@ -344,7 +345,7 @@ class Application(BaseApplication.BaseApplication):
         api = self.open_url(url, 'GET', {})
         errcode, errmsg, meta = api.getmeta()
         if errcode != 200:
-            raise IOError, ('url open error', errcode, errmsg, meta)
+            raise IOError(('url open error', errcode, errmsg, meta))
         return URLReadWrapper(api, meta)
 
     def get_cache_keys(self):
@@ -436,7 +437,7 @@ class Application(BaseApplication.BaseApplication):
         # Return when the user clicks OK
         # XXX This needn't be a modal dialog
         import SafeDialog
-        if type(msg) in (ListType, TupleType):
+        if type(msg) in (List, Tuple):
             s = ''
             for item in msg:
                 s = s + ':\n' + str(item)

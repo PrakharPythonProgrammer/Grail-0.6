@@ -258,7 +258,7 @@ class Context(URIContext):
         if self.app:
             self.app.error_dialog(exception, msg, root=self.root)
         else:
-            print "ERROR:", msg
+            print("ERROR:", msg)
 
     def set_title(self, title):
         if not title:
@@ -299,7 +299,7 @@ class Context(URIContext):
         try:
             image = AsyncImage(self, url, reload, width=width, height=height,
                                master=self.root)
-        except IOError, msg:
+        except IOError as msg:
             image = None
         if image:
             self.app.set_cached_image(
@@ -326,7 +326,7 @@ class Context(URIContext):
     def reload_page(self):
         self.load_from_history(self.history.peek(0), reload=1)
 
-    def load_from_history(self, (future, page), reload=0):
+    def load_from_history(self, future, page, reload=0):
         if not page:
             return 0
         self.future = future
@@ -381,15 +381,15 @@ class Context(URIContext):
     
     def set_local_api(self, name, klass):
         """Install a local protocol handler"""
-        if name[-3:] <> "API":
-            raise IOError, "Invalid name (%s) for protocol handler"
+        if name[-3:] != "API":
+            raise IOError("Invalid name (%s) for protocol handler")
         self.local_api_handlers[name] = klass
 
     def get_local_api(self, url, method, params):
         """get a local handler instance"""
         scheme, resturl = urllib.splittype(url)
         if not scheme:
-            raise IOError, ("protocol error",
+            raise IOError("protocol error",
                             "no scheme identifier in URL", url)
         scheme = string.lower(scheme)
         sanitized = regsub.gsub("[^a-zA-Z0-9]", "_", scheme)
@@ -486,7 +486,7 @@ class Context(URIContext):
                            show_source=show_source, reload=reload,
                            scrollpos=scrollpos)
             self.show_source = show_source
-        except IOError, msg:
+        except IOError as msg:
             self.error_dialog(IOError, msg)
             self.message_clear()
             if self.source:
@@ -553,7 +553,7 @@ class Context(URIContext):
         self.message("Posting to %s" % url)
         try:
             self.read_page(url, method, params, reload=1, data=data)
-        except IOError, msg:
+        except IOError as msg:
             self.error_dialog(IOError, msg)
             self.message_clear()
 
@@ -626,7 +626,7 @@ class SavingReader(Reader.Reader):
         self.stop()
         try:
             self.save_file = open(self.__filename, "wb")
-        except IOError, msg:
+        except IOError as msg:
             self.context.error_dialog(IOError, msg)
             return
         #

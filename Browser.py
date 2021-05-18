@@ -279,7 +279,7 @@ class Browser:
         if self.app:
             self.app.error_dialog(exception, msg, root=self.root)
         else:
-            print "ERROR:", msg
+            print("ERROR:", msg)
 
     def load(self, *args, **kw):
         """Interface for applets."""
@@ -489,7 +489,7 @@ class Browser:
     # --- API for searching ---
 
     def search_for_pattern(self, pattern,
-                           regex_flag, case_flag, backwards_flag):
+                           re_flag, case_flag, backwards_flag):
         textwidget = self.viewer.text
         try:
             index = textwidget.index(SEL_FIRST)
@@ -501,7 +501,7 @@ class Browser:
         hitlength = None
         hit = textwidget.search(pattern, index, count=length,
                                 nocase=not case_flag,
-                                regexp=regex_flag,
+                                rep=re_flag,
                                 backwards=backwards_flag)
         if hit:
             try:

@@ -8,7 +8,7 @@ import tk_tools
 import string
 import urllib
 import base64
-import re as regex
+import re as re
 
 class AuthenticationManager:
     """Handles HTTP access authorization.
@@ -55,7 +55,7 @@ class AuthenticationManager:
             # don't know about anything other than basic
             pass
 
-    basic_realm = regex.compile('realm="\(.*\)"')
+    basic_realm = re.compile('realm="\(.*\)"')
 
     def basic_get_realm(self,challenge):
         # the actual specification allows for multiple name=value

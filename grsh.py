@@ -21,6 +21,6 @@ for d in ('', '.'):
 del d
 
 # print the banner
-print sys.version
-print sys.copyright
-print grail.GRAILVERSION, "debugging shell"
+print(sys.version)
+print(sys.copyright)
+print(grail.GRAILVERSION, "debugging shell")

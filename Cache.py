@@ -93,7 +93,7 @@ class SharedItem:
         self.init_new_load(META)
 
     def __repr__(self):
-        return "SharedItem(%s)<%d>" % (`self.url`, self.refcnt)
+        return "SharedItem(%s)<%d>" % (repr(self.url), self.refcnt)
 
     def iscached(self):
         return self.incache and not self.reloading
@@ -350,17 +350,17 @@ def test():
         api = c.open(url, 'GET', {})
         while 1:
             message, ready = api.pollmeta()
-            print message
+            print(message)
             if ready:
                 meta = api.getmeta()
-                print `meta`
+                print(repr(meta))
                 break
         while 1:
             message, ready = api.polldata()
-            print message
+            print(message)
             if ready:
                 data = api.getdata(512)
-                print `data`
+                print(repr(data))
                 if not data:
                     break
         api.close()

@@ -71,7 +71,7 @@ class BaseReader:
         # to get busy
         self.message = "awaiting server response"
         if self.killed:
-            print "start() called after a kill"
+            print("start() called after a kill")
             return
         self.fno = self.api.fileno()
         if TkVersion == 4.0 and sys.platform == 'irix5':
@@ -162,7 +162,7 @@ class BaseReader:
 
     def checkapi(self, *args):
         if not self.callback:
-            print "*** checkapi -- too late ***"
+            print("*** checkapi -- too late ***")
             if self.fno >= 0:
                 fno = self.fno
                 self.fno = -1

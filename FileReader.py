@@ -33,7 +33,7 @@ class FileReader(BaseReader):
             if self.fp is None:
                 self.fp = self.open_file()
             self.fp.write(data)
-        except IOError, msg:
+        except IOError as msg:
             self.stop()
             self.handle_error(-1, "IOError", {'detail': msg})
             return
@@ -77,7 +77,7 @@ class TempFileReader(FileReader):
         else:
             import os, sys
             if not hasattr(os, 'popen'):
-                raise IOError, "pipelines not supported"
+                raise IOError("pipelines not supported")
             try:
                 return os.popen(self.pipeline + ">" + self.filename, "wb")
             except os.error as msg:

@@ -7,14 +7,21 @@ import time
 import ht_time
 import grailutil
 import mimetypes
-import re as regex
+import re as re
 
 META, DATA, DONE = 'META', 'DATA', 'DONE' # Three stages
 
-CacheMiss = 'Cache Miss'
-CacheEmpty = 'Cache Empty'
-CacheReadFailed = 'Cache Item Expired or Missing'
-CacheFileError = 'Cache File Error'
+class CacheMiss(Exception):
+    pass
+
+class CacheEmpty(Exception):
+    pass
+
+class CacheReadFailed(Exception):
+    pass
+
+class CacheFileError(Exception):
+    pass
 
 
 try:
@@ -178,7 +185,7 @@ class CacheManager:
 
         try:
             api = self.cache_read(key)
-        except CacheReadFailed, cache:
+        except CacheReadFailed as cache:
             cache.evict(key)
             api = None
         if api:
@@ -274,10 +281,10 @@ class CacheManager:
                 self.caches[0].add(item)
             elif reload == 1:
                 self.caches[0].update(item)
-        except CacheFileError, err_tuple:
+        except CacheFileError as err_tuple:
             (file, err) = err_tuple
-            print "error adding item %s (file %s): %s" % (item.url,
-                                                          file, err)
+            print("error adding item %s (file %s): %s" % (item.url,
+                                                          file, err))
 
     # list of protocols that we can cache
     cache_protocols = ['http', 'ftp', 'hdl']
@@ -424,7 +431,7 @@ class DiskCacheEntry:
         self.encoding = cencoding
         self.transfer_encoding = ctencoding
 
-    string_date = regex.compile('^[A-Za-z]')
+    string_date = re.compile('^[A-Za-z]')
 
     def __repr__(self):
         return self.unparse()
@@ -660,7 +667,7 @@ class DiskCache:
             os.unlink(logpath)
             os.rename(newpath, logpath)
         except:
-            print "exception during checkpoint"
+            print("exception during checkpoint")
             traceback.print_exc()
 
     def _reinit_log(self):
@@ -688,7 +695,7 @@ class DiskCache:
             # should we flush() here? probably...
             self.log.flush()
 
-    cache_file = regex.compile('^spam[0-9]+')
+    cache_file = re.compile('^spam[0-9]+')
 
     def erase_cache(self):
 
@@ -697,9 +704,9 @@ class DiskCache:
             self.manager.disk.erase_cache()
             return
 
-        def walk_erase(regexp,dir,files):
+        def walk_erase(rep,dir,files):
             for file in files:
-                if regexp.match(file) != -1:
+                if rep.match(file) != -1:
                     path = os.path.join(dir,file)
                     if os.path.isfile(path):
                         os.unlink(path)
@@ -714,10 +721,10 @@ class DiskCache:
             self.manager.disk.erase_unlogged_files()
             return
 
-        def walk_erase_unknown(known,dir,files,regexp=self.cache_file):
+        def walk_erase_unknown(known,dir,files,rep=self.cache_file):
             for file in files:
                 if not known.has_key(file) \
-                   and regexp.match(file) != -1:
+                   and rep.match(file) != -1:
                     path = os.path.join(dir,file)
                     if os.path.isfile(path):
                         os.unlink(path)
@@ -833,8 +840,8 @@ class DiskCache:
             f = open(path, 'wb')
             f.writelines(object.data)
             f.close()
-        except IOError, err:
-            raise CacheFileError, (path, err)
+        except IOError as err:
+            raise CacheFileError((path, err))
 
     def make_space(self,amount):
         """Ensures that there are amount bytes free in the disk cache.
@@ -856,7 +863,7 @@ class DiskCache:
             while self.size + amount > self.max_size:
                 self.evict_any_page()
         except CacheEmpty:
-            print "Can't make more room in the cache"
+            print("Can't make more room in the cache")
             pass
             # this is not the right thing to do, probably
             # but I don't think this should ever happen
@@ -895,7 +902,7 @@ class DiskCache:
             self.expires.remove(key)
         try:
             os.unlink(self.get_file_path(evictee.file))
-        except (os.error, IOError), err:
+        except (os.error, IOError) as err:
             # print "error deleteing %s from cache: %s" % (key, err)
             pass
         self.log_entry(evictee,1) # 1 indicates delete entry
@@ -917,10 +924,10 @@ class disk_cache_access:
         self.filename = filename
         try:
             self.fp = open(filename, 'rb')
-        except IOError, err:
-            print "io error opening %s: %s" % (filename, err)
+        except IOError as err:
+            print("io error opening %s: %s" % (filename, err))
             # propogate error through
-            raise IOError, err
+            raise IOError(err)
         self.state = DATA
 
     def pollmeta(self):

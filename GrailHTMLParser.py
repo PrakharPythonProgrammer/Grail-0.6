@@ -416,7 +416,7 @@ class GrailHTMLParser(HTMLParser):
                 # wrong number of coordinates
                 # how should this get reported to the user?
                 self.badhtml = 1
-                print "imagemap specifies bad coordinates:", `coords`
+                print("imagemap specifies bad coordinates:", repr(coords))
                 pass
         else:
             self.badhtml = 1
@@ -638,7 +638,7 @@ def try_configcolor(option, color, tag, widget):
             apply(widget.tag_config, (tag,), {option: color})
         else:
             widget[option] = color
-    except TclError, msg:
+    except TclError as msg:
         return None
     else:
         return color

@@ -52,14 +52,14 @@ class AppletRHooks(RHooks):
             # (at least under certain circumstances) shared libs
             # are okay when found on the local file system.
             if p[-3:] != '.py':
-                raise IOError, "Only Python modules may be read remotely"
+                raise IOError("Only Python modules may be read remotely")
             return self.openurl(p, mode, buf)
         else:
             return open(p, mode, buf)
 
     def openurl(self, p, mode='r', buf=-1):
         if mode not in ('r', 'rb'):
-            raise IOError, "Can't open URL for writing"
+            raise IOError("Can't open URL for writing")
         app = self.rexec.app
         if not app:
             # Fall back for test mode
@@ -308,10 +308,10 @@ class OSSurrogate:
         if writing:
             n = len(self.home)
             if not(path[:n] == self.home and path[n:n+1] == os.sep):
-                raise error, "can't write outside applet's own directory"
+                raise error("can't write outside applet's own directory")
             head, tail = os.path.split(path)
             if tail[:1] == "." and tail not in (os.curdir, os.pardir):
-                raise error, "can't write filenames beginning with '.'"
+                raise error("can't write filenames beginning with '.'")
         return path
 
     def _pwd(self):
@@ -325,8 +325,8 @@ class OSSurrogate:
         if not self.home_made:
             if not os.path.exists(self.home):
                 if not os.path.exists(self.appletsdir):
-                    os.mkdir(self.appletsdir, 0777)
-                os.mkdir(self.home, 0777)
+                    os.mkdir(self.appletsdir, 0o777)
+                os.mkdir(self.home, 0o777)
             self.home_made = 1
         return self.home
 

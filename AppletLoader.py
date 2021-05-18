@@ -1,7 +1,7 @@
 """Implement applet loading, possibly asynchronous."""
 
 import os
-import re as regex
+import re as re
 import string
 import urllib
 from tkinter import *
@@ -10,7 +10,7 @@ from Bastion import Bastion
 
 
 # Pattern for valid CODE attribute; group(2) extracts module name
-codeprog = regex.compile('^\(.*/\)?\([_a-zA-Z][_a-zA-Z0-9]*\)\.py$')
+codeprog = re.compile('^\(.*/\)?\([_a-zA-Z][_a-zA-Z0-9]*\)\.py$')
 
 CLEANUP_HANDLER_NAME = "__cleanup__"
 
@@ -299,7 +299,7 @@ class AppletLoader:
         elif type == ihooks.C_EXTENSION:
             m = rexec.load_dynamic(mod, filename, file)
         else:
-            raise ImportError, "Unsupported module type: %s" % `filename`
+            raise ImportError("Unsupported module type: %s" % repr(filename))
         return m
 
     def show_tb(self):

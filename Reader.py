@@ -10,7 +10,7 @@ from tkinter import *
 import tk_tools
 from BaseReader import BaseReader
 import copy
-import re as regex
+import re as re
 import time
 
 # mailcap dictionary
@@ -907,7 +907,7 @@ class TransferDisplay:
         else:
             self.__percent = None
 
-    __boldpat = regex.compile("-\([a-z]*bold\)-", regex.casefold)
+    __boldpat = re.compile("-\([a-z]*bold\)-", re.casefold)
     __datafont = None
     def make_labeled_field(self, master, labeltext, valuetext='', side=TOP):
         frame = Frame(master)
