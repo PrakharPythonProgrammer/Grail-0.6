@@ -14,7 +14,7 @@ import copy
 import nodes                            # sibling
 import search                           # sibling sub-package
 import string
-import urlparse
+import urllib
 import walker                           # sibling
 
 
@@ -24,8 +24,8 @@ class NodeIDError(Exception):
 
 
 def _parse_uri(uri):
-    """Normalize a URI in parsed form (similar to urlparse() result)."""
-    uri = list(urlparse.urlparse(uri))
+    """Normalize a URI in parsed form (similar to urllib() result)."""
+    uri = list(urllib.urllib(uri))
     if uri[0] == "http":
         host = uri[1]
         if host[-3:] == ":80":
@@ -143,7 +143,7 @@ class Collection:
                     if id in need_ids:
                         need_ids.remove(id)
                 uri = node.uri()
-                key = urlparse.urlunparse(_parse_uri(uri)[:3] + ('', '', ''))
+                key = urllib.urlunparse(_parse_uri(uri)[:3] + ('', '', ''))
                 try:
                     node_map[key].append(node)
                 except KeyError:
@@ -203,7 +203,7 @@ class Collection:
 
     def get_bookmarks_by_uri(self, uri):
         parsed = _parse_uri(uri)
-        uri = urlparse.urlunparse(parsed[:3] + ('', '', ''))
+        uri = urllib.urlunparse(parsed[:3] + ('', '', ''))
         try:
             return tuple(self.__node_map[uri])
         except KeyError:
@@ -211,7 +211,7 @@ class Collection:
 
     def __make_node_key(self, node):
         parsed = _parse_uri(node.uri())[:3] + ('', '', '')
-        return urlparse.urlunparse(parsed)
+        return urllib.urlunparse(parsed)
 
 
 class CopyWalker(walker.TreeWalker):
@@ -281,7 +281,7 @@ class CopyWalker(walker.TreeWalker):
         new_node.set_uri(uri)
         new_node.set_last_modified(node.last_modified())
         new_node.set_last_visited(node.last_visited())
-        key = urlparse.urlunparse(_parse_uri(uri)[:3] + ('', '', ''))
+        key = urllib.urlunparse(_parse_uri(uri)[:3] + ('', '', ''))
         try:
             self.__node_map[key].append(new_node)
         except KeyError:

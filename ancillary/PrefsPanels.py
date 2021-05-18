@@ -16,7 +16,7 @@ if __name__ == "__main__":
 import grailbase.GrailPrefs
 typify = grailbase.GrailPrefs.typify
 
-import urlparse
+import urllib
 from tkinter import *
 import tk_tools
 import grailutil
@@ -413,7 +413,7 @@ class Framework:
             browser = Browser.Browser(self.app.root, self.app)
             self.helpbrowser = browser
         helproot = self.app.prefs.Get('landmarks', 'grail-help-root')
-        browser.context.load(urlparse.urljoin(helproot, self.HELP_URL))
+        browser.context.load(urllib.urljoin(helproot, self.HELP_URL))
         browser.root.tkraise()
 
     def apply_cmd(self, event=None, close=0):

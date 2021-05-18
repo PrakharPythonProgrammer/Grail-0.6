@@ -1,7 +1,7 @@
 import os
 import string
 import sys
-import urlparse
+import urllib
 
 
 class Error:

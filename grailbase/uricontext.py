@@ -5,9 +5,9 @@ The use of 'url' in the method names is a historical accident.
 """
 __version__ = '$Revision: 1.5 $'
 
-import urlparse
-__default_joiner = urlparse.urljoin
-del urlparse
+import urllib
+__default_joiner = urllib.urljoin
+del urllib
 
 import re
 __typematch = re.compile('^([^/:]+):').match

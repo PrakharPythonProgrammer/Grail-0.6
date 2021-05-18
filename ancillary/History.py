@@ -8,7 +8,7 @@ import os
 import sys
 import time
 from grailutil import *
-from urlparse import urldefrag
+from urllib import urldefrag
 
 
 class PageInfo:

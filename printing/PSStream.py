@@ -8,7 +8,7 @@ import settings
 import string
 import sys
 import time
-import urlparse
+import urllib
 
 try:
     from cStringIO import StringIO
@@ -139,8 +139,8 @@ class PSStream:
         del self.__titles[:-1]
 
     def set_url(self, url):
-        parsed = urlparse.urlparse(url)[:3] + ('', '', '')
-        self._url_cooked = cook(urlparse.urlunparse(parsed))
+        parsed = urllib.urllib(url)[:3] + ('', '', '')
+        self._url_cooked = cook(urllib.urlunparse(parsed))
 
     def start(self):
         # print document preamble

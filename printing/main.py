@@ -17,7 +17,7 @@ import posixpath
 import string
 import traceback
 import urllib
-import urlparse
+import urllib
 
 from types import TupleType
 
@@ -336,7 +336,7 @@ def open_source(infile):
         # use posixpath since URLs are expected to be POSIX-like; don't risk
         # that we're running on NT and os.path.basename() doesn't "do the
         # right thing."
-        fn = posixpath.basename(urlparse.urlparse(infile)[2])
+        fn = posixpath.basename(urllib.urllib(infile)[2])
     else:
         fn = infile
     return infp, fn
@@ -346,7 +346,7 @@ class multi_transform:
     def __init__(self, context, levels=None):
         self.__app = context.app
         baseurl = context.get_baseurl()
-        scheme, netloc, path, params, query, frag = urlparse.urlparse(baseurl)
+        scheme, netloc, path, params, query, frag = urllib.urllib(baseurl)
         self.__scheme = scheme
         self.__netloc = string.lower(netloc)
         self.__path = os.path.dirname(path)
@@ -356,14 +356,14 @@ class multi_transform:
         self.__docs = {baseurl: 0}
 
     def __call__(self, url, attrs):
-        scheme, netloc, path, params, query, frag = urlparse.urlparse(url)
+        scheme, netloc, path, params, query, frag = urllib.urllib(url)
         if params or query:             # safety restraint
             return url
         netloc = string.lower(netloc)
         if scheme != self.__scheme or netloc != self.__netloc:
             return url
         # check the paths:
-        stored_url = urlparse.urlunparse((scheme, netloc, path, '', '', ''))
+        stored_url = urllib.urlunparse((scheme, netloc, path, '', '', ''))
         if self.__docs.has_key(stored_url):
             return url
         if len(path) < len(self.__path):
@@ -394,10 +394,10 @@ class multi_transform:
     def insert(self, url):
         if self.__base_index is not None:
             i = self.__base_index + 1
-            scheme, netloc, path, x, y, z = urlparse.urlparse(url)
+            scheme, netloc, path, x, y, z = urllib.urllib(url)
             basepath = os.path.dirname(path)
             while i < len(self.__subdocs):
-                scheme, netloc, path, x, y, z = urlparse.urlparse(
+                scheme, netloc, path, x, y, z = urllib.urllib(
                     self.__subdocs[i])
                 path = os.path.dirname(path)
                 i = i + 1

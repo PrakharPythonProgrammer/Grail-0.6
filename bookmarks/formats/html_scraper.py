@@ -5,7 +5,7 @@ __version__ = '$Revision: 1.5 $'
 
 import bookmarks.nodes
 import string
-import urlparse
+import urllib
 
 import sgml.SGMLHandler
 import sgml.SGMLParser
@@ -67,7 +67,7 @@ class Parser(sgml.SGMLHandler.BaseSGMLHandler):
             self.__node = bookmarks.nodes.Bookmark()
             self.__root.append_child(self.__node)
             if self.__baseurl:
-                uri = urlparse.urljoin(self.__baseurl, uri)
+                uri = urllib.urljoin(self.__baseurl, uri)
             self.__node.set_uri(uri)
             title = string.join(string.split(attrs.get("title", "")))
             if title:

@@ -58,18 +58,18 @@ def parse_text(writer, settings, context):
 
 
 def add_options(dialog, settings, top):
-    import Tkinter
-    import tktools
-    textfr = tktools.make_group_frame(top, "textoptions",
-                                      "Text options:", fill=Tkinter.X)
+    import tkinter
+    import tk_tools
+    textfr = tk_tools.make_group_frame(top, "textoptions",
+                                      "Text options:", fill=tkinter.X)
     #  The titleentry widget is used to set the title for text/plain
     #  documents; the title is printed in the page headers and
     #  possibly on an accounting page if your site uses them.
-    dialog.__titleentry, dummyframe = tktools.make_form_entry(textfr, "Title:")
+    dialog.__titleentry, dummyframe = tk_tools.make_form_entry(textfr, "Title:")
     if dialog.title:
-        dialog.__titleentry.insert(Tkinter.END, dialog.title)
+        dialog.__titleentry.insert(tkinter.END, dialog.title)
     dialog.add_entry(dialog.__titleentry)
-    Tkinter.Frame(textfr, height=4).pack()
+    tkinter.Frame(textfr, height=4).pack()
     dialog.__strip_blanks = dialog.new_checkbox(
         textfr, "Strip leading blank lines", settings.strip_blanks)
 

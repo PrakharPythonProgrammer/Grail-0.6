@@ -19,7 +19,7 @@ import time
 import tk_tools
 
 from tkinter import *
-from urlparse import urlparse, urlunparse
+from urllib import urllib, urlunparse
 from __main__ import GRAILVERSION
 from Context import LAST_CONTEXT
 
@@ -70,7 +70,7 @@ class MailDialog:
 
     def __init__(self, master, address, data):
         # query semantics may be used to identify header field values
-        scheme, netloc, path, params, query, fragment = urlparse(address)
+        scheme, netloc, path, params, query, fragment = urllib(address)
         address = urlunparse((scheme, netloc, path, '', '', ''))
         headers = cgi.parse_qs(query)
         # create widgets

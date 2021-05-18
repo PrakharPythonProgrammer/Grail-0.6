@@ -1,7 +1,7 @@
 """Preference panel to control applet privileges."""
 
 import string
-import urlparse
+import urllib
 from tkinter import *
 
 import tk_tools
