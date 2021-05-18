@@ -2,7 +2,7 @@
 
 __version__ = '$Revision: 2.16 $'
 
-import re as regex
+import re
 import string
 import tkinter
 import tk_tools
@@ -87,7 +87,7 @@ class DocumentInfoDialog:
                       ).pack(anchor=tkinter.NE, side=tkinter.LEFT)
         return fr
 
-    __boldpat = regex.compile("-\([a-z]*bold\|demi\)-", regex.casefold)
+    __boldpat = re.compile("-\([a-z]*bold\|demi\)-", re.casefold)
     __datafont = None
     def add_label_field(self, label, value, name):
         fr = self.add_field(label, name)

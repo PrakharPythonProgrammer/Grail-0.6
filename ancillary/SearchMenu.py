@@ -11,7 +11,7 @@ class SearchMenu:
     need to pass in a `searchable' object, which is simply one that
     conforms to the following interface:
 
-    search_for_pattern(pattern, regex_flag, case_flag, backwards_flag)
+    search_for_pattern(pattern, re_flag, case_flag, backwards_flag)
         Searchs for the pattern, returning true if the search
         succeeded, false if it failed.  This search module will ring
         the bell if no hit was found.
@@ -71,13 +71,13 @@ class SearchDialog:
         self.mid_frame = Frame(f)
         self.mid_frame.pack(fill=X)
 
-        self.regexp_var = BooleanVar(f)
+        self.rep_var = BooleanVar(f)
         self.case_var = BooleanVar(f)
         self.backwards_var = BooleanVar(f)
 
-        self.regexp_checkbutton = Checkbutton(self._root, name="regexp",
-                                              variable=self.regexp_var)
-        self.regexp_checkbutton.pack(side=LEFT, in_=self.mid_frame)
+        self.rep_checkbutton = Checkbutton(self._root, name="rep",
+                                              variable=self.rep_var)
+        self.rep_checkbutton.pack(side=LEFT, in_=self.mid_frame)
         self.case_checkbutton = Checkbutton(self._root, name="casesens",
                                             variable=self.case_var)
         self.case_checkbutton.pack(side=LEFT, expand=1, in_=self.mid_frame)
@@ -125,7 +125,7 @@ class SearchDialog:
             self._root.bell()
             return 0
         status = self._searchable.search_for_pattern(
-            pat, self.regexp_var.get(), self.case_var.get(),
+            pat, self.rep_var.get(), self.case_var.get(),
             self.backwards_var.get())
         if not status:
             # failure

@@ -1,7 +1,7 @@
 """Implement applet loading, possibly asynchronous."""
 
 import os
-import re as re
+import re
 import string
 import urllib
 from tkinter import *

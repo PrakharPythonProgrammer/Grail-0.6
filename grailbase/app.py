@@ -3,7 +3,7 @@ __version__ = '$Revision: 2.2 $'
 
 import os
 import mimetypes
-import re as regex
+import re
 import string
 import utils
 
@@ -50,8 +50,8 @@ class Application:
         raise RuntimeError, "Subclass failed to implement exception_dialog()."
 
 
-    __data_scheme_re = regex.compile(
-        "data:\([^,;]*\)\(;\([^,]*\)\|\),", regex.I)
+    __data_scheme_re = re.compile(
+        "data:\([^,;]*\)\(;\([^,]*\)\|\),", re.I)
 
     def guess_type(self, url):
         """Guess the type of a file based on its URL.

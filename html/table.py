@@ -4,7 +4,7 @@ __version__ = '$Id: table.py,v 2.62 1999/03/05 21:55:36 fdrake Exp $'
 ATTRIBUTES_AS_KEYWORDS = 1
 
 import string
-import re as regex
+import re
 import grailutil
 from tkinter import *
 from formatter import AbstractWriter, AbstractFormatter
@@ -18,7 +18,7 @@ EMPTY = 102
 
 BadMojoError = 'Bad Mojo!  Infinite loop in cell height calculation.'
 
-CELLGEOM_RE = regex.compile('%sx%s\+%s\+%s' % (('\([-+]?[0-9]+\)',) * 4))
+CELLGEOM_RE = re.compile('%sx%s\+%s\+%s' % (('\([-+]?[0-9]+\)',) * 4))
 
 DEFAULT_VALIGN = 'top'
 

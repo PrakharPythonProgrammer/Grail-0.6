@@ -46,7 +46,7 @@ Grail*History.close.text:		Close
 Grail*History.titles.text:		View by Titles
 Grail*History.uris.text:		View by URIs
 
-Grail*Search.regexp.text:		regexp
+Grail*Search.rep.text:		rep
 Grail*Search.casesens.text:		case sensitive
 Grail*Search.backwards.text:		backwards
 Grail*Search.search.text:		Search

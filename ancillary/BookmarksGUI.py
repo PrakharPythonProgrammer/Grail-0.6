@@ -9,6 +9,7 @@ import string
 import sys
 import time
 import tk_tools
+import re
 
 from tkinter import *
 from grailutil import *
@@ -40,7 +41,7 @@ try:
     file = os.path.expanduser(file)
     if file:
         BOOKMARKS_FILES.insert(0, file)
-        if file <> DEFAULT_NETSCAPE_BM_FILE:
+        if file != DEFAULT_NETSCAPE_BM_FILE:
             DEFAULT_GRAIL_BM_FILE = file
 except KeyError:
     pass
@@ -197,7 +198,7 @@ class BookmarksIO:
         try:
             fp = open(filename, 'r')
             return fp, self.__choose_reader(fp)
-        except IOError, error:
+        except IOError as error:
             if error[0] == errno.ENOENT:
                 # 'No such file or directory'
                 raise
@@ -214,7 +215,7 @@ class BookmarksIO:
             sio = StringIO(fp.read())
             fp.close()
             return sio, self.__choose_reader(sio)
-        except IOError, error:
+        except IOError as error:
             raise bookmarks.BookmarkFormatError(url, error, what="URL")
 
     def load(self, usedefault=0, filename=None):
@@ -264,7 +265,7 @@ class BookmarksIO:
         if filename:
             try:
                 fp, reader = self.__open_file_for_reading(filename)
-            except IOError, error:
+            except IOError as error:
                 # only ENOENT is passed through like this
                 fp, reader = self.__open_url_for_reading(filename)
             root = reader.read_file(fp)
@@ -636,9 +637,9 @@ class BookmarksDialog:
     def load(self, event=None):
         try:
             self._controller.load()
-        except IOError, errmsg:
+        except IOError as errmsg:
             IOErrorDialog(self._frame, 'during loading', errmsg)
-        except bookmarks.BookmarkFormatError, e:
+        except bookmarks.BookmarkFormatError as e:
             IOErrorDialog(self._frame, 'during loading', e.problem)
 
     def show(self):
@@ -662,7 +663,7 @@ class BookmarksDialog:
         self._frame.withdraw()
 
     def visible_p(self):
-        return self._frame.state() <> 'withdrawn'
+        return self._frame.state() != 'withdrawn'
 
     def set_labels(self, filename, title):
         self._file.config(text=filename)
@@ -1096,7 +1097,7 @@ class BookmarksController(OutlinerController):
         if at_end:
             parent.append_child(node)
         else:
-            parenr.insert_child(node, 0)
+            parent.insert_child(node, 0)
         # scroll the newly added node into view
         self.set_modflag(1)
         self.root_redisplay()
@@ -1332,13 +1333,13 @@ class BookmarksController(OutlinerController):
     # interface for searching
 
     def search_for_pattern(self, pattern,
-                           regex_flag, case_flag, backwards_flag):
+                           re_flag, case_flag, backwards_flag):
         # is case important in a literal match?
-        if regex_flag:
+        if re_flag:
             if case_flag:
-                cre = regex.compile(pattern, casefold)
+                cre = re.compile(pattern, re.casefold)
             else:
-                cre = regex.compile(pattern)
+                cre = re.compile(pattern)
         elif not case_flag:
             pattern = string.lower(pattern)
         # depth-first search for the next (or previous) node
@@ -1364,7 +1365,7 @@ class BookmarksController(OutlinerController):
             node = sv.node(nodei)
 ##          print 'checking nodei(%d): %s' % (nodei, node)
             if not node:
-                print 'no node for', nodei
+                print('no node for', nodei)
                 return None
             # match can occur in the title, uri string, or
             # description string. get this as one big ol' string
@@ -1376,13 +1377,13 @@ class BookmarksController(OutlinerController):
                                          node.description())
             else:
                 continue
-            if not regex_flag and not case_flag:
+            if not re_flag and not case_flag:
                 text = string.lower(text)
             # literal match
-            if not regex_flag:
+            if not re_flag:
                 if string.find(text, pattern) >= 0:
                     break
-            # regex match
+            # re match
             elif cre.search(text) >= 0:
                 break
             # have we gone round the world without a match?

@@ -129,8 +129,8 @@ class FrameSet:
                 x = x + width
             y = y + height
 
-    import re as regex
-    sizeprog = regex.compile("[ \t]*\([0-9]*\)\([%*]?\)")
+    import re
+    sizeprog = re.compile("[ \t]*\([0-9]*\)\([%*]?\)")
 
     def calculate_sizes(self, sizes, total):
         rawlist = string.splitfields(sizes, ",")

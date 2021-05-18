@@ -3,7 +3,7 @@
 from tkinter import *
 import tk_tools
 import string
-import re as regex
+import re
 import os
 import sys
 import time

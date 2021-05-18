@@ -20,13 +20,13 @@ TBD:
 """
 
 import os
-import re as regex
+import re
 import string
 import sys
 import time
 from grailutil import *
 
-GRAIL_RE = regex.compile('\([^ \t]+\)[ \t]+\([^ \t]+\)[ \t]+?\(.*\)?')
+GRAIL_RE = re.compile('\([^ \t]+\)[ \t]+\([^ \t]+\)[ \t]+?\(.*\)?')
 DEFAULT_NETSCAPE_HIST_FILE = os.path.join(gethome(), '.netscape-history')
 DEFAULT_GRAIL_HIST_FILE = os.path.join(getgraildir(), 'grail-history')
 
@@ -76,9 +76,9 @@ class HistoryReader:
         # we're looking at
         ghist = []
         line = fp.readline()
-        if regex.match('GRAIL-global-history-file-1', line) >= 0:
+        if re.match('GRAIL-global-history-file-1', line) >= 0:
             linereader = GrailHistoryReader()
-        elif regex.match('MCOM-Global-history-file-1', line) >= 0:
+        elif re.match('MCOM-Global-history-file-1', line) >= 0:
             linereader = NetscapeHistoryReader()
         else:
             return

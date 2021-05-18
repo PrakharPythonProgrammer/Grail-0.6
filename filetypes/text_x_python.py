@@ -3,7 +3,7 @@
 __version__ = '$Revision: 1.5 $'
 
 import grailutil
-import re as regex
+import re
 import string
 import tkinter
 import token
@@ -64,7 +64,7 @@ class parse_text_x_python:
 	if token.ISTERMINAL(ntype) and ntype not in IGNORED_TERMINALS:
 	    __wanted_terminals[ntype] = ntype
 
-    __ws_width = regex.compile("[%s]*" % string.whitespace).match
+    __ws_width = re.compile("[%s]*" % string.whitespace).match
 
     def close(self):
 	self.show("Colorizing Python source text - parsing...")

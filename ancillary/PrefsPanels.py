@@ -20,7 +20,7 @@ import urllib
 from tkinter import *
 import tk_tools
 import grailutil
-import string, regex, regsub
+import string, re, regsub
 from types import StringType
 
 
@@ -35,7 +35,7 @@ panels_dirs = [os.path.join(grail_root, 'prefpanels'),
                os.path.join(grail_root, 'prefspanels'),
                os.path.expanduser("~/.grail/prefspanels")]
 
-modname_matcher = regex.compile("^\(.*\)Panel.py[c]?$")
+modname_matcher = re.compile("^\(.*\)Panel.py[c]?$")
 
 # Framework
 

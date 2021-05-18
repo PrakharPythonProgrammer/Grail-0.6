@@ -8,7 +8,7 @@ import tk_tools
 import string
 import urllib
 import base64
-import re as re
+import re
 
 class AuthenticationManager:
     """Handles HTTP access authorization.

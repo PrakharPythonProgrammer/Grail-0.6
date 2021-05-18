@@ -126,7 +126,7 @@ def unregister_loads():
 import tempfile
 import os
 import socket
-import re as regex
+import re
 import string
 from tkinter import tkinter
 from grailutil import *
@@ -138,7 +138,7 @@ if not _filename:
     USER = getenv('USER') or getenv('LOGNAME')
     XDISPLAY = getenv('DISPLAY') or ':0'
     # normalize the display name
-    cre = regex.compile('\([^:]+\)?:\([0-9]+\)\(\.\([0-9]+\)\)?')
+    cre = re.compile('\([^:]+\)?:\([0-9]+\)\(\.\([0-9]+\)\)?')
     if cre.match(XDISPLAY):
         host, display, screen = cre.group(1, 2, 4)
         if not host:
@@ -166,7 +166,7 @@ class Controller:
         # clients of this class to register callbacks for commands
         # first.
         self._cbdict = {}
-        self._cmdre = regex.compile('\([^ \t]+\)\(.*\)')
+        self._cmdre = re.compile('\([^ \t]+\)\(.*\)')
 
     def start(self):
         """Begin listening for remote control commands."""
