@@ -4,6 +4,7 @@ import os
 import re
 import string
 import urllib
+from urllib.parse import urlparse
 from tkinter import *
 from BaseReader import BaseReader
 from Bastion import Bastion
@@ -575,7 +576,7 @@ def _get_key(context):
     groups = []
     for length, group in list:
         groups.append(group)
-    scheme, netloc, path, params, query, fragment = urllib.urllib(url)
+    scheme, netloc, path, params, query, fragment = urlparse(url)
     if scheme and netloc and scheme in urllib.uses_netloc:
         netloc = string.lower(netloc)
         user, host = urllib.splituser(netloc)

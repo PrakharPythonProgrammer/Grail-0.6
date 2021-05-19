@@ -4,6 +4,7 @@ import sys
 import string
 from tkinter import *
 import urllib
+from urllib.parse import urlparse
 import grailutil
 
 
@@ -101,7 +102,7 @@ class BaseReader:
         if self.api and self.api.iscached():
             status = status + " (cached)"
         if self.api and not self.shorturl:
-            tuple = urllib.urllib(self.api._url_)
+            tuple = urlparse(self.api._url_)
             path = tuple[2]
             i = string.rfind(path[:-1], '/')
             if i >= 0:

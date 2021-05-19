@@ -6,6 +6,7 @@ import os
 import sys
 import string
 import urllib
+from urllib.parse import urlparse
 from tkinter import *
 import tk_tools
 from BaseReader import BaseReader
@@ -454,14 +455,14 @@ class Reader(BaseReader):
 
         self.parser = None
 
-        tuple = urllib.urllib(url)
+        tuple = urlparse(url)
         # it's possible that the url send in a 301 or 302 error is a
         # relative URL.  if there's no scheme or netloc in the
         # returned tuple, try joining the URL with the previous URL
         # and retry parsing it.
         if not (tuple[0] and tuple[1]):
             url = urllib.urljoin(self.url, url)
-            tuple = urllib.urllib(url)
+            tuple = urlparse(url)
         self.url = url
 
         self.fragment = tuple[-1]

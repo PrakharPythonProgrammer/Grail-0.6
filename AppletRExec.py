@@ -10,11 +10,10 @@ import sys
 import tempfile
 import types
 import urllib
-import urllib
-
+from urllib.parse import urlparse
 
 def is_url(p):
-    u = urllib.urllib(p)
+    u = urlparse(p)
     #
     # Unfortunately path names on the MAC and Windows parse
     # similarly to URL's.  We currently have to not recognize
