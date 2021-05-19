@@ -23,6 +23,7 @@ non-proxy usage, the url parameter is a string.)
 import string
 import socket
 from urllib import splittype, splithost, splitport
+from urllib.parse import urlparse
 import grailutil
 
 #
@@ -42,7 +43,7 @@ def protocol_joiner(scheme):
 def protocol_access(url, mode, params, data=None):
     scheme, resturl = splittype(url)
     if not scheme:
-        raise IOError, ("protocol error", "no scheme identifier in URL", url)
+        raise IOError("protocol error", "no scheme identifier in URL", url)
     scheme = string.lower(scheme)
     sanitized = regsub.gsub("[^a-zA-Z0-9]", "_", scheme)
     #
@@ -118,14 +119,14 @@ def protocol_access(url, mode, params, data=None):
     app = grailutil.get_grailapp()
     access = app.find_extension('protocols', sanitized).access
     if not access:
-        raise IOError, ("protocol error", "no class for %s" % scheme)
+        raise IOError("protocol error", "no class for %s" % scheme)
     try:
         if data:
             return access(resturl, mode, params, data)
         else:
             return access(resturl, mode, params)
-    except socket.error, msg:
-        raise IOError, ("socket error", msg)
+    except socket.error as msg:
+        raise IOError("socket error", msg)
 
 
 import grailbase.extloader
@@ -162,17 +163,17 @@ def test(url = "http://www.python.org/"):
     api = protocol_access(url, 'GET', {})
     while 1:
         message, ready = api.pollmeta()
-        print message
+        print(message)
         if ready:
             meta = api.getmeta()
-            print `meta`
+            print(repr(meta))
             break
     while 1:
         message, ready = api.polldata()
-        print message
+        print(message)
         if ready:
             data = api.getdata(512)
-            print `data`
+            print(repr(data))
             if not data:
                 break
     api.close()
@@ -194,7 +195,7 @@ def valid_proxy(proxy):
     """Return 1 if the proxy string looks like a valid url, for an
     proxy URL else return 0."""
     import urllib
-    scheme, netloc, url, params, query, fragment = urllib.urllib(proxy)
+    scheme, netloc, url, params, query, fragment = urlparse(proxy)
     if scheme != 'http' or params or query or fragment:
         return 0
     return 1

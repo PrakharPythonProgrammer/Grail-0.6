@@ -145,8 +145,7 @@ class SGMLParser(SGMLLexer.SGMLLexer):
             elif not self.stack:
                 tag = self.doctype
                 if not tag:
-                    raise SGMLError, \
-                          'Cannot start the document with an empty tag.'
+                    raise SGMLError('Cannot start the document with an empty tag.')
         if self.__taginfo.has_key(tag):
             taginfo = self.__taginfo[tag]
         else:
@@ -235,7 +234,7 @@ class TagInfo:
             return cmp(self.tag, other)
         if type(other) is type(self):
             return cmp(self.tag, other.tag)
-        raise TypeError, "incomparable values"
+        raise TypeError("incomparable values")
 
 
 def _nullfunc(*args, **kw):

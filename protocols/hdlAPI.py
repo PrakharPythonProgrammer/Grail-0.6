@@ -106,7 +106,7 @@ class hdl_access(nullAPI.null_access):
     try:
         #print "Fetching global hash table"
         _global_hashtable = hdllib.fetch_global_hash_table()
-    except hdllib.Error, inst:
+    except hdllib.Error as inst:
         raise IOError, inst, sys.exc_traceback
 
     _hashtable = _global_hashtable
@@ -142,7 +142,7 @@ class hdl_access(nullAPI.null_access):
                     raise ImportError, mname
                 types = m.handle_types
                 formatter = m.data_formatter
-            except (ImportError, AttributeError), msg:
+            except (ImportError, AttributeError) as msg:
                 if hdllib.data_map.has_key(tname):
                     self._types = [hdllib.data_map[tname]]
                 else:
@@ -165,7 +165,7 @@ class hdl_access(nullAPI.null_access):
         try:
             replyflags, self._items = self._hashtable.get_data(
                 self._hdl, self._types)
-        except hdllib.Error, inst:
+        except hdllib.Error as inst:
             if inst.err == hdllib.HP_HANDLE_NOT_FOUND:
                 #print "Retry using a local handle server"
                 try:
@@ -173,7 +173,7 @@ class hdl_access(nullAPI.null_access):
                         self._hdl)
                     replyflags, self._items = self._hashtable.get_data(
                         self._hdl, self._types)
-                except hdllib.Error, inst:
+                except hdllib.Error as inst:
                     # (Same comment as below)
                     raise IOError, inst, sys.exc_traceback
                 else:
@@ -209,7 +209,7 @@ class hdl_access(nullAPI.null_access):
                             hdllib.HDL_TYPE_SERVICE_HANDLE):
                     uri = hdllib.hexstr(uri)
                 else:
-                    uri = escape(`uri`)
+                    uri = escape(repr(uri))
                 if hdllib.data_map.has_key(type):
                     type = hdllib.data_map[type][9:]
                 else:

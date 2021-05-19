@@ -72,7 +72,7 @@ class ColorDB:
 	    #
 	    key = (red, green, blue)
 	    foundname, aliases = self.__byrgb.get(key, (name, []))
-	    if foundname <> name and foundname not in aliases:
+	    if foundname != name and foundname not in aliases:
 		aliases.append(name)
 	    self.__byrgb[key] = (foundname, aliases)
 	    #
@@ -177,7 +177,7 @@ def rrggbb_to_triplet(color, atoi=string.atoi):
     """Converts a #rrggbb color to the tuple (red, green, blue)."""
     rgbtuple = _namedict.get(color)
     if rgbtuple is None:
-        if color[0] <> '#':
+        if color[0] != '#':
             raise BadColor(color)
 	red = color[1:3]
 	green = color[3:5]

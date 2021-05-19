@@ -30,14 +30,14 @@ class PaperInfo:
         if type(angle) is type(''):
             angle = paper_rotations[angle]
         if angle % 90.0 != 0:
-            raise ValueError, "Illegal page rotation: "  + `angle`
+            raise ValueError("Illegal page rotation: "  + repr(angle))
         self.Rotation = angle = angle % 360.0
         if angle % 180.0:
             pw, ph = self.PaperWidth, self.PaperHeight
             self.PaperWidth, self.PaperHeight = ph, pw
         self.__update()
 
-    def set_margins(self, (top, bottom, left, right)):
+    def set_margins(self, top, bottom, left, right):
         self.TopMargin = float(top)
         self.BottomMargin = float(bottom)
         self.LeftMargin = float(left)
@@ -57,21 +57,21 @@ class PaperInfo:
                            + self.BottomMargin / 2.0)
 
     def dump(self):
-        print "Paper information:"
-        print "------------------"
-        print "PaperName    =", self.PaperName
-        print "Rotation     =", self.Rotation
-        print "PaperHeight  =", self.PaperHeight
-        print "PaperWidth   =", self.PaperWidth
-        print "ImageHeight  =", self.ImageHeight
-        print "ImageWidth   =", self.ImageWidth
-        print "TopMargin    =", self.TopMargin
-        print "BottomMargin =", self.BottomMargin
-        print "LeftMargin   =", self.LeftMargin
-        print "RightMargin  =", self.RightMargin
-        print "HeaderPos    =", self.HeaderPos
-        print "FooterPos    =", self.FooterPos
-        print "TabStop      =", self.TabStop
+        print("Paper information:")
+        print("------------------")
+        print("PaperName    =", self.PaperName)
+        print("Rotation     =", self.Rotation)
+        print("PaperHeight  =", self.PaperHeight)
+        print("PaperWidth   =", self.PaperWidth)
+        print("ImageHeight  =", self.ImageHeight)
+        print("ImageWidth   =", self.ImageWidth)
+        print("TopMargin    =", self.TopMargin)
+        print("BottomMargin =", self.BottomMargin)
+        print("LeftMargin   =", self.LeftMargin)
+        print("RightMargin  =", self.RightMargin)
+        print("HeaderPos    =", self.HeaderPos)
+        print("FooterPos    =", self.FooterPos)
+        print("TabStop      =", self.TabStop)
 
 
 paper_sizes = {

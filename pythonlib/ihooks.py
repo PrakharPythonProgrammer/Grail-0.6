@@ -86,9 +86,9 @@ class _Verbose:
 
     def message(self, format, *args):
         if args:
-            print format%args
+            print(format%args)
         else:
-            print format
+            print(format)
 
 
 class BasicModuleLoader(_Verbose):
@@ -272,8 +272,8 @@ class ModuleLoader(BasicModuleLoader):
             elif type == PKG_DIRECTORY:
                 m = self.hooks.load_package(name, filename, file)
             else:
-                raise ImportError, "Unrecognized module type (%s) for %s" % \
-                      (`type`, name)
+                raise ImportError("Unrecognized module type (%s) for %s" % \
+                      (repr(type)), name)
         finally:
             if file: file.close()
         m.__file__ = filename
@@ -297,9 +297,9 @@ class FancyModuleLoader(ModuleLoader):
             initsuff, initmode, inittype = initinfo
             if inittype not in (PY_COMPILED, PY_SOURCE):
                 if initfile: initfile.close()
-                raise ImportError, \
+                raise ImportError(
                     "Bad type (%s) for __init__ module in package %s" % (
-                    `inittype`, name)
+                    repr(inittype), name))
             path = [filename]
             file = initfile
             realfilename = initfilename
@@ -321,7 +321,7 @@ class FancyModuleLoader(ModuleLoader):
         if path:
             m.__path__ = path
         m.__file__ = filename
-        exec code in m.__dict__
+        exec(code in m.__dict__)
         return m
 
 
@@ -436,7 +436,7 @@ class ModuleImporter(BasicModuleImporter):
             parent = None
             q = self.import_it(head, qname, parent)
             if q: return q, tail
-        raise ImportError, "No module named " + qname
+        raise ImportError("No module named " + qname)
 
     def load_tail(self, q, tail):
         m = q
@@ -447,7 +447,7 @@ class ModuleImporter(BasicModuleImporter):
             mname = "%s.%s" % (m.__name__, head)
             m = self.import_it(head, mname, m)
             if not m:
-                raise ImportError, "No module named " + mname
+                raise ImportError("No module named " + mname)
         return m
 
     def ensure_fromlist(self, m, fromlist, recursive=0):
@@ -465,11 +465,11 @@ class ModuleImporter(BasicModuleImporter):
                 subname = "%s.%s" % (m.__name__, sub)
                 submod = self.import_it(sub, subname, m)
                 if not submod:
-                    raise ImportError, "No module named " + subname
+                    raise ImportError("No module named " + subname)
 
     def import_it(self, partname, fqname, parent):
         if not partname:
-            raise ValueError, "Empty module name"
+            raise ValueError("Empty module name")
         try:
             return self.modules[fqname]
         except KeyError:

@@ -74,7 +74,7 @@ class PSWriter(formatter.AbstractWriter):
         self.__detab_pos = 0
 
     def new_spacing(self, spacing):
-        raise RuntimeError, 'not yet implemented'
+        raise RuntimeError('not yet implemented')
 
         # semantics of STYLES is a tuple of single char strings.
         # Right now the only styles we support are lower case 'underline' for

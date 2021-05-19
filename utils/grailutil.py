@@ -20,13 +20,14 @@ except AttributeError:
     # Copied from posixpath in Python 1.5.2.
     def abspath(path):
         if not os.path.isabs(path):
-            path = join(os.getcwd(), path)
+            path = ''.join(os.getcwd(), path)
         return os.path.normpath(path)
 
 
 def complete_url(url):
     import urllib
-    scheme, netloc = urllib.urllib(url)[:2]
+    from urllib.parse import urlparse
+    scheme, netloc = urlparse(url)[:2]
     if not scheme:
         if not netloc:
             # XXX url2pathname/pathname2url???
@@ -109,8 +110,8 @@ def pref_or_getenv(name, group='proxies', type_name='string',
         component = app.prefs.GetFloat(group, name, factory=factory)
         return component
     else:
-        raise ValueError, ('%s not supported - must be one of %s'
-                      % (`type_name`, ['string', 'int', 'float', 'Boolean']))
+        raise ValueError('%s not supported - must be one of %s'
+                      % (repr(type_name), ['string', 'int', 'float', 'Boolean']))
 
     import os
     try:

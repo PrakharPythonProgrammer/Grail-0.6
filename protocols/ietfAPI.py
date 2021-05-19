@@ -39,12 +39,12 @@ def convert_to_url(urn):
         else:
             m = _meeting_rx.match(urn)
             if not m:
-                raise ValueError, "not a valid ietf URN"
+                raise ValueError("not a valid ietf URN")
             wgbofname = m.group(2)
             try:
                 date = _number_to_date[int(m.group(1))]
             except KeyError:
-                raise ValueError, "unknown IETF meeting number: " + m.group(1)
+                raise ValueError("unknown IETF meeting number: " + m.group(1))
             which = "meeting-template"
             vars = {"date": date, "wg": wgbofname}
     return prefs.Get(PREF_GROUP, which) % vars

@@ -41,7 +41,7 @@ if __name__ == '__main__':
     import PSFont_Times_Roman
     font = PSFont_Times_Roman.font
 
-    print 'Font Name:', font.fontname()
-    print 'Full Name:', font.fullname()
-    print 'Width of "Hello World" in 12.0:', \
-          font.text_width(12.0, 'Hello World')
+    print('Font Name:', font.fontname())
+    print('Full Name:', font.fullname())
+    print('Width of "Hello World" in 12.0:', \
+          font.text_width(12.0, 'Hello World'))

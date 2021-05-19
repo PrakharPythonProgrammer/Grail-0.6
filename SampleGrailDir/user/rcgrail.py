@@ -65,12 +65,12 @@ def rc_filename(user=None, display=None):
     return os.path.join(tmpdir, os.path.join(RCDIR, sfile))
 
 def usage(progname):
-    print 'Usage:', progname, '[-b] [-d display] [-p] [-h] [URI]'
-    print '    -b fires up a new browser window'
-    print '    -d send URI to Grail on display'
-    print '    -p PING only'
-    print '    -h prints this message'
-    print '    URI is the URI string to tell Grail to load'
+    print('Usage:', progname, '[-b] [-d display] [-p] [-h] [URI]')
+    print('    -b fires up a new browser window')
+    print('    -d send URI to Grail on display')
+    print('    -p PING only')
+    print('    -h prints this message')
+    print('    URI is the URI string to tell Grail to load')
 
 
 
@@ -91,7 +91,7 @@ def main():
     try:
         optlist, args = getopt.getopt(sys.argv[1:], 'bdhp')
         for switch, arg in optlist:
-            if switch == '-b' and cmd[-3:] <> 'NEW':
+            if switch == '-b' and cmd[-3:] != 'NEW':
                 cmd = cmd + 'NEW'
             elif switch == '-d':
                 display = arg
@@ -130,10 +130,10 @@ def main():
         s.send(cmd)
         if pingonly:
             data = s.recv(1024)
-            print "Grail's response: `%s'" % data
+            print("Grail's response: `%s'" % data)
         s.close()
     except socket.error:
-        print 'rcgrail: unable to communicate with Grail'
+        print('rcgrail: unable to communicate with Grail')
         sys.exit(1)
 
 main()

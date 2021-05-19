@@ -79,7 +79,7 @@ class ftp_access:
     def __init__(self, url, method, params):
         Assert(method == 'GET')
         netloc, path = splithost(url)
-        if not netloc: raise IOError, ('ftp error', 'no host given')
+        if not netloc: raise IOError('ftp error', 'no host given')
         host, port = splitport(netloc)
         user, host = splituser(host)
         if user: user, passwd = splitpasswd(user)
@@ -89,7 +89,7 @@ class ftp_access:
             try:
                 port = string.atoi(port)
             except string.atoi_error:
-                raise IOError, ('ftp error', 'bad port')
+                raise IOError('ftp error', 'bad port')
         else:
             port = ftplib.FTP_PORT
         path, attrs = splitattr(path)
@@ -137,8 +137,8 @@ class ftp_access:
             self.cand = cand
             self.sock, self.isdir = cand.retrfile(file, type)
             self.content_length = cand.content_length
-        except ftplib.all_errors, msg:
-            raise IOError, ('ftp error', msg)
+        except ftplib.all_errors as msg:
+            raise IOError('ftp error', msg)
         self.state = META
 
     def pollmeta(self):
@@ -159,7 +159,7 @@ class ftp_access:
         if self.content_encoding:
             headers['content-encoding'] = self.content_encoding
         if self.content_length:
-            headers['content-length'] = `self.content_length`
+            headers['content-length'] = repr(self.content_length)
         self.lines = []                 # Only used of self.isdir
         return 200, "OK", headers
 
@@ -173,7 +173,7 @@ class ftp_access:
             return ""
         Assert(self.state == DATA)
         data = self.sock.recv(maxbytes)
-        if self.debuglevel > 4: print "*data*", `data`
+        if self.debuglevel > 4: print("*data*", repr(data))
         if not data:
             self.state = DONE
         if self.isdir:
@@ -192,7 +192,7 @@ class ftp_access:
         else:
             lines = string.splitfields(data, '\n')
             if self.debuglevel > 3:
-                for line in lines: print "*addl*", `line`
+                for line in lines: print("*addl*", repr(line))
             if self.lines:
                 lines[0] = self.lines[-1] + lines[0]
                 self.lines[-1:] = lines
@@ -208,7 +208,7 @@ class ftp_access:
         prog = re.compile(self.listing_pattern)
         for line in lines:
             if self.debuglevel > 2:
-                print "*getl*", `line`
+                print("*getl*", repr(line))
             if line is None:
                 data = data + self.listing_header % {'url':
                                                      self.escape(self.url)}
@@ -302,7 +302,7 @@ class ftpwrapper:
             try:
                 self.ftp.voidresp()
             except ftplib.all_errors:
-                print "[ftp.voidresp() failed]"
+                print("[ftp.voidresp() failed]")
 
     def retrfile(self, file, type):
         if type == 'd': cmd = 'TYPE A'; isdir = 1
@@ -317,9 +317,9 @@ class ftpwrapper:
             try:
                 cmd = 'RETR ' + unquote(file)
                 conn = self.ftp.transfercmd(cmd)
-            except ftplib.error_perm, reason:
+            except ftplib.error_perm as reason:
                 if reason[:3] != '550':
-                    raise IOError, ('ftp error', reason)
+                    raise IOError('ftp error', reason)
             else:
                 self.content_length = self.ftp._xfer_size
         if not conn:

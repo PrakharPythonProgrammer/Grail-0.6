@@ -86,7 +86,7 @@ class PrintSettings:
 
     def get_fontspec(self):
         if self.fontsize == self.leading:
-            return `self.fontsize`
+            return repr(self.fontsize)
         return "%s / %s" % (self.fontsize, self.leading)
 
     def get_scaling(self):

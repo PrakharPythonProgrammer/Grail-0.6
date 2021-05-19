@@ -6,8 +6,8 @@ import string
 class data_access(nullAPI.null_access):
     def __init__(self, url, method, params):
         if method != "GET":
-            raise IOError, \
-                  "'data:' scheme does not support the %s method" % method
+            raise IOError(
+                  "'data:' scheme does not support the %s method" % method)
         self.state = nullAPI.META
         self.__ctype, self.__data = parse(url)
 
@@ -15,7 +15,7 @@ class data_access(nullAPI.null_access):
         Assert(self.state == nullAPI.META)
         self.state = nullAPI.DATA
         headers = {"content-type": self.__ctype,
-                   "content-length": `len(self.__data)`,
+                   "content-length": repr(len(self.__data)),
                    }
         if self.__data:
             return 200, "Ready", headers

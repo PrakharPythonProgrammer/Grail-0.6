@@ -9,6 +9,7 @@ import string
 import sys
 import time
 import urllib
+from urllib.parse import urlparse
 
 try:
     from cStringIO import StringIO
@@ -139,7 +140,7 @@ class PSStream:
         del self.__titles[:-1]
 
     def set_url(self, url):
-        parsed = urllib.urllib(url)[:3] + ('', '', '')
+        parsed = urlparse(url)[:3] + ('', '', '')
         self._url_cooked = cook(urllib.urlunparse(parsed))
 
     def start(self):
@@ -147,45 +148,45 @@ class PSStream:
         oldstdout = sys.stdout
         try:
             sys.stdout = self._ofp
-            print "%!PS-Adobe-1.0"
+            print("%!PS-Adobe-1.0")
             if self.get_title():
-                print "%%Title:", self.get_title()
+                print("%%Title:", self.get_title())
             # output font prolog
-            print "%%DocumentPaperSizes:", self._paper.PaperName
-            print "%%DocumentFonts: Symbol ZapfDingbats",
+            print("%%DocumentPaperSizes:", self._paper.PaperName)
+            print("%%DocumentFonts: Symbol ZapfDingbats",)
             docfonts = self._font.docfonts
-            for dfv in docfonts.values(): print dfv,
-            print
+            for dfv in docfonts.values(): print(dfv,)
+            print()
             # spew out the contents of the header PostScript file
-            print get_systemheader()
+            print(get_systemheader())
             # define the fonts
-            print "/scalfac", self._font.points_per_pixel, "D"
+            print("/scalfac", self._font.points_per_pixel, "D")
             for docfont in docfonts.keys():
-                print "/%s /%s dup reencodeISO D findfont D" \
-                      % (docfont, docfonts[docfont])
+                print("/%s /%s dup reencodeISO D findfont D" \
+                      % (docfont, docfonts[docfont]))
             # finish out the prolog with paper information:
             for name, value in vars(self._paper).items():
                 if type(value) is type(''):
-                    print "/Gr%s (%s) D" % (name, value)
+                    print("/Gr%s (%s) D" % (name, value))
                 else:
-                    print "/Gr%s %s D" % (name, value)
+                    print("/Gr%s %s D" % (name, value))
             # Add time information to allow the printing functions to include
             # 'date printed' to the footers if desired.  We need a way to get
             # the last-modified time of the document from the context headers,
             # but these are not available to us at this point.
-            print "%%\n%% time values for use by page decorating functions:"
+            print("%%\n%% time values for use by page decorating functions:")
             names = ("Year", "Month", "Day", "Hour", "Minute", "Second",
                      "Weekday", "Julian", "DST")
             t = time.time()
             local = time.localtime(t)
             utc = time.gmtime(t)
             for name, local, utc in map(None, names, local, utc):
-                print "/Gr%s %s D /GrUTC%s %s D" % (name, local, name, utc)
+                print("/Gr%s %s D /GrUTC%s %s D" % (name, local, name, utc))
             # add per-user customization:
             user_template = get_userheader()
             if user_template:
-                print user_template
-            print "%%EndProlog"
+                print(user_template)
+            print("%%EndProlog")
         finally:
             sys.stdout = oldstdout
         self.print_page_preamble()
@@ -258,16 +259,16 @@ class PSStream:
             sys.stdout = self._linefp
             # Translate & scale for image origin (maybe should add
             # some cropping?  just assuming image is reasonable):
-            print 'gsave\n currentpoint %s sub translate %s %s scale' \
-                  % (below, xscale, yscale)
+            print('gsave\n currentpoint %s sub translate %s %s scale' \
+                  % (below, xscale, yscale))
             if ll_x or ll_y:
                 #  Have to translate again to make image happy:
-                print ' %d %d translate' % (-ll_x, -ll_y)
+                print(' %d %d translate' % (-ll_x, -ll_y))
             if img.data[-1] == '\n':
                 img.data = img.data[:-1]
-            print img.data
+            print(img.data)
             #  Restore context, move to right of image:
-            print 'grestore %s 0 R' % width
+            print('grestore %s 0 R' % width)
         finally:
             sys.stdout = oldstdout
 
@@ -337,9 +338,9 @@ class PSStream:
         oldstdout = sys.stdout
         try:
             sys.stdout = self._ofp
-            print "%%Trailer"
-            print "%%Pages:", self.get_pageno()
-            print "%%EOF"
+            print("%%Trailer")
+            print("%%Pages:", self.get_pageno())
+            print("%%EOF")
         finally:
             sys.stdout = oldstdout
 
@@ -464,12 +465,12 @@ class PSStream:
 
     def push_underline(self, flag):
         render = flag and 'U' or 'S'
-        if self._render <> render and self._linestr:
+        if self._render != render and self._linestr:
             self.close_string()
         self._render = render
 
     def push_literal(self, flag):
-        if self._inliteral_p <> flag and self._linestr:
+        if self._inliteral_p != flag and self._linestr:
             self.close_string()
         self._inliteral_p = flag
 
@@ -589,17 +590,17 @@ class PSStream:
             sys.stdout = self._ofp
             # write the structure page convention
             pageno = self.get_pageno()
-            print '%%Page:', pageno, pageno
-            print '%%BeginPageProlog'
+            print('%%Page:', pageno, pageno)
+            print('%%BeginPageProlog')
             psfontname, size = self._line_start_font
-            print "save", self._margin, psfontname, size, pageno, "NP"
-            print '%%EndPageProlog'
+            print("save", self._margin, psfontname, size, pageno, "NP")
+            print('%%EndPageProlog')
             if RECT_DEBUG:
-                print 'gsave', 0, 0, "M"
-                print self._paper.ImageWidth, 0, "RL"
-                print 0, -self._paper.ImageHeight, "RL"
-                print -self._paper.ImageWidth, 0, "RL closepath stroke newpath"
-                print 'grestore'
+                print('gsave', 0, 0, "M")
+                print(self._paper.ImageWidth, 0, "RL")
+                print(0, -self._paper.ImageHeight, "RL")
+                print(-self._paper.ImageWidth, 0, "RL closepath stroke newpath")
+                print('grestore')
         finally:
             sys.stdout = oldstdout
 

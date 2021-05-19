@@ -47,6 +47,6 @@ class telnet_access(null_access):
             os.execvp(cmd[0], cmd)
             # This doesn't return when successful
         except:
-            print "Exception in os.execvp() or os.close()"
+            print("Exception in os.execvp() or os.close()")
             # Don't fall back in the the parent's stack!
             os._exit(127)

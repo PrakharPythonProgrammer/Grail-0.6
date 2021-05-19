@@ -417,7 +417,7 @@ class SGMLLexer(SGMLLexerBase):
                     i = k
                     continue
             else:
-                raise RuntimeError, 'neither < nor & ??'
+                raise RuntimeError('neither < nor & ??')
             # We get here only if incomplete matches but
             # nothing else
             k = incomplete.match(rawdata, i)
@@ -439,8 +439,8 @@ class SGMLLexer(SGMLLexerBase):
     # Internal -- parse comment, return length or -1 if not terminated
     def parse_comment(self, i, end):
         rawdata = self.rawdata
-        if rawdata[i:i+4] <> (MDO + COM):
-            raise RuntimeError, 'unexpected call to parse_comment'
+        if rawdata[i:i+4] != (MDO + COM):
+            raise RuntimeError('unexpected call to parse_comment')
         if self._strict:
             # stricter parsing; this requires legal SGML:
             pos = i + len(MDO)
@@ -458,7 +458,7 @@ class SGMLLexer(SGMLLexerBase):
                 elif rawdata[pos] != "-":
                     self.lex_error("illegal character in"
                                    " markup declaration: "
-                                   + `rawdata[pos]`)
+                                   + repr(rawdata[pos]))
                     pos = pos + 1
                 else:
                     return -1
@@ -502,17 +502,17 @@ class SGMLLexer(SGMLLexerBase):
         if j < 0:
             return -1
         # Now parse the data between i+1 and j into a tag and attrs
-        if rawdata[i:i+2] == '<>':
+        if rawdata[i:i+2] == '!=':
             #  Semantics of the empty tag are handled by lex_starttag():
             if self._strict:
                 self.lex_starttag('', {})
             else:
-                self.lex_data('<>')
+                self.lex_data('!=')
             return i + 2
 
         k = tagfind.match(rawdata, i+1)     # matches just the GI
         if k < 0:
-            raise RuntimeError, 'unexpected call to parse_starttag'
+            raise RuntimeError('unexpected call to parse_starttag')
         k = i+1+k
         tag = self._normfunc(rawdata[i+1:k])
         # pull recognizable attributes
@@ -536,7 +536,7 @@ class SGMLLexer(SGMLLexerBase):
         xx = tagend.match(rawdata, k)
         if xx < 0:
             #  something vile
-            endchars = self._strict and "<>/" or "<>"
+            endchars = self._strict and "!=/" or "!="
             while 1:
                 try:
                     while rawdata[k] in string.whitespace:
@@ -579,7 +579,7 @@ class SGMLLexer(SGMLLexerBase):
     # Internal -- parse endtag
     def parse_endtag(self, i):
         rawdata = self.rawdata
-        if rawdata[i+2] in '<>':
+        if rawdata[i+2] in '!=':
             if rawdata[i+2] == '<' and not self._strict:
                 self.lex_limitation("unclosed end tags not supported")
                 self.lex_data(ETAGO)
@@ -650,9 +650,9 @@ class SGMLLexer(SGMLLexerBase):
 OPTIONAL_WHITESPACE = "[%s]*" % string.whitespace
 interesting = re.compile('[&<]')
 incomplete = re.compile('&\([a-zA-Z][a-zA-Z0-9]*\|#[0-9]*\)?\|'
-                           '<\([a-zA-Z][^<>]*\|'
-                           '/\([a-zA-Z][^<>]*\)?\|'
-                           '![^<>]*\)?')
+                           '<\([a-zA-Z][^!=]*\|'
+                           '/\([a-zA-Z][^!=]*\)?\|'
+                           '![^!=]*\)?')
 
 entityref = re.compile(ERO + '\([a-zA-Z][-.a-zA-Z0-9]*\)[^-.a-zA-Z0-9]')
 simplecharref = re.compile(CRO + '\([0-9]+[^0-9]\)')
@@ -665,11 +665,11 @@ shorttagopen = re.compile(STAGO + '[a-zA-Z][a-zA-Z0-9.-]*'
                              + OPTIONAL_WHITESPACE + NET)
 shorttag = re.compile(STAGO + '\([a-zA-Z][a-zA-Z0-9.-]*\)'
                          + OPTIONAL_WHITESPACE + NET + '\([^/]*\)' + NET)
-endtagopen = re.compile(ETAGO + '[<>a-zA-Z]')
-endbracket = re.compile('[<>]')
+endtagopen = re.compile(ETAGO + '[!=a-zA-Z]')
+endbracket = re.compile('[!=]')
 endtag = re.compile(ETAGO +
                        '\([a-zA-Z][-.a-zA-Z0-9]*\)'
-                       '\([^-.<>a-zA-Z0-9]?[^<>]*\)[<>]')
+                       '\([^-.!=a-zA-Z0-9]?[^!=]*\)[!=]')
 special = re.compile(MDO + '[^>]*' + MDC)
 markupdeclaration = re.compile(MDO +
                                   '\(\([-.a-zA-Z0-9]+\|'
@@ -691,7 +691,7 @@ attrfind = re.compile(
     + '\(' + LITA + "[^']*" + LITA
     + '\|' + LIT + '[^"]*' + LIT
     + '\|[-~a-zA-Z0-9,./:+*%?!()_#=]*\)\)?')
-tagend = re.compile(OPTIONAL_WHITESPACE + '[<>/]')
+tagend = re.compile(OPTIONAL_WHITESPACE + '[!=/]')
 
 # used below in comment_match()
 comment_start = re.compile(COM + "\([^-]*\)-\(.\|\n\)")

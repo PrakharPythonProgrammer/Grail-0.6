@@ -17,7 +17,7 @@ import posixpath
 import string
 import traceback
 import urllib
-import urllib
+from urllib.parse import urlparse
 
 from types import TupleType
 
@@ -88,7 +88,7 @@ def run(app):
                                        'url=',
                                        'verbose',
                                        ])
-    except getopt.error, err:
+    except getopt.error as err:
         error = 1
         help = 1
         options = ()
@@ -180,7 +180,7 @@ def run(app):
     else:
         outfp = open(outfile, 'w')
     if outfile != '-':
-        print 'Outputting PostScript to', outfile
+        print('Outputting PostScript to', outfile)
 
     if url:
         context = URIContext(url)
@@ -227,19 +227,19 @@ def run(app):
                 p.sgml_parser.lex_endtag(p.sgml_parser.get_stack()[0])
             try:
                 infp, fn = open_source(url)
-            except IOError, err:
+            except IOError as err:
                 if verbose and outfp is not sys.stdout:
-                    print "Error opening subdocument", url
-                    print "   ", err
+                    print("Error opening subdocument", url)
+                    print("   ", err)
             else:
                 new_ctype = get_ctype(app, url, infp)
                 if new_ctype != ctype:
                     if verbose:
-                        print "skipping", url
-                        print "  wrong content type:", new_ctype
+                        print("skipping", url)
+                        print("  wrong content type:", new_ctype)
                     continue
                 if verbose and outfp is not sys.stdout:
-                    print "Subdocument", url
+                    print("Subdocument", url)
                 w.ps.close_line()
                 if MULTI_DO_PAGE_BREAK: # must be true for now, not sure why
                     pageend = w.ps.push_page_end()
@@ -284,19 +284,19 @@ def load_tag_handler(app, arg):
         oldpath = sys.path
         try:
             sys.path = [dirname] + oldpath
-            exec "import %s ; mod = %s" % (modname, modname)
+            exec("import %s ; mod = %s" % (modname, modname))
             loader.load_tag_handlers(mod)
         finally:
             sys.path = oldpath
     else:
         sys.stdout = sys.stderr
-        print "Could not locate tag handler", arg
-        print
-        print "Argument to --tags must be a directory to be added to the html"
-        print "package or a file containing tag handler functions.  The tag"
-        print "handlers defined in the directory or file will take precedence"
-        print "over any defined in other extensions."
-        print
+        print("Could not locate tag handler", arg)
+        print()
+        print("Argument to --tags must be a directory to be added to the html")
+        print("package or a file containing tag handler functions.  The tag")
+        print("handlers defined in the directory or file will take precedence")
+        print("over any defined in other extensions.")
+        print()
         return 0
     return 1
 
@@ -336,7 +336,7 @@ def open_source(infile):
         # use posixpath since URLs are expected to be POSIX-like; don't risk
         # that we're running on NT and os.path.basename() doesn't "do the
         # right thing."
-        fn = posixpath.basename(urllib.urllib(infile)[2])
+        fn = posixpath.basename(urlparse(infile)[2])
     else:
         fn = infile
     return infp, fn
@@ -346,7 +346,7 @@ class multi_transform:
     def __init__(self, context, levels=None):
         self.__app = context.app
         baseurl = context.get_baseurl()
-        scheme, netloc, path, params, query, frag = urllib.urllib(baseurl)
+        scheme, netloc, path, params, query, frag = urlparse(baseurl)
         self.__scheme = scheme
         self.__netloc = string.lower(netloc)
         self.__path = os.path.dirname(path)
@@ -356,7 +356,7 @@ class multi_transform:
         self.__docs = {baseurl: 0}
 
     def __call__(self, url, attrs):
-        scheme, netloc, path, params, query, frag = urllib.urllib(url)
+        scheme, netloc, path, params, query, frag = urlparse(url)
         if params or query:             # safety restraint
             return url
         netloc = string.lower(netloc)
@@ -394,10 +394,10 @@ class multi_transform:
     def insert(self, url):
         if self.__base_index is not None:
             i = self.__base_index + 1
-            scheme, netloc, path, x, y, z = urllib.urllib(url)
+            scheme, netloc, path, x, y, z = urlparse(url)
             basepath = os.path.dirname(path)
             while i < len(self.__subdocs):
-                scheme, netloc, path, x, y, z = urllib.urllib(
+                scheme, netloc, path, x, y, z = urlparse(
                     self.__subdocs[i])
                 path = os.path.dirname(path)
                 i = i + 1
@@ -432,29 +432,29 @@ def usage(settings):
     import printing.paper
     #
     progname = os.path.basename(sys.argv[0])
-    print 'Usage:', progname, '[options] [file-or-url]'
-    print '    -u: URL for footer'
-    print '    -t: title for header'
-    print '    -a: toggle anchor footnotes (default is %s)' \
-          % _onoff(settings.footnoteflag)
-    print '    -U: toggle anchor underlining (default is %s)' \
-          % _onoff(settings.underflag)
-    print '    -o: orientation; portrait, landscape, or seascape'
-    print '    -p: paper size; letter, legal, a4, etc.',
-    print '(default is %s)' % settings.papersize
-    print '    -f: font size, in points (default is %s/%s)' \
-          % settings.get_fontsize()
-    print '    -d: turn on debugging'
-    print '    -l: logfile for debugging, otherwise stderr'
-    print '    -s: toggle "advanced" SGML recognition (default is %s)'\
-          % _onoff(settings.strict_parsing)
-    print '    -T: size of tab stop in points (default is %s)' \
-          % printing.paper.PaperInfo.TabStop
-    print '    -P: specify output printer'
-    print '    -m: descend tree starting from specified document,'
-    print '        printing all HTML documents found'
-    print '    -h: this help message'
-    print '[file]: file to convert, otherwise from stdin'
+    print('Usage:', progname, '[options] [file-or-url]')
+    print('    -u: URL for footer')
+    print('    -t: title for header')
+    print('    -a: toggle anchor footnotes (default is %s)' \
+          % _onoff(settings.footnoteflag))
+    print('    -U: toggle anchor underlining (default is %s)' \
+          % _onoff(settings.underflag))
+    print('    -o: orientation; portrait, landscape, or seascape')
+    print('    -p: paper size; letter, legal, a4, etc.',)
+    print('(default is %s)' % settings.papersize)
+    print('    -f: font size, in points (default is %s/%s)' \
+          % settings.get_fontsize())
+    print('    -d: turn on debugging')
+    print('    -l: logfile for debugging, otherwise stderr')
+    print('    -s: toggle "advanced" SGML recognition (default is %s)'\
+          % _onoff(settings.strict_parsing))
+    print('    -T: size of tab stop in points (default is %s)' \
+          % printing.paper.PaperInfo.TabStop)
+    print('    -P: specify output printer')
+    print('    -m: descend tree starting from specified document,')
+    print('        printing all HTML documents found')
+    print('    -h: this help message')
+    print('[file]: file to convert, otherwise from stdin')
 
 
 def _onoff(bool):
@@ -491,7 +491,7 @@ def main():
 
 def profile_main(n=18):
     import profile, pstats
-    print "Running under profiler...."
+    print("Running under profiler....")
     profiler = profile.Profile()
     try:
         profiler.runctx('main()', globals(), locals())

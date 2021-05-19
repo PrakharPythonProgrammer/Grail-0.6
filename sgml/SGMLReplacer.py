@@ -13,7 +13,7 @@ _named_chars = {'#re' : '\r',
                 '#space' : ' '}
 
 for i in range(256):
-    _named_chars["#" + `i`] = chr(i)
+    _named_chars["#" + repr(i)] = chr(i)
 
 #  build a table suitable for string.translate()
 _chartable = map(chr, range(256))

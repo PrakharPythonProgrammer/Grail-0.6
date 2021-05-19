@@ -110,7 +110,7 @@ class CookieDB:
             if cookie.expires is not None:
                 isdomain = cookie.isdomain and 'TRUE' or 'FALSE'
                 secure = cookie.secure and 'TRUE' or 'FALSE'
-                expires = `cookie.expires`[:-1]
+                expires = repr(cookie.expires)[:-1]
                 l = [cookie.domain, isdomain, cookie.path, secure,
                      expires, cookie.name, cookie.value]
                 s = string.join(l, '\t')
@@ -317,7 +317,7 @@ def parse_cookies(s):
             if s[0] == ",":
                 s = string.strip(s[1:])
             else:
-                raise ValueError, "illegal cookie separator"
+                raise ValueError("illegal cookie separator")
     return results
 
 
@@ -335,7 +335,7 @@ def parse_cookie(s):
     name, pos = _get_name(s)
     value, pos = _get_value(s, pos)
     if value is None:
-        raise ValueError, "no value for cookie"
+        raise ValueError("no value for cookie")
     s = string.strip(s[pos:])
     pos = 0
     if s and s[0] == ';':
@@ -347,7 +347,7 @@ def parse_cookie(s):
         if k == "expires":
             expires, pos = _get_value(s, pos, _date_rx)
             if expires is None:
-                raise ValueError, "missing or unrecognized expiration date"
+                raise ValueError("missing or unrecognized expiration date")
             expires = _parse_date(expires)
         else:
             v, pos = _get_value(s, pos)
@@ -380,7 +380,7 @@ def parse_cookie(s):
         if hostparts[-1] in SPECIAL_DOMAINS:
             minparts = 2
         if len(hostparts) < minparts:
-            raise ValueError, "too few components in domain specification"
+            raise ValueError("too few components in domain specification")
     # prefer max-age over expires
     if max_age:
         expires = long(time.time()) + max_age
@@ -391,7 +391,7 @@ def parse_cookie(s):
 def _get_name(s, start=0):
     m = _name_rx.match(s, start)
     if not m:
-        raise ValueError, "could not extract name"
+        raise ValueError("could not extract name")
     return m.group(1), m.end()
 
 
@@ -426,9 +426,9 @@ def _2dyear_to_4dyear(yy):
     # what do we do with those darn two-digit years?
     # always assuming 19yy seems a little dangerous
     if (yy < 70):
-	return yy + 2000
+	    return yy + 2000
     else:
-	return yy + 1900
+	    return yy + 1900
 
 def _parse_date(str):
     """Parses time in rfc850, rfc1123, and raw seconds formats. Returns
@@ -443,8 +443,8 @@ def _parse_date(str):
 
     # first we need to determine the format
     if ',' in str:
-	noday = string.strip(str[string.find(str, ',')+1:])
-	if '-' in str:
+	    noday = string.strip(str[string.find(str, ',')+1:])
+    if '-' in str:
 	    # Format...... Weekday, 00-Mon-00 00:00:00 GMT (rfc850)
 	    mday = string.atoi(noday[0:2])
 	    mon = _month_to_num(noday[3:6])
@@ -452,7 +452,7 @@ def _parse_date(str):
 	    hour = string.atoi(noday[10:12])
 	    min = string.atoi(noday[13:15])
 	    sec = string.atoi(noday[16:18])
-	else:
+    else:
 	    # Format...... Wkd, 00 Mon 0000 00:00:00 GMT (rfc1123)
 	    mday = string.atoi(noday[0:2])
 	    mon = _month_to_num(noday[3:6])
@@ -461,14 +461,13 @@ def _parse_date(str):
 	    min = string.atoi(noday[15:17])
 	    sec = string.atoi(noday[18:20])
 
-	gmt = (year, mon, mday, hour, min, sec, 0, 0, 0)
-	secs = time.mktime(gmt)
-	return secs - time.timezone
-    else:
+    gmt = (year, mon, mday, hour, min, sec, 0, 0, 0)
+    secs = time.mktime(gmt)
+    return secs - time.timezone
 	# could be raw digits
-	if str[0] in string.digits:
+    if str[0] in string.digits:
 	    return time.time() + string.atoi(str)
-	else:
+    else:
 	    mon = _month_to_num(str[4:7])
 	    mday = string.atoi(str[8:10])
 	    year = string.atoi(str[-4:])
@@ -488,12 +487,12 @@ def testcgi():
     """CGI program that can be used to test a browser's cookie support.
     Call this as the main program of a CGI script."""
     import cgi
-    print "Set-Cookie: key=value"
-    print "Set-Cookie: another=thing"
+    print("Set-Cookie: key=value")
+    print("Set-Cookie: another=thing")
     cgi.test()
-    print
-    print "<p> This is the <code>cookielib</code> module's"
-    print "<code>testcgi()</code> function."
+    print()
+    print("<p> This is the <code>cookielib</code> module's")
+    print("<code>testcgi()</code> function.")
 
 
 # Testing stuff.  The following things really need testing:

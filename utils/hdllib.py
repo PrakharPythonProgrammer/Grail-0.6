@@ -140,9 +140,9 @@ HDL_TYPE_TRANS_ID = 13                  # Transaction Identifier
 
 # Put data_types mappings into the module's dictionary, and into the
 # data_map dictionary.  Also create an inverted mapping.
-exec data_types
+exec(data_types)
 data_map = {}
-exec data_types in data_map
+exec(data_types in data_map)
 for key, value in data_map.items():
     if key != '__builtins__':
         data_map[value] = key
@@ -166,9 +166,9 @@ HP_FORWARD_ERROR = 11
 """
 
 # See data_types comment above
-exec error_codes
+exec(error_codes)
 error_map = {}
-exec error_codes in error_map
+exec(error_codes in error_map)
 for key, value in error_map.items():
     if key != '__builtins__':
         error_map[value] = key
@@ -185,11 +185,11 @@ class Error:
         self.err = err                  # Error code (int) or None
         self.info = info                # Additional info or None
     def __repr__(self):
-        msg = "Error(%s" % `self.msg`
+        msg = "Error(%s" % repr(self.msg)
         if self.err is not None:
-            msg = msg + ", %s" % `self.err`
+            msg = msg + ", %s" % repr(self.err)
         if self.info is not None:
-            msg = msg + ", %s" % `self.info`
+            msg = msg + ", %s" % repr(self.info)
         msg = msg + ")"
         return msg
     def __str__(self):
@@ -294,10 +294,10 @@ class PacketUnpacker:
         """
         self.length_from_header = self.u.unpack_uint()
         if len(self.buf()) - self.u.get_position() != self.length_from_header:
-            print "length according to header:",
-            print self.length_from_header,
-            print "actual length:",
-            print len(buf) - self.u.get_position()
+            print("length according to header:",)
+            print(self.length_from_header,)
+            print("actual length:",)
+            print(len(self.buf) - self.u.get_position())
             raise Error("body length mismatch")
 
     def unpack_item_array(self):
@@ -319,17 +319,17 @@ class PacketUnpacker:
 
         """
         nopts = self.u.unpack_uint()
-        if self.debug: print 'nopts=' + str(nopts)
+        if self.debug: print('nopts=' + str(nopts))
         opts = []
         for i in range(nopts):
             opt = self.u.unpack_uint()
-            if self.debug: print 'type=' + str(opt)
+            if self.debug: print('type=' + str(opt))
             #
             # Unpack the length value to determine if we have
             # a continuation packet.
             #
             length_from_body = self.u.unpack_int()
-            if self.debug: print 'length from body=' + str(length_from_body)
+            if self.debug: print('length from body=' + str(length_from_body))
             if length_from_body == 0:
                 raise Error("Invalid zero packet length")
             #
@@ -340,7 +340,7 @@ class PacketUnpacker:
             if length_from_body < 0:
                 total_length = length_from_body * -1
                 offset = self.u.unpack_uint()
-                if self.debug: print 'Continuation packet'
+                if self.debug: print('Continuation packet')
                 if offset < 0 or offset > total_length:
                     error = 'Bad offset in UDP body: ' + str(offset)
                     raise Error(error)
@@ -354,17 +354,17 @@ class PacketUnpacker:
 
             else:
                 # Normal packet, but it may be the start of a continuation
-                if self.debug: print 'Normal Packet'
+                if self.debug: print('Normal Packet')
                 total_length = self.value_length = length_from_body
-                if self.debug: print "length from body =", length_from_body
+                if self.debug: print("length from body =", length_from_body
                 if nopts == 1:
                     max_value_length = len(self.buf()) \
                                        - self.u.get_position() - 16
                     if self.value_length > max_value_length:
                         if self.debug:
-                            print 'Start of a continuation:',
-                            print "max value length =", max_value_length
-                        self.value_length = max_value_length
+                            print('Start of a continuation:',)
+                            print("max value length =", max_value_length
+                        self.value_length = max_value_length)
                 #
                 # Finally get the value
                 if self.debug: print 'Getting data segment of ' \
@@ -1151,8 +1151,8 @@ def test(defargs = testsets[0]):
                 s = data_map[stufftype][9:]
             else:
                 s = "UNKNOWN(%d)" % stufftype
-            print "\t%s/%s" % (s, stuffvalue)
-        print
+            print("\t%s/%s" % (s, stuffvalue))
+        print()
 
 
 if __name__ == '__main__':

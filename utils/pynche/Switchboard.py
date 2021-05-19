@@ -33,7 +33,7 @@ class Switchboard:
                 try:
                     fp = open(initfile)
                     self.__optiondb = marshal.load(fp)
-                    if type(self.__optiondb) <> DictType:
+                    if type(self.__optiondb) != DictType:
                         sys.stderr.write(
                             'Problem reading options from file: %s\n' %
                             initfile)

@@ -7,6 +7,7 @@ import string
 import types
 import urllib
 
+from urllib.parse import urlparse
 from formatter import AbstractFormatter
 from formatter import AS_IS
 from sgml.HTMLParser import HTMLParser
@@ -94,7 +95,7 @@ class PrintingHTMLParser(HTMLParser):
     def register_id(self, name):
         """Add page number of element start to internal database."""
         (scheme, netloc, path, params, query, fragment) = \
-                 urllib.urllib(self.context.get_url())
+                 urlparse(self.context.get_url())
         netloc = string.lower(netloc)
         url = urllib.urlunparse(
             (scheme, netloc, path, params, query, name))
@@ -600,7 +601,7 @@ class PrintingHTMLParser(HTMLParser):
 
 def disallow_data_scheme(href, attrs):
     """Cancel data: URLs."""
-    if urllib.urllib(href)[0] == 'data':
+    if urlparse(href)[0] == 'data':
         href = None
     return href
 
@@ -613,10 +614,10 @@ def disallow_anchor_footnotes(href, attrs):
 class disallow_self_reference:
     """Cancel all anchor footnotes which refer to the current document."""
     def __init__(self, baseurl):
-        self.__baseref = urllib.urllib(baseurl)[:-1] + ('',)
+        self.__baseref = urlparse(baseurl)[:-1] + ('',)
 
     def __call__(self, href, attrs):
-        ref = urllib.urllib(href)[:-1] + ('',)
+        ref = urlparse(href)[:-1] + ('',)
         if ref == self.__baseref:
             href = None
         return href

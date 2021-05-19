@@ -32,7 +32,7 @@ _subsystems = {}
 
 def debug(text, subsystem=None):
     if get_debugging(subsystem):
-        if text[-1] <> '\n':
+        if text[-1] != '\n':
             text = text + '\n'
         sys.stderr.write(text)
         sys.stderr.flush()
@@ -83,7 +83,7 @@ def image_loader(url):
     from urllib import urlopen
     try:
         imgfp = urlopen(url)
-    except IOError, msg:
+    except IOError as msg:
         return None
     return imgfp.read()
 
@@ -111,7 +111,7 @@ def conv_fontsize(spec):
     if '/' in spec:
         spec = string.splitfields(spec, '/')
         if len(spec) != 2:
-            raise ValueError, "illegal font size specification"
+            raise ValueError("illegal font size specification")
     else:
         spec = [spec, spec]
     spec = map(string.atof, map(string.strip, spec))

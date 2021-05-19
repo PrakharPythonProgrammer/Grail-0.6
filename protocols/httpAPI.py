@@ -59,7 +59,7 @@ class MyHTTP(httplib.HTTP):
     def getreply(self, file):
         self.file = file
         line = self.file.readline()
-        if self.debuglevel > 0: print 'reply:', `line`
+        if self.debuglevel > 0: print('reply:', repr(line))
         if replyprog.match(line) < 0:
             # Not an HTTP/1.0 response.  Fall back to HTTP/0.9.
             # Push the data back into the file.
@@ -120,7 +120,7 @@ class http_access:
         else:
             host, selector = splithost(resturl)
         if not host:
-            raise IOError, "no host specified in URL"
+            raise IOError("no host specified in URL")
         i = string.find(host, '@')
         if i >= 0:
             user_passwd, host = host[:i], host[i+1:]
@@ -172,11 +172,11 @@ class http_access:
         try:
             if not select.select([sock], [], [], timeout)[0]:
                 return "waiting for server response", 0
-        except select.error, msg:
+        except select.error as msg:
             raise IOError, msg, sys.exc_traceback
         try:
             new = sock.recv(1024)
-        except socket.error, msg:
+        except socket.error as msg:
             raise IOError, msg, sys.exc_traceback
         if not new:
             return "EOF in server response", 1
@@ -223,7 +223,7 @@ class http_access:
             return data
         try:
             data = self.h.sock.recv(maxbytes)
-        except socket.error, msg:
+        except socket.error as msg:
             raise IOError, msg, sys.exc_traceback
         if not data:
             self.state = DONE
