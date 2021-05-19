@@ -50,7 +50,7 @@ class Preferences:
         elif self.saved.has_key(group) and self.saved[group].has_key(cmpnt):
             return self.saved[group][cmpnt]
         else:
-            raise KeyError, "Preference %s not found" % ((group, cmpnt),)
+            raise KeyError("Preference %s not found" % ((group, cmpnt),))
 
     def Set(self, group, cmpnt, val):
         self.modified = 1
@@ -61,7 +61,7 @@ class Preferences:
             # Undelete.
             del self.deleted[group][cmpnt]
 
-    def __delitem__(self, (group, cmpnt)):
+    def __delitem__(self, group, cmpnt):
         """Inhibit preference (GROUP, COMPONENT) from being seen or saved."""
         self.Get(group, cmpnt)  # Verify item existence.
         if not self.deleted.has_key(group):
@@ -159,7 +159,7 @@ class AllPreferences:
         Silently ignores unregistered callbacks."""
         try:
             self.callbacks[group].remove(callback)
-        except ValueError, KeyError:
+        except (ValueError, KeyError):
             pass
 
     # Getting:
@@ -188,8 +188,8 @@ class AllPreferences:
         try:
             return typify(val, type_name)
         except TypeError:
-            raise TypeError, ('%s should be %s: %s'
-                               % (str((group, cmpnt)), type_name, `val`))
+            raise TypeError('%s should be %s: %s'
+                               % (str((group, cmpnt)), type_name, repr(val)))
 
     def GetInt(self, group, cmpnt, factory=0):
         return self.GetTyped(group, cmpnt, "int", factory)
@@ -252,7 +252,7 @@ class AllPreferences:
         try:
             self.user.Save()
         except IOError:
-            print "Failed save of user prefs."
+            print("Failed save of user prefs.")
 
         # Process the callbacks:
         callbacks, did_callbacks = self.callbacks, {}
@@ -284,13 +284,13 @@ def typify(val, type_name):
         elif type_name == 'Boolean':
             i = string.atoi(val)
             if i not in (0, 1):
-                raise TypeError, '%s should be Boolean' % `val`
+                raise TypeError('%s should be Boolean' % repr(val))
             return i
     except ValueError:
-            raise TypeError, '%s should be %s' % (`val`, type_name)
+            raise TypeError('%s should be %s' % (repr(val), type_name))
     
-    raise ValueError, ('%s not supported - must be one of %s'
-                       % (`type_name`, ['string', 'int', 'float', 'Boolean']))
+    raise ValueError('%s not supported - must be one of %s'
+                       % (repr(type_name), ['string', 'int', 'float', 'Boolean']))
     
 
 def test():
@@ -338,7 +338,7 @@ def test():
     exercise("prefs.Save()", env, "Save as it was originally.")
     
 
-    print "GrailPrefs tests passed."
+    print("GrailPrefs tests passed.")
     return prefs
 
 if __name__ == "__main__":

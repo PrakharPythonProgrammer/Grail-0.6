@@ -60,7 +60,7 @@ def get_scaling_adjustments(w):
 def PrintDialog(context, url, title):
     try:
         infp = context.app.open_url_simple(url)
-    except IOError, msg:
+    except IOError as msg:
         context.error_dialog(IOError, msg)
         return
     content_encoding, transfer_encoding = Reader.get_encodings(infp.info())
@@ -268,7 +268,7 @@ class RealPrintDialog:
                 return
             try:
                 fp = open(filename, "w")
-            except IOError, msg:
+            except IOError as msg:
                 self.context.error_dialog(IOError, str(msg))
                 return
         else:
@@ -284,7 +284,7 @@ class RealPrintDialog:
                     fp = open(tempname, 'w')
                 else:
                     fp = os.popen(cmd, "w")
-            except IOError, msg:
+            except IOError as msg:
                 self.context.error_dialog(IOError, str(msg))
                 return
         for e in self.cursor_widgets:
@@ -308,7 +308,7 @@ class RealPrintDialog:
                 pass
         if sts:
             self.context.error_dialog("Exit",
-                                      "Print command exit status %s" % `sts`)
+                                      "Print command exit status %s" % repr(sts))
         self.root.destroy()
 
     def cancel_event(self, event):

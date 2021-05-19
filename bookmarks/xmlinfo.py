@@ -112,8 +112,7 @@ def guess_byte_order_and_encoding(buffer):
     elif bom == '':
         pass
     else:
-        raise RuntimeError, \
-              "unexpected internal condition: bad byte-order mark"
+        raise RuntimeError("unexpected internal condition: bad byte-order mark")
     #
     # no byte-order mark
     #
@@ -147,7 +146,7 @@ def extract(encoding, buffer, values, best_effort=0):
         extractor = new_extractor(encoding, buffer, v2)
         try:
             v2 = extractor.extract()
-        except EncodingMismatchError, e:
+        except EncodingMismatchError as e:
             encoding = e.encoding
         except:
             if best_effort:
@@ -223,7 +222,7 @@ class Extractor:
         for c in verno:
             if not c in version_chars:
                 raise ParseError(
-                    "illegal character in XML version declaration: " + `c`)
+                    "illegal character in XML version declaration: " + repr(c))
         self.values.xml_version = verno
 
     def get_pseudo_attr(self):
@@ -402,7 +401,7 @@ class Extractor:
     def parse_Name(self, where):
         s, u = self.get_char_and_unicode()
         if not self.is_name_char(u):
-            raise ParseError("illegal character in name: %s (%d)" % (`s`, u))
+            raise ParseError("illegal character in name: %s (%d)" % (repr(s), u))
         i = 1
         while 1:
             c, u = self.get_char_and_unicode(i)
@@ -667,7 +666,7 @@ for c in "23456789":
     except TypeError:
         # older Python versions wouldn't allow __name__ to be set on a class
         pass
-    exec "ISO8859_%s_Extractor = _Extractor" % c
+    exec("ISO8859_%s_Extractor = _Extractor" % c)
     add_extractor_class(_Extractor)
 del _Extractor
 
@@ -727,7 +726,7 @@ class EBCDICExtractor(Extractor):
         _m[_e] = chr(_i)
     for i in range(len(_m)):
         if _m[_i] is None:
-            print "No EBCDIC character for ASCII", `chr(i)`
+            print("No EBCDIC character for ASCII", repr(chr(i)))
 
     __EBCDIC_TO_ASCII = tuple(_m)
 
@@ -774,8 +773,7 @@ class UCS2Extractor(Extractor):
     def __init__(self, buffer, values):
         Extractor.__init__(self, buffer, values)
         if values.byte_order not in (BIG_ENDIAN, LITTLE_ENDIAN):
-            raise ValueError, \
-                  "UCS-2 encoded strings must have determinable byte order"
+            raise ValueError("UCS-2 encoded strings must have determinable byte order")
         self.__byte_order = values.byte_order
         if values.byte_order == BIG_ENDIAN:
             self.__whitespace = self.__WHITESPACE_BE
@@ -806,7 +804,7 @@ class UCS2Extractor(Extractor):
             for i in range(0, count*2, 2):
                 if data[i+zero_offset] != '\0':
                     raise ConversionError("cannot convert %s to ASCII"
-                                          % `data[i:i+2]`)
+                                          % repr(data[i:i+2]))
                 s = s + data[i+char_offset]
         except IndexError:
             # just didn't have enough; somebody else's problem
@@ -845,7 +843,7 @@ def ordwc(wc, byte_order=None):
         else:
             o = (((((o4 << 8) | o3) << 8) | o2) << 8) | o1
     else:
-        raise ValueError, "wide-character string has bad length"
+        raise ValueError("wide-character string has bad length")
     return o
 
 
@@ -865,7 +863,7 @@ def dump_info(values, labels=None):
         value = getattr(values, field_name)
         label = getattr(FieldLabels, field_name)
         if value is not None:
-            print format % (label, value)
+            print(format % (label, value))
 
 
 def main():
@@ -918,7 +916,7 @@ def main():
     fp.close()
     try:
         values = get_xml_info(buffer)
-    except Error, e:
+    except Error as e:
         sys.stderr.write("parse failed: %s\n" % e.args[0])
         if debugging:
             raise
@@ -933,9 +931,9 @@ def main():
             if getattr(reqs, field_name):
                 value = getattr(values, field_name)
                 if value is None:
-                    print
+                    print()
                 else:
-                    print value
+                    print(value)
 
 
 if __name__ == "__main__":

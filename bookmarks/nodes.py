@@ -6,7 +6,7 @@ import string
 import sys
 import time
 import urllib
-
+from urllib.parse import urlparse
 
 
 class Error(Exception):
@@ -21,7 +21,7 @@ class AliasReferenceError(Error):
 
 def norm_uri(uri):
     scheme, netloc, path, params, query, fragment \
-            = urllib.urllib(uri)
+            = urlparse(uri)
     if scheme == "http" and ':' in netloc:
         loc = string.splitfields(netloc, ':')
         try:

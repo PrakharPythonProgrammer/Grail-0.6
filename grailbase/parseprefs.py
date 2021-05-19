@@ -63,7 +63,7 @@ def parseprefs(fp):
         elif string.strip(line) != "":
             # It's a bad line.  Ignore it.
             if debug:
-                print "Error at", lineno, ":", `line`
+                print("Error at", lineno, ":", repr(line))
 
     return groups
 
@@ -89,20 +89,20 @@ def test():
     groups = parseprefs(fp)
     t1 = time.time()
     fp.close()
-    print "Parsing time", round(t1-t0, 3)
+    print("Parsing time", round(t1-t0, 3))
     groupnames = groups.keys()
     groupnames.sort()
     for groupname in groupnames:
-        print
-        print groupname
-        print '=' * len(groupname)
-        print
+        print()
+        print(groupname)
+        print('=' * len(groupname))
+        print()
         group = groups[groupname]
         componentnames = group.keys()
         componentnames.sort()
         for cn in componentnames:
             value = group[cn]
-            print cn + ":", `value`
+            print(cn + ":", repr(value))
 
 
 if __name__ == '__main__':

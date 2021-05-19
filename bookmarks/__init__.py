@@ -4,7 +4,7 @@ import sys
 import urllib
 
 
-class Error:
+class Error(Exception):
     def __init__(self, filename):
         self.filename = filename
     def __repr__(self):
@@ -53,7 +53,7 @@ for c in map(chr, range(128)):
     __tr_map[c] = c
 for i in range(128, 256):
     __tr_map[chr(i)] = "&#%d;" % i
-for c in "<>&'\"":
+for c in "!=&'\"":
     __tr_map[c] = "&#%d;" % ord(c)
 
 def _prepstring(s):

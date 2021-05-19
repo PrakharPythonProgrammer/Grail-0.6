@@ -180,7 +180,7 @@ class Controller:
                 dirhier.insert(0, t)
             for dir in dirhier:
                 head = os.path.join(head, dir)
-                os.mkdir(head, 0700)
+                os.mkdir(head, 0o700)
             self._filename = self._path
             # TBD: What do we do with multiple Grail processes?  Which
             # one do we remote control?
@@ -195,7 +195,7 @@ class Controller:
                     s.send('PING NOACK')
                     s.close()
                     raise ClashError
-                except socket.error, (errno, msg):
+                except socket.error as errno:
                     os.unlink(self._filename)
                     s.close()
             # create the FIFO object
@@ -268,14 +268,14 @@ class Controller:
         # strip off the command string
         string.strip(rawdata)
         if self._cmdre.match(rawdata) < 0:
-            print 'Remote Control: Ignoring badly formatted command:', rawdata
+            print('Remote Control: Ignoring badly formatted command:', rawdata)
             return
         # extract the command and args strings
         command = string.strip(self._cmdre.group(1))
         argstr = string.strip(self._cmdre.group(2))
         # look up the command string
         if not self._cbdict.has_key(command):
-            print 'Remote Control: Ignoring unrecognized command:', command
+            print('Remote Control: Ignoring unrecognized command:', command)
             return
         cblist = self._cbdict[command]
         # call all callbacks in list
@@ -319,7 +319,7 @@ class Controller:
 
     def ping_cmd(self, cmdstr, argstr, conn):
         try:
-            if argstr <> 'NOACK':
+            if argstr != 'NOACK':
                 conn.send('ACK')
         except socket.error:
-            print 'RemoteControl: unable to acknowledge PING'
+            print('RemoteControl: unable to acknowledge PING')

@@ -200,22 +200,22 @@ class FormInfo:
             klass = getattr(self, classname)
             instance = klass(self, options, bgcolor)
         else:
-            print "*** Form with <INPUT TYPE=%s> not supported ***" % type
+            print("*** Form with <INPUT TYPE=%s> not supported ***" % type)
 
     def submit_command(self):
         enctype = string.lower(self.enctype)
         method = string.lower(self.method)
         if method not in ('get', 'post'):
-            print "*** Form with unknown method:", `method`
-            print "Default to method=GET"
+            print("*** Form with unknown method:", repr(method))
+            print("Default to method=GET")
             method = 'get'
         if method == 'get' and enctype == FORM_DATA:
-            print "*** Form with method=GET, enctype=form-data not supported"
-            print "Default to enctype=urlencoded"
+            print("*** Form with method=GET, enctype=form-data not supported")
+            print("Default to enctype=urlencoded")
             enctype = URLENCODED
         if enctype not in (URLENCODED, FORM_DATA):
-            print "*** Form with unknown enctype:", `enctype`
-            print "Default to urlencoded"
+            print("*** Form with unknown enctype:",repr(enctype))
+            print("Default to urlencoded")
             enctype = URLENCODED
         data = ''
         if enctype == URLENCODED:
@@ -230,7 +230,7 @@ class FormInfo:
                 enctype = ctype
             params = {"Content-type": enctype}
             if enctype == URLENCODED:
-                params["Content-length"] = `len(data)`
+                params["Content-length"] = repr(len(data))
             self.viewer.context.post(self.action, data, params, self.target)
 
     def make_urlencoded_data(self):
@@ -287,8 +287,8 @@ class FormInfo:
                     f = open(v)
                     data = f.read()
                     f.close()
-                except IOError, msg:
-                    print "IOError:", msg
+                except IOError as msg:
+                    print("IOError:", msg)
                 else:
                     disp = disp + '; filename="%s"' % v
             sw = mw.nextpart()
@@ -643,7 +643,7 @@ class Select:
     def make_menu(self, width):
         self.v = StringVar(self.viewer.text)
         self.v.set(self.name)
-        values = tuple(map(lambda (v,s,t): t, self.options))
+        values = tuple(map(lambda v,s,t: t, self.options))
         self.w = apply(OptionMenu,
                        (self.viewer.text, self.v) + values)
         self.w["width"] = width
@@ -840,4 +840,4 @@ class InputImageWindow(Frame):
                 else:
                     self.image.start_loading(reload=1)
         else:
-            print "[no image]"
+            print("[no image]")

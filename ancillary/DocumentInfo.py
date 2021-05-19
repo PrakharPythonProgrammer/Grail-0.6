@@ -7,6 +7,7 @@ import string
 import tkinter
 import tk_tools
 import urllib
+from urllib.parse import urlparse
 
 FIELD_BREAKER = string.maketrans("&", "\n")
 MAX_TEXT_FIELD_LINES = 10
@@ -30,7 +31,7 @@ class DocumentInfoDialog:
         # Info display
         #
         url = context.page.url()
-        scheme, netloc, path, params, query, fragment = urllib.urllib(url)
+        scheme, netloc, path, params, query, fragment = urlparse(url)
         url = urllib.urlunparse((scheme, netloc, path, '', '', ''))
         self.add_label_field("Title", page_title or "(unknown)", "title")
         self.add_label_field("URI", url, "uri")

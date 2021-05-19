@@ -29,7 +29,7 @@ class ExtensionLoader:
         d = {}
         s = "import %s; mod = %s" % (realname, realname)
         try:
-            exec s in d
+            exec(s in d)
         except ImportError:
             mod = None
         else:

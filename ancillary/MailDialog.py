@@ -171,7 +171,7 @@ class MailDialog:
             p.write(message)
             sts = p.close()
             if sts:
-                print "*** Sendmail exit status", sts, "***"
+                print("*** Sendmail exit status", sts, "***")
         self.root.destroy()
 
     def cancel_command(self, event=None):

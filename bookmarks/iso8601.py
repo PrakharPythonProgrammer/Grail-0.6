@@ -20,7 +20,7 @@ def parse(s):
     since the epoch."""
     m = __datetime_rx.match(s)
     if m is None or m.group() != s:
-        raise ValueError, "unknown or illegal ISO-8601 date format: " + `s`
+        raise ValueError("unknown or illegal ISO-8601 date format: " + repr(s))
     gmt = __extract_date(m) + __extract_time(m) + (0, 0, 0)
     return time.mktime(gmt) + __extract_tzd(m) - time.timezone
 
@@ -30,9 +30,9 @@ def parse_timezone(timezone):
     relative to UTC."""
     m = __tzd_rx.match(timezone)
     if not m:
-        raise ValueError, "unknown timezone specifier: " + `timezone`
+        raise ValueError("unknown timezone specifier: " + repr(timezone))
     if m.group() != timezone:
-        raise ValueError, "unknown timezone specifier: " + `timezone`
+        raise ValueError("unknown timezone specifier: " + repr(timezone))
     return __extract_tzd(m)
 
 

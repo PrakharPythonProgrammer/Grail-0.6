@@ -52,23 +52,23 @@ class OpenURIDialog:
         self.__entry.focus_set()
         try:
             self.__frame.mainloop()
-        except SystemExit, (uri, new):
+        except SystemExit as uri:
             self.__frame.grab_release()
             focuswin.focus_set()
             self.__frame.destroy()
             if uri:
                 uri = string.joinfields(string.split(uri), '')
                 self.__class__.__lasturi = uri
-            return uri, new
+            return uri
 
     def okaycmd(self, event=None):
-        raise SystemExit, (self.__entry.get(), 0)
+        raise SystemExit(self.__entry.get(), 0)
 
     def newcmd(self, event=None):
-        raise SystemExit, (self.__entry.get(), 1)
+        raise SystemExit(self.__entry.get(), 1)
 
     def clearcmd(self, event=None):
         self.__entry.delete(0, END)
 
     def cancelcmd(self, event=None):
-        raise SystemExit, (None, 0)
+        raise SystemExit(None, 0)

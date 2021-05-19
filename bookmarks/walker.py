@@ -12,7 +12,7 @@ class TreeWalker:
 
     def set_root(self, root):
         if self.__root is not None:
-            raise RuntimeError, "cannot change root node"
+            raise RuntimeError("cannot change root node")
         self.__root = root
 
     def walk(self):

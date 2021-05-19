@@ -218,7 +218,7 @@ class HistoryDialog:
             title = page.title() or url
             if viewby == VIEW_BY_TITLES:
                 docurl, frag = urldefrag(url)
-                if frag and title <> url:
+                if frag and title != url:
                     title = title + ' [%s]' % frag
                 self._listbox.insert(END, title)
             elif viewby == VIEW_BY_URLS:

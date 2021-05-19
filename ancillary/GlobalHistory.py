@@ -37,7 +37,7 @@ EXPIRATION_SECS = GLOBAL_HISTORY_EXPIRATION_DAYS * 60 * 60 * 24
 
 
 def now():
-    return int(time.time() % (1L<<31))
+    return int(time.time() % (1<<31))
 
 
 
@@ -174,7 +174,7 @@ class GlobalHistory:
         try:
             fp = open(DEFAULT_GRAIL_HIST_FILE, 'w')
             sys.stdout = fp
-            print 'GRAIL-global-history-file-1'
+            print('GRAIL-global-history-file-1')
             urls = self.urls()
             urls.reverse()
             expiration = EXPIRATION_SECS and (now() - EXPIRATION_SECS)
@@ -184,9 +184,9 @@ class GlobalHistory:
                 if expiration and expiration > timestamp:
                     continue
                 if not title or title == url:
-                    print '%s\t%d' % (url, timestamp)
+                    print('%s\t%d' % (url, timestamp))
                 else:
-                    print '%s\t%d\t%s' % (url, timestamp, title)
+                    print('%s\t%d\t%s' % (url, timestamp, title))
         finally:
             sys.stdout = stdout
             fp.close()

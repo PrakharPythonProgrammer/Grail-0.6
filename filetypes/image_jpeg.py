@@ -35,11 +35,11 @@ if hasattr(os, 'popen') and _FILTERPATH:
         def feed(self, data):
             try:
                 self.tf.write(data)
-            except IOError, (errno, errmsg):
+            except IOError as err:
                 self.tf.close()
                 self.tf = None
                 self.broken = 1
-                raise IOError, (errno, errmsg)
+                raise IOError(err)
     
         def close(self):
             if self.tf:

@@ -47,7 +47,7 @@ class Application:
     #######################################################################
 
     def exception_dialog(self, message="", *args):
-        raise RuntimeError, "Subclass failed to implement exception_dialog()."
+        raise RuntimeError("Subclass failed to implement exception_dialog().")
 
 
     __data_scheme_re = re.compile(

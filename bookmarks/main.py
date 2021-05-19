@@ -84,7 +84,7 @@ class Options:
             elif opt == "--export":
                 self.export = 1
                 fields = string.split(arg, ",")
-                print fields
+                print(fields)
                 for f in fields:
                     fname = self.__export_field_map[f]
                     if not fname in self.export_fields:
@@ -106,7 +106,7 @@ def valid_output_format(format):
 def main():
     try:
         options = Options(sys.argv[1:])
-    except getopt.error, message:
+    except getopt.error as message:
         usage(2, message)
     args = options.args
     if options.guess_type:
@@ -125,7 +125,7 @@ def main():
     else:
         try:
             infile = open(ifn, 'rb')    # binary in case it's a binary pickle
-        except IOError, (err, message):
+        except IOError as message:
             if options.scrape_links:
                 # try to open as URL
                 import urllib
@@ -179,7 +179,7 @@ def main():
     else:
         try:
             writer.write_tree(get_outfile(ofn))
-        except IOError, (err, msg):
+        except IOError as err:
             # Ignore the error if we lost a pipe into another process.
             if err != errno.EPIPE:
                 raise
@@ -193,9 +193,9 @@ def report_info(root):
     total = 0
     for type, count in items:
         total = total + count
-        print "%12s: %5d" % (type, count)
-    print "%12s  -----" % ''
-    print "%12s: %5d" % ("Total", total)
+        print("%12s: %5d" % (type, count))
+    print("%12s  -----" % '')
+    print("%12s: %5d" % ("Total", total))
 
 
 def guess_bookmarks_type(filename, verbose=0):
@@ -205,9 +205,9 @@ def guess_bookmarks_type(filename, verbose=0):
         fp = open(filename)
     type = bookmarks.get_format(fp)
     if verbose:
-        print "%s: %s" % (filename, type)
+        print("%s: %s" % (filename, type))
     else:
-        print type
+        print(type)
 
 
 def get_outfile(ofn):
@@ -216,9 +216,9 @@ def get_outfile(ofn):
     else:
         try:
             outfile = open(ofn, 'w')
-        except IOError, (errno, message):
+        except IOError as message:
             error(1, "could not open %s: %s" % (ofn, message))
-        print "Writing output to", ofn
+        print("Writing output to", ofn)
     return outfile
 
 
@@ -227,9 +227,9 @@ def usage(err=0, message=''):
         sys.stdout = sys.stderr
     program = os.path.basename(sys.argv[0])
     if message:
-        print "%s: %s" % (program, message)
-        print
-    print __doc__ % {"program": program}
+        print("%s: %s" % (program, message))
+        print()
+    print(__doc__ % {"program": program})
     sys.exit(err)
 
 

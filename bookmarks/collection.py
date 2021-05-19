@@ -16,7 +16,7 @@ import search                           # sibling sub-package
 import string
 import urllib
 import walker                           # sibling
-
+from urllib.parse import urlparse
 
 class NodeIDError(Exception):
     """Raised when a node with a duplicate ID is added."""
@@ -25,7 +25,7 @@ class NodeIDError(Exception):
 
 def _parse_uri(uri):
     """Normalize a URI in parsed form (similar to urllib() result)."""
-    uri = list(urllib.urllib(uri))
+    uri = list(urlparse(uri))
     if uri[0] == "http":
         host = uri[1]
         if host[-3:] == ":80":
@@ -137,7 +137,7 @@ class Collection:
             if nodetype == "Bookmark":
                 id = node.id()
                 if id_map.has_key(id):
-                    raise NodeIDError("duplicate ID found: " + `id`)
+                    raise NodeIDError("duplicate ID found: " + repr(id))
                 if id:
                     id_map[id] = node
                     if id in need_ids:
@@ -151,7 +151,7 @@ class Collection:
             elif nodetype == "Folder":
                 id = node.id()
                 if id_map.has_key(id):
-                    raise NodeIDError("duplicate ID found: " + `id`)
+                    raise NodeIDError("duplicate ID found: " + repr(id))
                 if id:
                     id_map[id] = node
                     if id in need_ids:
@@ -229,12 +229,11 @@ class CopyWalker(walker.TreeWalker):
 
     def get_new_root(self):
         if self.__parents:
-            raise RuntimeError, \
-                  "cannot retrieve new root before walk is complete"
+            raise RuntimeError("cannot retrieve new root before walk is complete")
         if self.__needed_ids:
-            raise RuntimeError, \
+            raise RuntimeError(
                   "copied tree cannot resolve all referenced IDs: " \
-                  + string.join(self.__needed_ids)
+                  + string.join(self.__needed_ids))
         return self.__new_root
 
     def add_node(self, node):
