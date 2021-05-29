@@ -7,7 +7,7 @@ import re
 import os
 import sys
 import time
-from grailutil import *
+from utils.grailutil import *
 from urllib import urldefrag
 
 

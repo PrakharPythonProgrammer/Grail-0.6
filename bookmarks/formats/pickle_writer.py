@@ -6,7 +6,7 @@ __version__ = '$Revision: 1.4 $'
 import bookmarks                        # parent
 
 try:
-    import cPickle
+    import pickle as cPickle
 except ImportError:
     import pickle
 else:

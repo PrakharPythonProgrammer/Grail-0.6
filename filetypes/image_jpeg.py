@@ -1,7 +1,7 @@
 import tempfile
 import os
 import string
-from grailutil import getenv, which
+from utils.grailutil import getenv, which
 from tkinter import *
 from formatter import AS_IS
 

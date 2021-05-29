@@ -129,7 +129,7 @@ import socket
 import re
 import string
 from tkinter import tkinter
-from grailutil import *
+from utils.grailutil import *
 
 # The file structure.  Modeled after X11
 _filename = getenv('GRAIL_REMOTE')

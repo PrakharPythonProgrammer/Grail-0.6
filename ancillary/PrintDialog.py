@@ -31,7 +31,8 @@ be assumed, giving the option to cancel.
 
 from Cursors import CURSOR_WAIT
 from tkinter import *
-import grailutil
+from utils import grailutil
+from functools import reduce
 import os
 import printing.paper
 import printing.settings

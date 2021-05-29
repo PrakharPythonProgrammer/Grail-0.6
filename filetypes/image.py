@@ -2,11 +2,11 @@
 __version__ = "$Revision: 1.6 $"
 
 import AsyncImage
-import HTMLParser
+from sgml import HTMLParser
 import string
 import tkinter
 
-from grailutil import *
+from utils.grailutil import *
 
 allowed_types = None
 
@@ -17,7 +17,7 @@ def init_types():
     global allowed_types
     allowed_types = {}
     if AsyncImage.isPILAllowed():
-        import Image
+        from PIL import Image
         for datatype in Image.MIME.values():
             type, subtype = string.splitfields(datatype, '/')
             if type == "image":
@@ -82,7 +82,7 @@ class ImageObject(HTMLParser.Embedding):
     def __make_map(self, context):
         global __map_count
         try:
-            __map_count = __map_count + 1
+            __map_count+=1
         except NameError:
             __map_count = 0
         name = '<OBJECT-MAP-%d>' % __map_count

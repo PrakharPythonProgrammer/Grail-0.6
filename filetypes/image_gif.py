@@ -13,7 +13,7 @@ The files Grail/*.py from the PIL distribution should be installed in the
 same directory as this file.
 """
 import AsyncImage
-import grailutil
+from utils import grailutil
 import os
 import string
 import sys
@@ -37,9 +37,10 @@ class pil_interface:
     pass
 
 try:
-    import Image
-    import ImageTk
-    from pil_interface import pil_interface
+    from PIL import Image
+    from PIL import ImageTk
+    from PIL import pil_interface
+
 except ImportError:
     _use_pil = 0
 else:
@@ -163,4 +164,4 @@ def parse_image_gif(*args, **kw):
         parse_image_gif = PILGifParser
     else:
         parse_image_gif = TkGifParser
-    return apply(parse_image_gif, args, kw)
+    return parse_image_gif(args, kw)

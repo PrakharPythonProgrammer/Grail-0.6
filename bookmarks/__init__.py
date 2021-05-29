@@ -79,7 +79,7 @@ del sysid_fmt
 
 
 def check_xml_format(buffer):
-    import xmlinfo
+    from . import xmlinfo
     try:
         info = xmlinfo.get_xml_info(buffer)
     except xmlinfo.Error:
@@ -147,11 +147,11 @@ def get_default_extension(format):
 
 
 def get_parser_class(format):
-    exec "from formats.%s_parser import Parser" % get_short_name(format)
+    exec("from formats.%s_parser import Parser" % get_short_name(format))
     return Parser
 
 def get_writer_class(format):
-    exec "from formats.%s_writer import Writer" % get_short_name(format)
+    exec("from formats.%s_writer import Writer" % get_short_name(format))
     return Writer
 
 def get_output_format(format):

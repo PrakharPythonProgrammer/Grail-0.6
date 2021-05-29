@@ -102,7 +102,7 @@ def __get_search_module(which):
     d = {}
     s = "from bookmarks.search import %sSearch" % which
     try:
-        exec s in d
+        exec(s in d)
     except ImportError:
         return None
     try:

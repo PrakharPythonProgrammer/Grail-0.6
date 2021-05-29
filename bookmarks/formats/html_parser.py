@@ -5,7 +5,7 @@ __version__ = '$Revision: 1.3 $'
 
 import bookmarks
 import bookmarks.nodes
-import html_scraper
+from . import html_scraper
 import string
 
 import sgml.SGMLParser

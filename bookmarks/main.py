@@ -139,8 +139,8 @@ def main():
     # get the parser class, bypassing completely if the formats are the same
     #
     if options.scrape_links:
-        import formats.html_scraper
-        parser = formats.html_scraper.Parser(ifn)
+        from .formats import html_scraper
+        parser = html_scraper.Parser(ifn)
         parser.set_baseurl(baseurl)
     else:
         format = bookmarks.get_format(infile)
@@ -157,9 +157,9 @@ def main():
     infile.close()
     root = parser.get_root()
     if options.search:
-        import search
-        import search.KeywordSearch
-        search_options = search.KeywordSearch.KeywordOptions()
+        from . import search
+        from .search import KeywordSearch
+        search_options = KeywordSearch.KeywordOptions()
         search_options.set_keywords(string.join(options.keywords))
         matcher = search.get_matcher("Keyword", search_options)
         root = search.find_nodes(root, matcher)
@@ -168,7 +168,7 @@ def main():
             sys.exit(1)
     writer = writer_class(root)
     if options.export:
-        import exporter
+        from . import exporter
         export_options = exporter.ExportOptions()
         for s in options.export_fields:
             setattr(export_options, "remove_" + s, 0)
@@ -186,7 +186,7 @@ def main():
 
 
 def report_info(root):
-    import collection
+    from . import collection
     coll = collection.Collection(root)
     items = coll.get_type_counts().items()
     items.sort()

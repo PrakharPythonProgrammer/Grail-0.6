@@ -45,7 +45,7 @@ class DocumentInfoDialog:
         s = ""
         for k, v in items:
             if k == 'date' and type(v) is type(self):
-                import ht_time
+                from . import ht_time
                 v = ht_time.unparse(v.get_secs())
             s = "%s%s:\t%s\n" % (s, k, v)
         stretch = self.add_text_field("Response headers", s, "headers")
@@ -107,7 +107,7 @@ class DocumentInfoDialog:
                 DocumentInfoDialog.__datafont = ''
         if datafont:
             try: label['font'] = datafont
-            except TclError: DocumentInfoDialog.__datafont = ''
+            except tkinter.TclError: DocumentInfoDialog.__datafont = ''
         label.pack(anchor=tkinter.W, fill=tkinter.X, expand=1)
         return label
 

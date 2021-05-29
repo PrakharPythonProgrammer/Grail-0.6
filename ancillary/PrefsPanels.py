@@ -7,6 +7,7 @@ __version__ = "$Revision: 2.37 $"
 
 import sys, os
 import imp
+from functools import reduce
 
 if __name__ == "__main__":
     # For operation outside of Grail:
@@ -19,9 +20,9 @@ typify = grailbase.GrailPrefs.typify
 import urllib
 from tkinter import *
 import tk_tools
-import grailutil
+from utils import grailutil
 import string, re, regsub
-from types import StringType
+
 
 
 PANEL_CLASS_NAME_SUFFIX = 'Panel'
@@ -424,7 +425,7 @@ class Framework:
         try:
             for (g, c), (type_nm, uiget, uiset) in self.collection.items():
                 val = uiget()
-                if (type(val) == StringType) and (type_nm != 'string'):
+                if (isinstance(val,str)) and (type_nm != 'string'):
                     val = typify(val, type_nm)
                 prefsset(g, c, val)
         except TypeError as ValueError:
@@ -513,7 +514,7 @@ class Framework:
             for (g, c), (type_nm, uiget, uiset) in self.collection.items():
                 uival = uiget()
                 if type_nm != 'string':
-                    if type(uival) == StringType:
+                    if isinstance(uival,str):
                         uival = typify(uival, type_nm)
                     if uival != prefsgettyped(g, c, type_nm, factory):
                         return 1

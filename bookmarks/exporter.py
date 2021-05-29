@@ -5,7 +5,7 @@ or visited."""
 __version__ = '$Revision: 1.3 $'
 
 
-import walker
+from . import walker
 
 class ExportWalker(walker.TreeWalker):
     def __init__(self, root, options=None):

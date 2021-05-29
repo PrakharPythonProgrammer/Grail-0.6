@@ -1,4 +1,4 @@
-import Outliner
+from . import Outliner
 import string
 
 from bookmarks.nodes import norm_uri

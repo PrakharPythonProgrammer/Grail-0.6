@@ -24,7 +24,7 @@ import re
 import string
 import sys
 import time
-from grailutil import *
+from utils.grailutil import *
 
 GRAIL_RE = re.compile('\([^ \t]+\)[ \t]+\([^ \t]+\)[ \t]+?\(.*\)?')
 DEFAULT_NETSCAPE_HIST_FILE = os.path.join(gethome(), '.netscape-history')

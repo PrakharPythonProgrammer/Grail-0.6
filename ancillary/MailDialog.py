@@ -11,9 +11,9 @@ user-defined handling of the mailto: scheme to subclass this dialog.
 __version__ = '$Revision: 2.5 $'
 
 import cgi
-import grailutil
+from utils import grailutil
 import os
-import rfc822
+import plone.rfc822
 import string
 import time
 import tk_tools

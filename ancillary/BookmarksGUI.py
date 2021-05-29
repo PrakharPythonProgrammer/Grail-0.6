@@ -12,8 +12,8 @@ import tk_tools
 import re
 
 from tkinter import *
-from grailutil import *
-from Outliner import OutlinerViewer, OutlinerController
+from utils.grailutil import *
+from .Outliner import OutlinerViewer, OutlinerController
 
 
 DEFAULT_NETSCAPE_BM_FILE = os.path.join(gethome(), '.netscape-bookmarks.html')
@@ -471,7 +471,7 @@ class BookmarksDialog:
         itembtn = Menubutton(self._menubar, name='item')
         itembtn.pack(side=LEFT)
         itemmenu = Menu(itembtn, name="menu")
-        import SearchMenu
+        from . import SearchMenu
         SearchMenu.SearchMenu(itemmenu, self._frame, self._controller)
         itemmenu.add_separator()
         itemmenu.add_command(label="Add Current",
@@ -960,7 +960,7 @@ class BookmarksController(OutlinerController):
 
     def importBookmarks(self, event=None):
         # need to get URL or filename here...
-        import OpenURIDialog
+        from . import OpenURIDialog
         dialog = OpenURIDialog.OpenURIDialog(
             self._master, title="Import Bookmarks Dialog", new=0)
         filename, new = dialog.go()
@@ -1149,7 +1149,7 @@ class BookmarksController(OutlinerController):
         if headers.has_key("last-modified"):
             modified = headers["last-modified"]
             if type(modified) is type(''):
-                import ht_time
+                from . import ht_time
                 try:
                     modified = ht_time.parse(modified)
                 except:

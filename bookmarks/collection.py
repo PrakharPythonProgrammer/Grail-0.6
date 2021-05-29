@@ -11,11 +11,11 @@ This class is also used to generate new ID values for nodes.
 __version__ = '$Revision: 1.6 $'
 
 import copy
-import nodes                            # sibling
-import search                           # sibling sub-package
+from . import nodes                            # sibling
+from . import search                           # sibling sub-package
 import string
 import urllib
-import walker                           # sibling
+from . import walker                           # sibling
 from urllib.parse import urlparse
 
 class NodeIDError(Exception):

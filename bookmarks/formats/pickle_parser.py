@@ -10,7 +10,7 @@ import re
 import string
 
 try:
-    import cPickle
+     import pickle as cPickle
 except ImportError:
     import pickle
 else:
