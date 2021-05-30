@@ -51,7 +51,7 @@ def extract_keyword(key, dict, default=None, conv=None):
     return default
 
 
-def conv_integer(val, conv=_string.atoi, otherlegal=''):
+def conv_integer(val, conv=int, otherlegal=''):
     val = _string.strip(val)
     l = len(val)
     start = 0

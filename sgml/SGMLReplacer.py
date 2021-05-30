@@ -3,7 +3,7 @@ __version__ = '$Revision: 1.12 $'
 
 import re
 import string
-from SGMLLexer import *
+from .SGMLLexer import *
 
 
 _entref_exp = re.compile("&\(\(#\|\)[a-zA-Z0-9][-.a-zA-Z0-9]*\)\(;\|\)")

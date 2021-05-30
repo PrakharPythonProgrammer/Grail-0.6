@@ -529,7 +529,7 @@ class SGMLLexer(SGMLLexerBase):
                  attrvalue[:1] == LIT == attrvalue[-1:]:
                 attrvalue = attrvalue[1:-1]
                 if '&' in attrvalue:
-                    from SGMLReplacer import replace
+                    from .SGMLReplacer import replace
                     attrvalue = replace(attrvalue, self.entitydefs)
             attrs[self._normfunc(attrname)] = attrvalue
         # close the start-tag

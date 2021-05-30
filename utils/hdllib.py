@@ -55,8 +55,8 @@ I think yes, but this means repacking the request.
 # I didn't see a caching of authority handles and/or service handles,
 # this would be a tremendous increase for handle resolution.
 
-import whrandom
-import md5
+import random
+from hashlib import md5 # md5 has been deprecated since Python 2.5 use hashlib instead
 import os
 import select
 import socket
@@ -119,24 +119,24 @@ HP_HASH_RESPONSE = 3
 
 
 # Handle data types
-data_types = """
-HDL_TYPE_NULL = -1                      # Indicates End of Type List
-HDL_TYPE_URL = 0                        # Uniform Resource Locator
-HDL_TYPE_EMAIL_RFC822 = 1               # E-Mail Address Defined In RFC822
-HDL_TYPE_EMAIL_X400 = 2                 # E-Mail Address Defined By CCITT
-HDL_TYPE_X500_DN = 3                    # Distinguished Name Defined By CCITT
-HDL_TYPE_INET_HOST = 4                  # Internet host name or IP address
-HDL_TYPE_INET_SERVICE = 5               # "hostname":"tcp"|"udp":"port"
-HDL_TYPE_CONTACT_INFO = 6               # Same Syntax As EMAIL_RFC822
-HDL_TYPE_DLS = 7                        # To be determined
-HDL_TYPE_CACHE_PERIOD = 8               # Default caching period timeout
-HDL_TYPE_HANDLE_TYPE = 9                # For Handle Service internal use
-HDL_TYPE_SERVICE_HANDLE = 10            # Handle containing hash table info
-HDL_TYPE_SERVICE_POINTER  = 11          # Service's hash table info
-HDL_TYPE_URN = 12                       # Universal Resource Name
-HDL_TYPE_TRANS_ID = 13                  # Transaction Identifier
+data_types = {
+"HDL_TYPE_NULL":-1,                      # Indicates End of Type List
+"HDL_TYPE_URL":0,                        # Uniform Resource Locator
+"HDL_TYPE_EMAIL_RFC822":1,               # E-Mail Address Defined In RFC822
+"HDL_TYPE_EMAIL_X400":2,                 # E-Mail Address Defined By CCITT
+"HDL_TYPE_X500_DN":3,                    # Distinguished Name Defined By CCITT
+"HDL_TYPE_INET_HOST":4,                  # Internet host name or IP address
+"HDL_TYPE_INET_SERVICE":5,               # "hostname":"tcp"|"udp":"port"
+"HDL_TYPE_CONTACT_INFO":6,               # Same Syntax As EMAIL_RFC822
+"HDL_TYPE_DLS":7,                        # To be determined
+"HDL_TYPE_CACHE_PERIOD":8,               # Default caching period timeout
+"HDL_TYPE_HANDLE_TYPE":9,                # For Handle Service internal use
+"HDL_TYPE_SERVICE_HANDLE":10,            # Handle containing hash table info
+"HDL_TYPE_SERVICE_POINTER":11,           # Service's hash table info
+"HDL_TYPE_URN":12,                       # Universal Resource Name
+"HDL_TYPE_TRANS_ID":13                   # Transaction Identifier
 # Non-registered types are > 65535
-"""
+}
 
 # Put data_types mappings into the module's dictionary, and into the
 # data_map dictionary.  Also create an inverted mapping.
@@ -150,20 +150,20 @@ for key, value in data_map.items():
 
 
 # Handle protocol error codes
-error_codes = """
-HP_OK = 0
-HP_PARSING_FAILURE = 1
-HP_VERSION_MISMATCH = 2
-HP_ACCESS_TEMPORARILY_DENIED = 3
-HP_NOT_RESPONSIBLE_FOR_HANDLE = 4
-HP_HANDLE_NOT_FOUND = 5
-HP_FORWARDED = 6
-HP_INTERNAL_ERROR = 7
-HP_TYPES_NOT_FOUND = 8
-HP_REQUEST_TIMED_OUT = 9
-HP_HANDLE_DOES_NOT_EXIST = 10
-HP_FORWARD_ERROR = 11
-"""
+error_codes = {
+"HP_OK":0,
+"HP_PARSING_FAILURE":1,
+"HP_VERSION_MISMATCH":2,
+"HP_ACCESS_TEMPORARILY_DENIED":3,
+"HP_NOT_RESPONSIBLE_FOR_HANDLE":4,
+"HP_HANDLE_NOT_FOUND":5,
+"HP_FORWARDED":6,
+"HP_INTERNAL_ERROR":7,
+"HP_TYPES_NOT_FOUND":8,
+"HP_REQUEST_TIMED_OUT":9,
+"HP_HANDLE_DOES_NOT_EXIST":10,
+"HP_FORWARD_ERROR":11
+}
 
 # See data_types comment above
 exec(error_codes)
@@ -174,7 +174,7 @@ for key, value in error_map.items():
         error_map[value] = key
 
 # Error code set by the parser
-HDL_ERR_INTERNAL_ERROR = HP_INTERNAL_ERROR
+HDL_ERR_INTERNAL_ERROR = error_codes["HP_INTERNAL_ERROR"]
 
 
 # error class for this module
@@ -356,21 +356,21 @@ class PacketUnpacker:
                 # Normal packet, but it may be the start of a continuation
                 if self.debug: print('Normal Packet')
                 total_length = self.value_length = length_from_body
-                if self.debug: print("length from body =", length_from_body
+                if self.debug: print("length from body =", length_from_body)
                 if nopts == 1:
                     max_value_length = len(self.buf()) \
                                        - self.u.get_position() - 16
                     if self.value_length > max_value_length:
                         if self.debug:
                             print('Start of a continuation:',)
-                            print("max value length =", max_value_length
-                        self.value_length = max_value_length)
+                            print("max value length =", max_value_length)
+                        self.value_length = max_value_length
                 #
                 # Finally get the value
-                if self.debug: print 'Getting data segment of ' \
-                   + str(self.value_length) + ' bytes'
+                if self.debug: print('Getting data segment of ' \
+                   + str(self.value_length) + ' bytes')
             value = self.u.unpack_fstring(self.value_length)
-            if self.debug: print "Got", len(value), "bytes:", `value`
+            if self.debug: print("Got", len(value), "bytes:", repr(value))
             opts.append((opt, value))
         return opts
 
@@ -427,18 +427,18 @@ class PacketUnpacker:
 
         self.check_body_length()
 
-        if err == HP_NOT_RESPONSIBLE_FOR_HANDLE:
+        if err == error_codes["HP_NOT_RESPONSIBLE_FOR_HANDLE"]:
             server = self.u.unpack_string()
             udpport = self.u.unpack_int()
             tcpport = self.u.unpack_int()
             return (server, udpport, tcpport)
-        elif err == HP_FORWARD_ERROR:
+        elif err == error_codes["HP_FORWARD_ERROR"]:
             return self.u.unpack_string()
-        elif err == HP_VERSION_MISMATCH:
+        elif err == error_codes["HP_VERSION_MISMATCH"]:
             return self.u.unpack_int()
-        elif err == HP_ACCESS_TEMPORARILY_DENIED:
+        elif err == error_codes["HP_ACCESS_TEMPORARILY_DENIED"]:
             return self.u.unpack_string()
-        elif err == HP_PARSING_FAILURE:
+        elif err == error_codes["HP_PARSING_FAILURE"]:
             return self.u.unpack_string()
         else:
             # According to the spec, the other errors have no other
@@ -459,7 +459,7 @@ class SessionTag:
     """
     def session_tag(self):
         """Implemented as in create_session_tag()."""
-        return whrandom.randint(0, 32767)
+        return random.randint(0, 32767)
 
 
 
@@ -524,9 +524,9 @@ class HashTable:
             for fn in (DEFAULT_HASH_FILE, HASH_TABLE_FILE_FALLBACK):
                 try:
                     self._read_hash_table(fn)
-                except (IOError, Error), msg:
+                except IOError as msg:
                     if self.debug:
-                        print "Error for %s: %s" % (`fn`, str(msg))
+                        print("Error for %s: %s" % (repr(fn), str(msg)))
                 else:
                     break
             else:
@@ -544,9 +544,9 @@ class HashTable:
         """
         if self.debug:
             if server:
-                print "Constructing hardcoded hash table using", server
+                print("Constructing hardcoded hash table using", server)
             else:
-                print "Constructing hardcoded fallback hash table"
+                print("Constructing hardcoded fallback hash table")
         if server:
             self.num_of_bits = 0
         else:
@@ -557,7 +557,7 @@ class HashTable:
         for i in range(1<<self.num_of_bits):
             s = server or DEFAULT_SERVERS[i]
             if self.debug and not server:
-                print 'Bucket', i, 'uses server', s
+                print('Bucket', i, 'uses server', s)
             self.bucket_cache[i] = (0, 0, s, up, tp, ap, -1)
 
 
@@ -568,7 +568,7 @@ class HashTable:
         its data is read and self._parse_hash_table() called.
 
         """
-        if self.debug: print "Opening hash table:", `filename`
+        if self.debug: print("Opening hash table:", repr(filename))
         fp = open(filename, 'rb')
         data = fp.read()
         fp.close()
@@ -603,8 +603,8 @@ class HashTable:
         self.schema_version = u.unpack_int()
         # The header_length field is not present if schema version < 2
         if self.schema_version < 2:
-            if self.debug: print "Old hash table detected, version: %d" \
-               % self.schema_version
+            if self.debug: print("Old hash table detected, version: %d" \
+               % self.schema_version)
             self.header_length = HP_HASH_HEADER_SIZE
             restofheader = data[4:self.header_length]
         else:
@@ -619,16 +619,16 @@ class HashTable:
         self.unique_id = u.unpack_fopaque(16)
 
         if self.debug:
-            print '*'*20
-            print "Hash table file header:"
-            print "Schema version:", self.schema_version
-            print "header length: ", self.header_length
-            print "data version:  ", self.data_version
-            print "num_of_bits:   ", self.num_of_bits
-            print "max slot size: ", self.max_slot_size
-            print "max IP addr sz:", self.max_address_length
-            print "unique ID:     ", hexstr(self.unique_id)
-            print '*'*20
+            print('*'*20)
+            print("Hash table file header:")
+            print("Schema version:", self.schema_version)
+            print("header length: ", self.header_length)
+            print("data version:  ", self.data_version)
+            print("num_of_bits:   ", self.num_of_bits)
+            print("max slot size: ", self.max_slot_size)
+            print("max IP addr sz:", self.max_address_length)
+            print("unique ID:     ", hexstr(self.unique_id))
+            print('*'*20)
 
         # Parse the buckets
         for i in range(1<<self.num_of_bits):
@@ -654,16 +654,16 @@ class HashTable:
         ipaddr = string.joinfields(map(repr, map(ord, ip_address)), '.')
 
         if self.debug:
-            print "Hash bucket index:", index
-            print "slot_no:          ", slot_no
-            print "weight:           ", weight
-            print "ip_address:       ", hexstr(ip_address)
-            print "decoded IP addr:  ", ipaddr
-            print "udp_query_port:   ", udp_query_port
-            print "tcp_query_port:   ", tcp_query_port
-            print "admin_port:       ", admin_port
-            print "secondary_slot_no:", secondary_slot_no
-            print "="*20
+            print("Hash bucket index:", index)
+            print("slot_no:          ", slot_no)
+            print("weight:           ", weight)
+            print("ip_address:       ", hexstr(ip_address))
+            print("decoded IP addr:  ", ipaddr)
+            print("udp_query_port:   ", udp_query_port)
+            print("tcp_query_port:   ", tcp_query_port)
+            print("admin_port:       ", admin_port)
+            print("secondary_slot_no:", secondary_slot_no)
+            print("="*20)
 
         result = (slot_no, weight, ipaddr, udp_query_port,
                   tcp_query_port, admin_port, secondary_slot_no)
@@ -719,13 +719,13 @@ class HashTable:
             digest = md5.new(hdl).digest()
             u = xdrlib.Unpacker(digest)
             index = u.unpack_uint()
-            index = (index&0xFFFFFFFFL) >> (32 - self.num_of_bits)
+            index = (index&0xFFFFFFFF) >> (32 - self.num_of_bits)
             index = int(index)
         else:
             index = 0
 
         if self.bucket_cache.has_key(index):
-            if self.debug: print "return cached bucket for index", index
+            if self.debug: print("return cached bucket for index", index)
             return self.bucket_cache[index]
 
         raise Error("no bucket found with index %d" % index)
@@ -763,7 +763,7 @@ class HashTable:
         (server, qport) = self.hash_handle(hdl)[2:4]
 
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        if self.debug: print "Send request"
+        if self.debug: print("Send request")
         s.sendto(request, (server, qport))
 
         expected = 1
@@ -781,10 +781,10 @@ class HashTable:
                     [s], [], [], min(endtime-t, interval))
 
             if s not in readers:
-                if self.debug: print "Nothing received yet..."
+                if self.debug: print("Nothing received yet...")
                 t = time.time()
                 if t+interval < endtime:
-                    if self.debug: print "Resend request"
+                    if self.debug: print("Resend request")
                     s.sendto(request, (server, qport))
                 continue
 
@@ -794,45 +794,45 @@ class HashTable:
                   u.unpack_header()
 
             if self.debug:
-                print '-'*20
-                print "Reply header:"
-                print "Version:       ", version
-                print "Session tag:   ", tag
-                print "Command:       ", rcommand
-                print "Sequence#:     ", sequence
-                print "#Datagrams:    ", total
-                print "Error code:    ", err,
+                print('-'*20)
+                print("Reply header:")
+                print("Version:       ", version)
+                print("Session tag:   ", tag)
+                print("Command:       ", rcommand)
+                print("Sequence#:     ", sequence)
+                print("#Datagrams:    ", total)
+                print("Error code:    ", err,)
                 if error_map.has_key(err):
-                    print "(%s)" % error_map[err],
-                print
-                print '-'*20
+                    print("(%s)" % error_map[err],)
+                print()
+                print('-'*20)
 
             if tag != mytag:
-                if self.debug: print "bad session tag"
+                if self.debug: print("bad session tag")
                 continue
 
             if rcommand != response:
-                if self.debug: print "bad reply type"
+                if self.debug: print("bad reply type")
                 continue
 
             if not 1 <= sequence <= total and not err:
-                if self.debug: print "bad sequence number"
+                if self.debug: print("bad sequence number")
                 continue
 
             expected = total
             
-            if err != HP_OK:
+            if err != error_codes["HP_OK"]:
                 if self.debug:
-                    print 'err: ', err
+                    print('err: ', err)
                 err_info = u.unpack_error_body(err)
                 if self.debug:
-                    print 'err_info:', `err_info`
+                    print('err_info:', repr(err_info))
                 try:
                     err_name = error_map[err]
                 except KeyError:
                     err_name = str(err)
                 if self.debug:
-                    print 'err_name:', `err`
+                    print('err_name:', repr(err))
                 raise Error(err_name, err, err_info)
 
             flags, items = u.unpack_reply_body()
@@ -855,9 +855,9 @@ class HashTable:
                     try:
                         previtem = allitems[-1]
                     except IndexError:
-                        raise IOError, error
+                        raise IOError(error)
                     if abs(item[0]) != previtem[0]:
-                        raise IOError, error
+                        raise IOError(error)
                     newdata = previtem[1] + item[1]
                     previtem = (previtem[0], newdata)
                     allitems[-1] = previtem
@@ -877,7 +877,7 @@ def hexstr(s):
 
 def fetch_global_hash_table(ht=None, debug=DEBUG):
     """Fetch the global hash table from the default global server."""
-    if debug: print "Fetching global hash table"
+    if debug: print("Fetching global hash table")
     if not ht:
         ht = HashTable(server=DEFAULT_GLOBAL_SERVER, debug=debug)
     flags, items = ht.get_data("/service-pointer",
@@ -885,7 +885,7 @@ def fetch_global_hash_table(ht=None, debug=DEBUG):
                                response=HP_HASH_RESPONSE)
     hashtable = None
     for type, data in items:
-        if type == HDL_TYPE_SERVICE_POINTER:
+        if type == data_types["HDL_TYPE_SERVICE_POINTER"]:
             # Version 2 of the handle protocol introduces the
             # HANDLE_SERVICE_ID.  This must be checked first.
             # As of 8/10/97 global now implements version 2.
@@ -893,7 +893,7 @@ def fetch_global_hash_table(ht=None, debug=DEBUG):
             if urnscheme == HANDLE_SERVICE_ID:
                 hashtable = data[16:]
                 # This data is in the same format as file "hdl_hash.tbl"
-                if debug: print "hash table data =", hexstr(hashtable)
+                if debug: print("hash table data =", hexstr(hashtable))
             else:
                 raise Error("Unknown SERVICE_ID: %s" % urnscheme)
     return HashTable(data=hashtable, debug=debug)
@@ -906,54 +906,54 @@ def fetch_local_hash_table(hdl, ht=None, debug=DEBUG):
     # In fetch_local_hash_table function, does not query Global Handle
     # System for the service handle.
 
-    if debug: print "Fetching local hash table for", `hdl`
+    if debug: print("Fetching local hash table for", repr(hdl))
     # 1. Get the authority name
     hdl = get_authority(hdl)
     # 2. Prefix the "ha.auth/" authority
     hdl = "ha.auth/" + hdl
-    if debug: print "Requesting handle", `hdl`
+    if debug: print("Requesting handle", repr(hdl))
     # 3. Create a HashTable object if none is provided
     if not ht: ht = HashTable(debug=debug)
     # 4. Send the query and get the reply
     flags, items = ht.get_data(hdl,
-                               types=[HDL_TYPE_SERVICE_POINTER,
-                                      HDL_TYPE_SERVICE_HANDLE])
+                               types=[data_types["HDL_TYPE_SERVICE_POINTER"],
+                                      data_types["HDL_TYPE_SERVICE_HANDLE"]])
     # 5. Inspect the result
     hashtable = None
     handle = None
     for type, data in items:
-        if type == HDL_TYPE_SERVICE_HANDLE:
-            if debug: print "service handle =", hexstr(data)
+        if type == data_types["HDL_TYPE_SERVICE_HANDLE"]:
+            if debug: print("service handle =", hexstr(data))
             handle = data
-        elif type == HDL_TYPE_SERVICE_POINTER:
+        elif type == data_types["HDL_TYPE_SERVICE_POINTER"]:
             urnscheme = data[:16]
             urndata = data[16:]
-            if debug: print "URN scheme =", `urnscheme`
+            if debug: print("URN scheme =", repr(urnscheme))
             if urnscheme == HANDLE_SERVICE_ID:
                 hashtable = urndata
-                if debug: print "hash table data =", hexstr(hashtable)
+                if debug: print("hash table data =", hexstr(hashtable))
             else:
                 raise Error("Unknown SERVICE_ID: %s" % urnscheme)       
         else:
-            if debug: print "type", type, "=", data
+            if debug: print("type", type, "=", data)
     if hashtable:
         return HashTable(data=hashtable, debug=debug)
     elif handle:
         flags, items = ht.get_data(handle,
-                               types=[HDL_TYPE_SERVICE_POINTER])
+                               types=[data_types["HDL_TYPE_SERVICE_POINTER"]])
         for type, data in items:
-            if type == HDL_TYPE_SERVICE_POINTER:
+            if type == data_types["HDL_TYPE_SERVICE_POINTER"]:
                 urnscheme = data[:16]
                 urndata = data[16:]
-                if debug: print "URN scheme =", `urnscheme`
+                if debug: print("URN scheme =", repr(urnscheme))
                 if urnscheme == HANDLE_SERVICE_ID:
                     hashtable = urndata
-                    if debug: print "hash table data =", hexstr(hashtable)
+                    if debug: print("hash table data =", hexstr(hashtable))
                     return HashTable(data=hashtable, debug=debug)
                 else:
                     raise Error("Unknown SERVICE_ID: %s" % urnscheme)
             else:
-                if debug: print "type", type, "=", data
+                if debug: print("type", type, "=", data)
 
     raise Error("Didn't get a hash table")
 
@@ -1056,9 +1056,9 @@ def test(defargs = testsets[0]):
 
     try:
         opts, args = getopt.getopt(sys.argv[1:], '01234abd:f:i:lqs:t:v')
-    except getopt.error, msg:
-        print msg
-        print usage_msg
+    except getopt.error as msg:
+        print(msg)
+        print(usage_msg)
         sys.exit(2)
 
     bootstrap = 0
@@ -1067,7 +1067,7 @@ def test(defargs = testsets[0]):
     timeout = 30
     interval = 5
     filename = None
-    types = [HDL_TYPE_URL]
+    types = [data_types["HDL_TYPE_URL"]]
     flags = []
     server = None
     
@@ -1089,7 +1089,7 @@ def test(defargs = testsets[0]):
         if o == '-4':
             args = testsets[4]
             local = 1
-            if types: types.append(HDL_TYPE_DLS)
+            if types: types.append(data_types["HDL_TYPE_DLS"])
 
     if not args:
         args = defargs
@@ -1100,50 +1100,50 @@ def test(defargs = testsets[0]):
         ht = HashTable(filename, debug, server)
 
     for hdl in args:
-        print "Handle:", `hdl`
+        print("Handle:", repr(hdl))
 
         try:
             replyflags, items = ht.get_data(
                     hdl, types, flags, timeout, interval)
-        except Error, msg:
-            if not local or msg.err != HP_HANDLE_NOT_FOUND:
-                print "Error:", msg
-                print
+        except Exception as msg:
+            if not local or msg.err != data_types["HP_HANDLE_NOT_FOUND"]:
+                print("Error:", msg)
+                print()
                 continue
             else:
-                print "(Retry using local hash table)"
+                print("(Retry using local hash table)")
                 try:
                     htl = fetch_local_hash_table(hdl, ht=ht, debug=debug)
                     replyflags, items = htl.get_data(
                         hdl, types, flags, timeout, interval)
-                except Error, msg:
-                    print "Error:", msg
+                except Exception as msg:
+                    print("Error:", msg)
                     print
                     continue
 
-        if debug: print replyflags, items
+        if debug: print(replyflags, items)
 
-        bits = 0L
+        bits = 0
         i = 0
         for c in replyflags:
-            bits = bits | (long(ord(c)) << i)
+            bits = bits | (int(ord(c)) << i)
             i = i + 8
 
-        print "flags:", hex(bits),
+        print("flags:", hex(bits),)
         for i in range(8 * len(replyflags)):
-            if bits & (1L<<i):
+            if bits & (1<<i):
                 if flags_map.has_key(i):
-                    print flags_map[i],
+                    print(flags_map[i],)
                 else:
-                    print i,
-        print
+                    print(i,)
+        print()
 
-        if bits & (1L<<HDL_NONMUTABLE): print "\tSTATIC"
-        if bits & (1L<<HDL_DISABLED): print "\tDISABLED"
+        if bits & (1<<HDL_NONMUTABLE): print("\tSTATIC")
+        if bits & (1<<HDL_DISABLED): print("\tDISABLED")
 
         for stufftype, stuffvalue in items:
-            if stufftype in (HDL_TYPE_SERVICE_POINTER,
-                             HDL_TYPE_SERVICE_HANDLE):
+            if stufftype in (data_types["HDL_TYPE_SERVICE_POINTER"],
+                             data_types["HDL_TYPE_SERVICE_HANDLE"]):
                 stuffvalue = hexstr(stuffvalue)
             else:
                 stuffvalue = repr(stuffvalue)

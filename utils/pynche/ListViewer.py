@@ -16,7 +16,7 @@ given name, without selecting the color.
 """
 
 from tkinter import *
-import ColorDB
+from . import ColorDB
 
 class ListViewer:
     def __init__(self, switchboard, master=None):

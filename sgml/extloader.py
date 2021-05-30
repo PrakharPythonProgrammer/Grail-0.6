@@ -6,7 +6,7 @@ __version__ = '$Revision: 1.4 $'
 import string
 
 import grailbase.extloader
-import SGMLParser
+from . import SGMLParser
 
 
 class TagExtensionLoader(grailbase.extloader.ExtensionLoader):
@@ -64,4 +64,4 @@ class ListAttributesCaller:
         self.__func = func
 
     def __call__(self, parser, attrs):
-        return apply(self.__func, (parser, attrs.items()))
+        return self.__func(parser, attrs.items())

@@ -95,7 +95,7 @@ class CookieDB:
             if len(parts) != 7:
                 raise FormatError("wrong number of fields", lineno)
             domain, isdomain, path, secure, expires, name, value = parts
-            expires = long(expires)
+            expires = int(expires)
             # This doesn't perform the same test for true, but perform the
             # same test Mozilla makes.
             secure = secure != 'FALSE'
@@ -143,7 +143,7 @@ class CookieDB:
                 if len(cookies) == caps.num_per_server:
                     # need to remove one more!
                     mcookies = cookies[:]
-                    mcookies.sort(lambda l, r: cmp(l.expires, r.expires))
+                    mcookies.sort(lambda l, r: (l.expires<r.expires)+(l.expires>r.expires))
                     for c, i in mcookies:
                         if c.expires:
                             cookies.remove(c)
@@ -187,7 +187,7 @@ class CookieDB:
         database size is adjusted, so only call this on lists which are
         part of the database.  The resulting list is limited to the number
         of cookies allowed for a single domain."""
-        now = long(time.time())
+        now = int(time.time())
         old_len = len(cookies)
         indexes = range(old_len)
         indexes.reverse()
@@ -201,7 +201,7 @@ class CookieDB:
         if len(cookies) > num_per_server:
             # sort on expiration
             ncookies = cookies[:]
-            ncookies.sort(lambda l, r: cmp(l.expires, r.expires))
+            ncookies.sort(lambda l, r: (l.expires>r.expires)+(l.expires<r.expires))
             for cookie in ncookies:
                 if cookie.expires:
                     cookies.remove(cookies)
@@ -245,7 +245,8 @@ class CookieDB:
                 # nothing left in domain
                 del self.__cookies[domain]
         if results:
-            results.sort(lambda l,r: cmp(len(r.path), len(l.path)))
+            # NOTE cmp doesn't exist in python 3 use (a<b)-(a>b) instead
+            results.sort(lambda l,r: (len(r.path)<len(l.path))-(len(r.path>len(l.path))))
             results.reverse()
         return results
 
@@ -286,7 +287,7 @@ class Cookie:
         self.isdomain = domain and domain[0] == '.'
         self.path = path
         self.secure = secure
-        self.expires = expires and long(expires) or None
+        self.expires = expires and int(expires) or None
         self.name = name
         self.value = value
         if others:
@@ -359,7 +360,7 @@ def parse_cookie(s):
         elif k == 'domain':
             domain = string.lower(v)
         elif k == 'max-age':
-            max_age = long(v)
+            max_age = int(v)
         elif k == 'expires':
             # don't fall into 'others'
             pass
@@ -383,7 +384,7 @@ def parse_cookie(s):
             raise ValueError("too few components in domain specification")
     # prefer max-age over expires
     if max_age:
-        expires = long(time.time()) + max_age
+        expires = int(time.time()) + max_age
     others["max_age"] = max_age
     return Cookie(domain, path, secure, expires, name, value, others), s
 

@@ -2,8 +2,8 @@
 
 __version__ = "$Revision: 1.27 $"
 
-import SGMLLexer
-import SGMLHandler
+from . import SGMLLexer
+from . import SGMLHandler
 import string
 
 SGMLError = SGMLLexer.SGMLError
@@ -212,7 +212,6 @@ class SGMLParser(SGMLLexer.SGMLLexer):
         self.__handler.handle_entityref(name, terminator)
 
 
-from types import StringType
 
 class TagInfo:
     as_dict = 1
@@ -230,10 +229,11 @@ class TagInfo:
 
     def __cmp__(self, other):
         # why is this needed???
+        StringType=type("")
         if type(other) is StringType:
-            return cmp(self.tag, other)
+            return (self.tag<other) - (self.tag>other)
         if type(other) is type(self):
-            return cmp(self.tag, other.tag)
+            return (self.tag<other.tag) - (self.tag>other.tag)
         raise TypeError("incomparable values")
 
 

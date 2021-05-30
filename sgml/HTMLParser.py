@@ -4,20 +4,20 @@ See the HTML 2.0 specification:
 http://www.w3.org/hypertext/WWW/MarkUp/html-spec/html-spec_toc.html
 """
 
+from .utils import extract_keyword, conv_normstring
 import sys
 
 if __name__ == '__main__':
     sys.path.insert(0, '../pythonlib')
 
-import htmlentitydefs
+from . import htmlentitydefs
 import regsub
-import string
-import SGMLHandler
-import SGMLLexer
-import SGMLParser
+from . import string
+from . import SGMLHandler
+from . import SGMLLexer
+from . import SGMLParser
 
 from formatter import AS_IS
-from types import DictType, StringType
 from utils import *
 
 
@@ -654,6 +654,7 @@ class HTMLParser(SGMLHandler.BaseSGMLHandler):
         [listtype, label, counter, compact, depth] = top = self.list_stack[-1]
         if attrs.has_key('type'):
             s = attrs['type']
+            StringType=type("")
             if type(s) is StringType:
                 label = top[1] = self.make_format(s, label, listtype=listtype)
             elif s:
@@ -680,6 +681,7 @@ class HTMLParser(SGMLHandler.BaseSGMLHandler):
         self.element_close_maybe('p', 'lh')
         self.formatter.end_paragraph(0)
         format = '*'
+        StringType=type("")
         if attrs.has_key('type') and (type(attrs['type']) is StringType):
             format = self.make_format(attrs['type'], format)
         else:
@@ -689,6 +691,7 @@ class HTMLParser(SGMLHandler.BaseSGMLHandler):
             self.formatter.add_flowing_data(data)
 
     def make_format(self, format, default='*', listtype=None):
+        StringType=type("")
         if not format:
             format = default
         if format in ('1', 'a', 'A', 'i', 'I') and listtype == 'ol':
