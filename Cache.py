@@ -11,7 +11,8 @@ META, DATA, DONE = 'META', 'DATA', 'DONE' # Three stages
 
 SharedItemExpired = 'SharedItem Expired'
 
-from Assert import Assert
+from functools import cache
+from utils.Assert import Assert
 import os
 import protocols
 import time
@@ -345,7 +346,7 @@ def test():
     import sys
     url = "http://www.python.org/"
     if sys.argv[1:]: url = sys.argv[1]
-    c = Cache()
+    c = cache()
     for i in range(3):
         api = c.open(url, 'GET', {})
         while 1:

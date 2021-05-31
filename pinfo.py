@@ -49,5 +49,5 @@ if not os.path.exists(fileName):
 
 
 p = pstats.Stats(fileName).strip_dirs()
-apply(p.sort_stats, sorts)
-apply(getattr(p, 'print_'+report), restrictions)
+p.sort_stats(sorts)
+getattr(p, 'print_'+report), restrictions

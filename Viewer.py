@@ -59,7 +59,7 @@ class HRule(Canvas):
         kw["highlightbackground"] = bgcolor
         kw["highlightthickness"] = 0
         kw["width"] = self.get_width()
-        apply(Canvas.__init__, (self, viewer.text), kw)
+        Canvas.__init__(self, viewer.text), kw
 
     def get_width(self):
         maxwid = self.__magic.get_available_width()
@@ -199,7 +199,7 @@ class Viewer(formatter.AbstractWriter):
         self.smoothscroll = bars and self.context.app.prefs.GetBoolean(
             "browser", "smooth-scroll-hack")
         if self.smoothscroll:
-            from supertextbox import make_super_text_box
+            from utils.supertextbox import make_super_text_box
             self.text, self.frame = make_super_text_box(self.master,
                                                       width=width,
                                                       height=height,
@@ -358,7 +358,7 @@ class Viewer(formatter.AbstractWriter):
         if self.__fonttags_built is None:
             self.__fonttags_built = {}
         self.__fonttags_built[tag] = tag
-        apply(self.text.tag_configure, (tag,), self.stylesheet.styles[tag])
+        self.text.tag_configure(tag,), self.stylesheet.styles[tag]
 
     def bind_anchors(self, tag):
         # Each URL must have a separate binding so moving between
@@ -464,7 +464,7 @@ class Viewer(formatter.AbstractWriter):
             self.text.insert(END, self.pendingdata, self.flowingtags)
             self.pendingdata = ''
         if self.smoothscroll:
-            from supertextbox import resize_super_text_box
+            from utils.supertextbox import resize_super_text_box
             resize_super_text_box(frame=self.frame)
         self.text['state'] = DISABLED
         if update:
@@ -543,7 +543,7 @@ class Viewer(formatter.AbstractWriter):
         self.new_tags()
 
     def new_spacing(self, spacing):
-        self.spacingtag = spacingtag
+        self.spacingtag = spacing
         self.new_tags()
 
     def new_styles(self, styles):
@@ -768,7 +768,7 @@ class Viewer(formatter.AbstractWriter):
     def clear_targets(self):
         targs = self.targets.keys()
         if targs:
-            apply(self.text.mark_unset, tuple(targs))
+            self.text.mark_unset(tuple(targs))
 
     def add_target(self, fragment):
         if self.pendingdata:
@@ -898,7 +898,7 @@ class ViewerMenu:
         menu.add_separator()
         menu.add_command(label="View Frame Source",
                          command=context.view_source)
-        import DocumentInfo
+        from ancillary import DocumentInfo
         menu.add_command(label="Document Info...",
                          command=DocumentInfo.DocumentInfoCommand(viewer))
         self.__source_item = menu.index(END)
@@ -1001,7 +1001,7 @@ class ViewerMenu:
         try:
             bmarks = self.__context.browser.app.bookmarks_controller
         except AttributeError:
-            import BookmarksGUI
+            from ancillary import BookmarksGUI
             bmarks = BookmarksGUI.BookmarksController(
                 self.__context.browser.app)
             self.__context.browser.app.bookmarks_controller = bmarks

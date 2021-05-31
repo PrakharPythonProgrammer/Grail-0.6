@@ -51,7 +51,7 @@ class Stylesheet:
             attr = string.splitfields(composite, '.')[0]
             return self.attrs[attr]
         except IndexError:
-            raise AttributeError(attr)
+            raise AttributeError()
 
     def get_sizes(self):
         """Get the size name and a dictionary of size name/values.
@@ -133,7 +133,7 @@ def test():
     grail_root = '.'
     import sys
     sys.path = ['./utils', './ancillary'] + sys.path
-    import GrailPrefs
+    from grailbase import GrailPrefs
     prefs = GrailPrefs.AllPreferences()
     sheet = Stylesheet(prefs)
     print(sheet.styles['h5_b']['font'])

@@ -10,7 +10,7 @@ import sys
 import grail
 
 # Standard Grail imports
-import grailutil
+from utils import grailutil
 
 d = os.path.join(grailutil.getgraildir(), "user")
 if os.path.isdir(d):

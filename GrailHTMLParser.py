@@ -13,9 +13,9 @@ import string
 import tk_tools
 import formatter
 import Viewer
-import grailutil
+import utils.grailutil as grailutil
 
-from grailutil import extract_attribute, extract_keyword
+from utils.grailutil import extract_attribute, extract_keyword
 from sgml.HTMLParser import HTMLParser, HeaderNumber
 
 
@@ -237,7 +237,7 @@ class GrailHTMLParser(HTMLParser):
         HTMLParser.start_body(self, attrs)
         if not self.app.prefs.GetBoolean('parsing-html', 'honor-colors'):
             return
-        from grailutil import conv_normstring
+        from utils.grailutil import conv_normstring
         bgcolor = extract_keyword('bgcolor', attrs, conv=conv_normstring)
         if bgcolor:
             clr = self.configcolor('background', bgcolor)
@@ -635,7 +635,7 @@ class GrailHTMLParser(HTMLParser):
 def try_configcolor(option, color, tag, widget):
     try:
         if tag:
-            apply(widget.tag_config, (tag,), {option: color})
+            widget.tag_config(tag,), {option: color}
         else:
             widget[option] = color
     except TclError as msg:

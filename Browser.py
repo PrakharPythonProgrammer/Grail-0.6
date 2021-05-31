@@ -4,7 +4,7 @@
 import os
 import string
 import sys
-import grailutil
+from utils import grailutil
 
 from tkinter import *
 import tk_tools
@@ -32,7 +32,7 @@ if _iconxbm_file:
     if not os.path.isfile(_iconmask_file):
         _iconmask_file = None
     def make_toplevel(*args, **kw):
-        w = apply(tk_tools_make_toplevel, args, kw)
+        w = tk_tools_make_toplevel(args, kw)
         # icon set up
         try: w.iconbitmap('@' + _iconxbm_file)
         except TclError: pass
@@ -158,7 +158,7 @@ class Browser:
         menu.add_separator()
         self._menucmd(menu, "Save As...", "S", self.save_as_command)
         self._menucmd(menu, "Print...", "P", self.print_command)
-        import DocumentInfo
+        from ancillary import DocumentInfo
         self._menucmd(menu, "Document Info...", "D",
                       DocumentInfo.DocumentInfoCommand(self))
         menu.add_separator()
@@ -178,16 +178,16 @@ class Browser:
 
     def create_menu_search(self, menu):
         menu.grail_browser = self       # Applet compatibility
-        import SearchMenu
+        from ancillary import SearchMenu
         SearchMenu.SearchMenu(menu, self.root, self)
 
     def create_menu_bookmarks(self, menu):
         menu.grail_browser = self # Applet compatibility
-        import BookmarksGUI
+        from ancillary import BookmarksGUI
         self.bookmarksmenu_menu = BookmarksGUI.BookmarksMenu(menu)
 
     def create_menu_preferences(self, menu):
-        from PrefsPanels import PrefsPanelsMenu
+        from ancillary.PrefsPanels import PrefsPanelsMenu
         PrefsPanelsMenu(menu, self)
 
     def create_menu_help(self, menu):
@@ -283,7 +283,7 @@ class Browser:
 
     def load(self, *args, **kw):
         """Interface for applets."""
-        return apply(self.context.load, args, kw)
+        return self.context.load(args, kw)
 
     def valid(self):
         return self.app and self in self.app.browsers
@@ -343,7 +343,7 @@ class Browser:
         return b
 
     def open_uri_command(self, event=None):
-        import OpenURIDialog
+        from ancillary import OpenURIDialog
         dialog = OpenURIDialog.OpenURIDialog(self.root)
         uri, new = dialog.go()
         if uri:
@@ -354,8 +354,8 @@ class Browser:
             browser.context.load(grailutil.complete_url(uri))
 
     def open_file_command(self, event=None):
-        import FileDialog
-        dialog = FileDialog.LoadFileDialog(self.master)
+        from tkinter import filedialog
+        dialog = filedialog.LoadFileDialog(self.master)
         filename = dialog.go(key="load")
         if filename:
             import urllib

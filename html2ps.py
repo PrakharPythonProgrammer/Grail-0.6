@@ -31,7 +31,7 @@ if __name__ == '__main__':
 if sys.version < "1.5":
     import ni
 
-import grailutil
+from utils import grailutil
 grailutil._grail_root = script_dir
 
 import printing.main

@@ -1,8 +1,8 @@
 """Restricted execution for Applets."""
 
 
-import SafeDialog
-import Safetkinter
+from utils import SafeDialog
+from utils import Safetkinter
 import os
 from rexec import RExec, RHooks
 import string
@@ -383,7 +383,7 @@ class OSPathSurrogate:
         exec(TEMPLATE2 % {'name': name})
 
     def join(self, *args):
-        return apply(os.path.join, args)
+        return os.path.join(args)
 
     for name in ('exists', 'isdir', 'isfile', 'islink', 'ismount'):
         exec(TEMPLATE3 % {'name': name})
@@ -412,7 +412,8 @@ def group2dirname(group):
     should probably be maintained making the mapping explicit.)
 
     """
-    import regsub, md5
+    import regsub
+    from hashlib import md5
     sum = md5.new(group).digest()
     path = regsub.gsub('[:/\\]+', '_', group)
     if len(path) > 15:

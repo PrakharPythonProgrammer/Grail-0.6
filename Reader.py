@@ -1,7 +1,7 @@
 """Reader class -- helper to read documents asynchronously."""
 
-import grailutil
-import ht_time
+from utils import grailutil
+from utils import ht_time
 import os
 import sys
 import string
@@ -632,8 +632,8 @@ class Reader(BaseReader):
                 if encoding[:2] == "x-":
                     encoding = encoding[2:]
             encoding_label = "MIME type: %s%s" % (encoding, real_content_type)
-            import FileDialog
-            fd = FileDialog.SaveFileDialog(context.root)
+            from tkinter import filedialog
+            fd = filedialog.SaveFileDialog(context.root)
             label = Label(fd.top, text=encoding_label)
             label.pack(before=fd.filter)
             # give it a default filename on which save within the

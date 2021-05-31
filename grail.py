@@ -40,7 +40,7 @@ import filetypes
 import grailbase.utils
 # TBD: hack!
 grailbase.utils._grail_root = grail_root
-import grailutil
+from utils import grailutil
 from tkinter import *
 import tk_tools
 import BaseApplication
@@ -49,7 +49,7 @@ import Stylesheet
 from CacheMgr import CacheManager
 from ImageCache import ImageCache
 from Authenticate import AuthenticationManager
-import GlobalHistory
+from ancillary import GlobalHistory
 
 # Milliseconds between interrupt checks
 KEEPALIVE_TIMER = 500
@@ -121,7 +121,7 @@ def main(args=None):
         load_images_vis_prefs()
     prefs.AddGroupCallback('browser', load_images_vis_prefs)
 
-    import Safetkinter
+    from utils import Safetkinter
     Safetkinter._castrate(app.root.tk)
 
     tk_tools.install_keybindings(app.root)
@@ -137,9 +137,9 @@ def main(args=None):
     # Import user's grail startup file, defined as
     # $GRAILDIR/user/grailrc.py if it exists.
     if user_init:
-        try: import grailrc
+        try: from SampleGrailDir import grailrc
         except ImportError as e:
-            # Only catch this is grailrc itself doesn't import,
+            # Only catch this if grailrc itself doesn't import,
             # otherwise propogate.
             if string.split(e.args[0])[-1] != "grailrc":
                 raise
@@ -273,7 +273,7 @@ class Application(BaseApplication.BaseApplication):
         self.browsers = []
         self.iostatuspanel = None
         self.in_exception_dialog = None
-        import Greek
+        from ancillary import Greek
         for k, v in Greek.entitydefs.items():
             Application.dingbatimages[k] = (v, '_sym')
         self.root.bind_class("Text", "<Alt-Left>", self.dummy_event)
@@ -304,7 +304,7 @@ class Application(BaseApplication.BaseApplication):
 
     def open_io_status_panel(self):
         if not self.iostatuspanel:
-            import IOStatusPanel
+            from ancillary import IOStatusPanel
             self.iostatuspanel = IOStatusPanel.IOStatusPanel(self)
         else:
             self.iostatuspanel.reopen()
@@ -413,7 +413,7 @@ class Application(BaseApplication.BaseApplication):
     def _exc_dialog(self, message, exc, val, tb, root=None):
         # XXX This needn't be a modal dialog --
         # XXX should SafeDialog be changed to support callbacks?
-        import SafeDialog
+        from utils import SafeDialog
         msg = "An exception occurred " + str(message) + " :\n"
         msg = msg + str(exc) + " : " + str(val)
         dlg = SafeDialog.Dialog(root or self.root,
@@ -429,14 +429,14 @@ class Application(BaseApplication.BaseApplication):
 
     def traceback_dialog(self, exc, val, tb):
         # XXX This could actually just create a new Browser window...
-        import TbDialog
+        from utils import TbDialog
         TbDialog.TracebackDialog(self.root, exc, val, tb)
 
     def error_dialog(self, exc, msg, root=None):
         # Display an error dialog.
         # Return when the user clicks OK
         # XXX This needn't be a modal dialog
-        import SafeDialog
+        from utils import SafeDialog
         if type(msg) in (List, Tuple):
             s = ''
             for item in msg:
