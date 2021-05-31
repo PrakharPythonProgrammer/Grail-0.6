@@ -1,6 +1,6 @@
 """doc: URI scheme handler."""
 
-from nullAPI import null_access
+from .nullAPI import null_access
 
 class doc_access(null_access):
 

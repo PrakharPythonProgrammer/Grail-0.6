@@ -24,7 +24,7 @@ import string
 import socket
 from urllib import splittype, splithost, splitport
 from urllib.parse import urlparse
-import grailutil
+from . import grailutil
 
 #
 # list of valid scheme environment variables for proxies

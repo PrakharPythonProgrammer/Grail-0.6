@@ -5,8 +5,8 @@ as xxx:yyy, so the equivalence is evident."""
 __version__ = '$Revision: 2.3 $'
 
 
-import nullAPI
-import ProtocolAPI
+from . import nullAPI
+from . import ProtocolAPI
 
 
 class urn_access(nullAPI.null_access):

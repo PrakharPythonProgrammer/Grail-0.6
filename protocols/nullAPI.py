@@ -1,4 +1,4 @@
-from Assert import Assert
+from utils.Assert import Assert
 
 META, DATA, DONE = 'META', 'DATA', 'DONE'
 

@@ -2,8 +2,8 @@
 
 XXX This was hacked together in an hour si I would have something to
 test ProtocolAPI.py.  Especially the way it uses knowledge about the
-internals of httplib.HTTP is disgusting (but then, so would editing
-the source of httplib.py be :-).
+internals of http.client.HTTP is disgusting (but then, so would editing
+the source of http.client.py be :-).
 
 XXX Main deficiencies:
 
@@ -16,11 +16,11 @@ XXX Main deficiencies:
 
 
 import string
-import httplib
+import http.client
 from urllib import splithost
 import mimetools
-from Assert import Assert
-import grailutil
+from utils.Assert import Assert
+from utils import grailutil
 import select
 import Reader
 import re
@@ -30,12 +30,12 @@ import sys
 from __main__ import GRAILVERSION
 
 
-httplib.HTTP_VERSIONS_ACCEPTED = 'HTTP/1\.[0-9.]+'
-replypat = httplib.HTTP_VERSIONS_ACCEPTED + '[ \t]+\([0-9][0-9][0-9]\)\(.*\)'
+http.client.HTTP_VERSIONS_ACCEPTED = 'HTTP/1\.[0-9.]+'
+replypat = http.client.HTTP_VERSIONS_ACCEPTED + '[ \t]+\([0-9][0-9][0-9]\)\(.*\)'
 replyprog = re.compile(replypat)
 
-httplib.replypat = replypat
-httplib.replyprog = replyprog
+http.client.replypat = replypat
+http.client.replyprog = replyprog
 
 
 # Search for blank line following HTTP headers
@@ -50,11 +50,11 @@ DATA = 'data'
 DONE = 'done'
 CLOS = 'closed'
 
-class MyHTTP(httplib.HTTP):
+class MyHTTP(http.client.HTTP):
 
     def putrequest(self, request, selector):
         self.selector = selector
-        httplib.HTTP.putrequest(self, request, selector)
+        http.client.HTTP.putrequest(self, request, selector)
 
     def getreply(self, file):
         self.file = file
@@ -73,7 +73,7 @@ class MyHTTP(httplib.HTTP):
             self.headers['content-type'] = c_type or "text/html"
             return 200, "OK", self.headers
         errcode, errmsg = replyprog.group(1, 2)
-        errcode = string.atoi(errcode)
+        errcode = int(errcode)
         errmsg = string.strip(errmsg)
         self.headers = mimetools.Message(self.file, 0)
         return errcode, errmsg, self.headers

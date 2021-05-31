@@ -20,10 +20,10 @@ try:
     __ # This fails with 1.5 packages, succeeds when using ni
 except NameError:
     # 1.5 packages
-    from ProtocolAPI import protocol_access, protocol_joiner
+    from .ProtocolAPI import protocol_access, protocol_joiner
 else:
     # Backward compatible solution for ni
-    import ProtocolAPI
+    from . import ProtocolAPI
 
     for name in ['protocol_access', 'protocol_joiner']:
         setattr(__, name, getattr(ProtocolAPI, name))

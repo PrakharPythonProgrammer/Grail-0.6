@@ -22,8 +22,8 @@ from urllib import unquote, splithost, splitport, splituser, \
      splitpasswd, splitattr, splitvalue, quote
 from urllib import urljoin
 import mimetools
-from Assert import Assert
-import grailutil
+from utils.Assert import Assert
+from utils import grailutil
 import socket
 
 app = grailutil.get_grailapp()          # app.guess_type(url)
@@ -87,7 +87,7 @@ class ftp_access:
         host = socket.gethostbyname(host)
         if port:
             try:
-                port = string.atoi(port)
+                port = int(port)
             except string.atoi_error:
                 raise IOError('ftp error', 'bad port')
         else:
@@ -122,7 +122,7 @@ class ftp_access:
                     type = value
                 elif attr == 'debug':
                     try:
-                        self.debuglevel = string.atoi(value)
+                        self.debuglevel = int(value)
                     except string.atoi_error:
                         pass
             candidates = ftpcache[key]
@@ -346,7 +346,7 @@ class GrailFTP(ftplib.FTP):
         resp = ftplib.FTP.getresp(self)
         if len(resp) >= 3 and resp[:3] == "150" \
            and self._size_re.search(resp) >= 0:
-                self._xfer_size = string.atoi(self._size_re.group(1))
+                self._xfer_size = int(self._size_re.group(1))
         return resp
 
 

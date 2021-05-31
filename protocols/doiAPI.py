@@ -4,6 +4,6 @@ extensions.  This causes the same thing to work in Grail."""
 __version__ = '$Revision: 2.3 $'
 
 
-import hdlAPI
+from . import hdlAPI
 
 doi_access = hdlAPI.hdl_access

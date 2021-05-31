@@ -1,5 +1,5 @@
-from Assert import Assert
-import nullAPI
+from utils.Assert import Assert
+from . import nullAPI
 import string
 
 

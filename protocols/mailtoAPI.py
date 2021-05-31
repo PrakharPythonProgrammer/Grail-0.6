@@ -1,10 +1,10 @@
 """mailto: URI scheme handler."""
 
-import grailutil
+from utils import grailutil
 
-from nullAPI import null_access
+from .nullAPI import null_access
 
-from MailDialog import MailDialog
+from ancillary.MailDialog import MailDialog
 
 
 class mailto_access(null_access):

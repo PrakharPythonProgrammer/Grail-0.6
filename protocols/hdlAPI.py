@@ -29,9 +29,9 @@ XXX Remaining problems:
 import sys
 import string
 import urllib
-import hdllib
-import nullAPI
-import grailutil
+from . import hdllib
+from . import nullAPI
+from . import grailutil
 
 
 # We are currently only concerned with URL type handles.
@@ -147,7 +147,7 @@ class hdl_access(nullAPI.null_access):
                     self._types = [hdllib.data_map[tname]]
                 else:
                     try:
-                        n = string.atoi(t)
+                        n = int(t)
                     except ValueError:
                         self._types = [] # Request all types
                     else:

@@ -1,6 +1,6 @@
-from Assert import Assert
-import grailutil
-import ht_time
+from utils.Assert import Assert
+from utils import grailutil
+from utils import ht_time
 import os
 
 from stat import ST_MTIME, ST_SIZE

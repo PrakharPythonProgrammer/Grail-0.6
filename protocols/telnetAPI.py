@@ -5,7 +5,7 @@ For Unix only; requires xterm in your $PATH.
 """
 
 import os, urllib
-from nullAPI import null_access
+from .nullAPI import null_access
 
 class telnet_access(null_access):
 
