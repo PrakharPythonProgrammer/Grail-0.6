@@ -34,6 +34,14 @@ def init_module(prefs):
         fmt = prefs.Get('parsing-html', 'format-h%d' % opt)
         HeaderNumber.set_default_format(opt - 1, eval(fmt))
 
+# At function of tkinter has been depricated since Python 3.4
+# Defining our own At function
+def At(x, y=None):
+    if y is None:
+        return '@%r' % (x,)
+    else:
+        return '@%r,%r' % (x, y)
+
 
 class GrailHTMLParser(HTMLParser):
 
@@ -170,7 +178,7 @@ class GrailHTMLParser(HTMLParser):
                                    conv=grailutil.conv_integer)
             if size == 1:
                 # could not actually set it to 1 unless it was flat; do it now:
-                width = string.atoi(rule.cget('width'))
+                width = int(rule.cget('width'))
                 rule.config(borderwidth=0, height=1, width=width+2)
         elif color:
             self.configcolor('background', color, widget=rule)
@@ -182,14 +190,14 @@ class GrailHTMLParser(HTMLParser):
         ## align = extract('align', attrs, align, conv=conv_align)
         alt = extract('alt', attrs, '(image)')
         border = extract('border', attrs, self.anchor and 2 or None,
-                         conv=string.atoi)
+                         conv=int)
         ismap = attrs.has_key('ismap')
         if ismap and border is None: border = 2
         src = extract('src', attrs, '')
-        width = extract('width', attrs, 0, conv=string.atoi)
-        height = extract('height', attrs, 0, conv=string.atoi)
-        hspace = extract('hspace', attrs, 0, conv=string.atoi)
-        vspace = extract('vspace', attrs, 0, conv=string.atoi)
+        width = extract('width', attrs, 0, conv=int)
+        height = extract('height', attrs, 0, conv=int)
+        hspace = extract('hspace', attrs, 0, conv=int)
+        vspace = extract('vspace', attrs, 0, conv=int)
         # not sure how to assert(value[0] == '#')
         usemap = extract('usemap', attrs, conv=string.strip)
         if usemap:
@@ -435,7 +443,7 @@ class GrailHTMLParser(HTMLParser):
 
         coords = []
 
-        terms = map(string.atoi, regsub.split(string.strip(text), '[, ]+'))
+        terms = map(int, regsub.split(string.strip(text), '[, ]+'))
 
         if shape == 'poly':
             # list of (x,y) tuples
@@ -477,8 +485,8 @@ class GrailHTMLParser(HTMLParser):
     def do_app(self, attrs):
         mod, cls, src = self.get_mod_class_src(attrs)
         if not (mod and cls): return
-        width = extract_attribute('width', attrs, conv=string.atoi, delete=1)
-        height = extract_attribute('height', attrs, conv=string.atoi, delete=1)
+        width = extract_attribute('width', attrs, conv=int, delete=1)
+        height = extract_attribute('height', attrs, conv=int, delete=1)
         menu = extract_attribute('menu', attrs, delete=1)
         mod = mod + ".py"
         import AppletLoader
@@ -767,7 +775,7 @@ class DynamicReloader:
         if not specitems:
             return None, None
         try:
-            seconds = string.atof(specitems[0])
+            seconds = float(specitems[0])
         except ValueError:
             return None, None
         if seconds < 0:
