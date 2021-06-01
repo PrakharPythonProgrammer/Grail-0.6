@@ -117,7 +117,7 @@ class file_access:
         fp = os.popen("ls -l -a %s/. 2>&1" % self.pathname, "r")
         lines = fp.readlines()
         fp.close()
-        import StringIO
+        import io
         import re
         from urllib import quote
         from urllib import urljoin
@@ -150,7 +150,7 @@ class file_access:
                 mode, middle, escape(href), name)
             data = data + line
         data = data + self.listing_trailer
-        self.fp = StringIO.StringIO(data)
+        self.fp = io.io(data)
         self.headers['content-type'] = 'text/html'
         self.headers['content-length'] = str(len(data))
 

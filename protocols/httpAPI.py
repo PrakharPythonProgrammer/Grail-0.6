@@ -18,13 +18,13 @@ XXX Main deficiencies:
 import string
 import http.client
 from urllib import splithost
-import mimetools
+import email
 from utils.Assert import Assert
 from utils import grailutil
 import select
 import Reader
 import re
-import StringIO
+import io
 import socket
 import sys
 from __main__ import GRAILVERSION
@@ -75,7 +75,7 @@ class MyHTTP(http.client.HTTP):
         errcode, errmsg = replyprog.group(1, 2)
         errcode = int(errcode)
         errmsg = string.strip(errmsg)
-        self.headers = mimetools.Message(self.file, 0)
+        self.headers = email.Message(self.file, 0)
         return errcode, errmsg, self.headers
 
     def close(self):
@@ -202,7 +202,7 @@ class http_access:
             x, y = self.pollmeta(None)
             while not y:
                 x, y = self.pollmeta(None)
-        file = StringIO.StringIO(self.readahead)
+        file = io.io(self.readahead)
         errcode, errmsg, headers = self.h.getreply(file)
         self.state = DATA
         self.readahead = file.read()

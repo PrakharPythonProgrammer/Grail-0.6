@@ -21,7 +21,7 @@ import ftplib
 from urllib import unquote, splithost, splitport, splituser, \
      splitpasswd, splitattr, splitvalue, quote
 from urllib import urljoin
-import mimetools
+import email
 from utils.Assert import Assert
 from utils import grailutil
 import socket

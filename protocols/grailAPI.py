@@ -1,8 +1,8 @@
 """grail: URI scheme handler."""
 
-import grailutil
+from utils import grailutil
 import urllib
-from nullAPI import null_access
+from .nullAPI import null_access
 
 class grail_access(null_access):
 
