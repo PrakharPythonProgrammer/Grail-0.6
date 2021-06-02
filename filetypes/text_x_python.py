@@ -5,6 +5,7 @@ __version__ = '$Revision: 1.5 $'
 import grailutil
 import re
 import string
+
 import tkinter
 import token
 
@@ -15,14 +16,14 @@ import sgml.HTMLParser
 def embed_text_x_python(parser, attrs):
 	"""<OBJECT> Handler for Python applets."""
 	extract = grailutil.extract_keyword
-	width = extract('width', attrs, conv=string.atoi)
-	height = extract('height', attrs, conv=string.atoi)
-	menu = extract('menu', attrs, conv=string.strip)
-	classid = extract('classid', attrs, conv=string.strip)
-	codebase = extract('codebase', attrs, conv=string.strip)
+	width = extract('width', attrs, conv=int)
+	height = extract('height', attrs, conv=int)
+	menu = extract('menu', attrs, conv=str.strip)
+	classid = extract('classid', attrs, conv=str.strip)
+	codebase = extract('codebase', attrs, conv=str.strip)
 	align = extract('align', attrs, 'baseline')
-	vspace = extract('vspace', attrs, 0, conv=string.atoi)
-	hspace = extract('hspace', attrs, 0, conv=string.atoi)
+	vspace = extract('vspace', attrs, 0, conv=int)
+	hspace = extract('hspace', attrs, 0, conv=int)
 	apploader = AppletLoader.AppletLoader(
 		parser, width=width, height=height, menu=menu,
 		classid=classid, codebase=codebase,
@@ -82,7 +83,7 @@ class parse_text_x_python:
 	tag_add = self.tag_add = self.__viewer.text.tag_add
 	colorize = self.colorize
 	prevline, prevcol = 0, 0
-	sourcetext = string.split(self.__source, "\n")
+	sourcetext = str.split(self.__source, "\n")
 	sourcetext.insert(0, '')
 	self.show("Colorizing Python source text - coloring...")
 	steps = 0
@@ -98,7 +99,7 @@ class parse_text_x_python:
 		   # The parser spits out the line number the token ENDS on,
 		   # not the line it starts on!
 		   if ntype == token.STRING and "\n" in nstr:
-			   strlines = string.split(nstr, "\n")
+			   strlines = str.split(nstr, "\n")
 			   endpos = lineno, len(strlines[-1]), sourcetext[lineno]
 			   lineno = lineno - len(strlines) + 1
 		   else:

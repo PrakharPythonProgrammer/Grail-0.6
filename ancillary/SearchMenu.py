@@ -52,18 +52,18 @@ class SearchDialog:
 
     def __init__(self, rootwin, searchable):
         self._searchable = searchable
-        import tk_tools
-        self._root = tk_tools.make_toplevel(rootwin, title="Search Dialog",
+        from utils import tktools
+        self._root = tktools.make_toplevel(rootwin, title="Search Dialog",
                                            class_="Search")
         self.create_widgets()
-        tk_tools.set_transient(self._root, rootwin, rely=0.0)
+        tktools.set_transient(self._root, rootwin, rely=0.0)
         self.__rootwin = rootwin
 
     def create_widgets(self):
-        import tk_tools
-        x, f, self.bot_frame = tk_tools.make_double_frame(self._root)
+        from utils import tktools
+        x, f, self.bot_frame = tktools.make_double_frame(self._root)
         self.pat_entry, self.pat_frame = \
-                        tk_tools.make_form_entry(f, None, name="entry")
+                        tktools.make_form_entry(f, None, name="entry")
         self.pat_entry['exportselection'] = 0
         self.pat_entry.bind('<Return>', self.return_event)
         self.pat_entry.focus_set()

@@ -7,7 +7,7 @@ import bookmarks
 import bookmarks.nodes
 import bookmarks.walker
 import re
-import string
+
 
 try:
      import pickle as cPickle
@@ -39,8 +39,8 @@ class Parser:
         if self.version == "4":
             orig_fname, data = self.__split_line(data)
             orig_mtime, data = self.__split_line(data)
-            self.original_filename = string.strip(orig_fname)
-            self.original_mtime = int(string.strip(orig_mtime))
+            self.original_filename = str.strip(orig_fname)
+            self.original_mtime = int(str.strip(orig_mtime))
         self.__root = pickle.loads(data)
         if self.version != "4":
             # re-write as new version:
@@ -61,7 +61,7 @@ class Parser:
         if '\n' not in data:
             raise bookmarks.BookmarkFormatError(self._filename,
                                                 "incomplete file header")
-        pos = string.find(data, '\n') + 1
+        pos = str.find(data, '\n') + 1
         header = data[:pos]
         data = data[pos:]
         return header, data

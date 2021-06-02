@@ -5,7 +5,7 @@ __version__ = '$Revision: 1.4 $'
 
 import bookmarks                        # parent
 import bookmarks.walker
-import string
+
 import sys
 
 
@@ -107,7 +107,7 @@ class Writer(bookmarks.walker.TreeWalker):
     def __write_description(self, desc):
         if not desc: return
         # write the description, sans leading and trailing whitespace
-        print('<DD>%s' % string.strip(bookmarks._prepstring(desc)))
+        print('<DD>%s' % str.strip(bookmarks._prepstring(desc)))
 
     __header = """\
 <!DOCTYPE NETSCAPE-Bookmark-file-1>

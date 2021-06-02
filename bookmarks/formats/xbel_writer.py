@@ -5,7 +5,7 @@ __version__ = '$Revision: 1.12 $'
 import bookmarks
 import bookmarks.iso8601
 import bookmarks.walker
-import string
+
 import sys
 
 
@@ -27,7 +27,7 @@ class Writer(bookmarks.walker.TreeWalker):
 
     def write_tree(self, fp):
         root = self.get_root()
-        root_type = string.lower(root.get_nodetype())
+        root_type = str.lower(root.get_nodetype())
         if root_type == "folder":
             root_type = "xbel"
         fp.write(self.__header % (root_type, self.PUBLIC_ID, self.SYSTEM_ID))
@@ -109,7 +109,7 @@ class Writer(bookmarks.walker.TreeWalker):
         added = date_attr(node.add_date(), "added")
         modified = date_attr(node.last_modified(), "modified")
         visited = date_attr(node.last_visited(), "visited")
-        desc = string.strip(node.description() or '')
+        desc = str.strip(node.description() or '')
         idref = node.id() or ''
         if idref:
             idref = 'id="%s"' % idref
@@ -120,7 +120,7 @@ class Writer(bookmarks.walker.TreeWalker):
         tab = "  " * self._depth
         if attrs:
             sep = "\n%s          " % tab
-            attrs = " " + string.join(attrs, sep)
+            attrs = " " + str.join(attrs, sep)
         else:
             sep = " "
             attrs = ""
@@ -154,7 +154,7 @@ class Writer(bookmarks.walker.TreeWalker):
             append("\n")
         append(tab)
         append("  </info>\n")
-        self.write(string.join(L, ""))
+        self.write(str.join(L, ""))
 
     def __dump_xml(self, stuff, L, tab):
         tag, attrs, content = stuff
@@ -201,7 +201,7 @@ def _fmt_date_attr(date, attrname):
 
 
 def _wrap_lines(s, width, indentation=0):
-    words = string.split(s)
+    words = str.split(s)
     lines = []
     buffer = ''
     for w in words:
@@ -218,4 +218,4 @@ def _wrap_lines(s, width, indentation=0):
         lines.append(buffer)
     if len(lines) > 1:
         lines.insert(0, '')
-    return string.join(lines, "\n" + " "*indentation)
+    return str.join(lines, "\n" + " "*indentation)

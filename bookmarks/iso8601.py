@@ -11,7 +11,7 @@ This module was written by Fred L. Drake, Jr. <fdrake@acm.org>.
 
 __version__ = '1.0'
 
-import string
+
 import time
 
 
@@ -100,11 +100,11 @@ del re
 
 
 def __extract_date(m):
-    year = string.atoi(m.group("year"), 10)
+    year = int(m.group("year"), 10)
     julian = m.group("julian")
     if julian:
-        return __find_julian(year, string.atoi(julian, 10))
-    month = string.atoi(m.group("month"), 10)
+        return __find_julian(year, int(julian, 10))
+    month = int(m.group("month"), 10)
     day = 1
     if month is None:
         month = 1
@@ -113,7 +113,7 @@ def __extract_date(m):
     else:
         day = m.group("day")
         if day:
-            day = string.atoi(day)
+            day = int(day)
             if not 1 <= day <= 31:
                 raise ValueError, "illegal day number: " + m.group("day")
         else:
@@ -127,15 +127,15 @@ def __extract_time(m):
     hours = m.group("hours")
     if not hours:
         return 0, 0, 0
-    hours = string.atoi(hours, 10)
+    hours = int(hours, 10)
     if not 0 <= hours <= 23:
         raise ValueError, "illegal hour number: " + m.group("hours")
-    minutes = string.atoi(m.group("minutes"), 10)
+    minutes = int(m.group("minutes"), 10)
     if not 0 <= minutes <= 59:
         raise ValueError, "illegal minutes number: " + m.group("minutes")
     seconds = m.group("seconds")
     if seconds:
-        seconds = string.atof(seconds)
+        seconds = float(seconds)
         if not 0 <= seconds <= 59:
             raise ValueError, "illegal seconds number: " + m.group("seconds")
     else:
@@ -152,10 +152,10 @@ def __extract_tzd(m):
         return 0
     if tzd == "Z":
         return 0
-    hours = string.atoi(m.group("tzdhours"), 10)
+    hours = int(m.group("tzdhours"), 10)
     minutes = m.group("tzdminutes")
     if minutes:
-        minutes = string.atoi(minutes, 10)
+        minutes = int(minutes, 10)
     else:
         minutes = 0
     offset = (hours*60 + minutes) * 60

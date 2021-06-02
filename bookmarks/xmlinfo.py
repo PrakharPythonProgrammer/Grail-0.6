@@ -14,6 +14,7 @@ import copy
 import os
 import re
 import string
+
 import struct
 import sys
 
@@ -160,7 +161,7 @@ def extract(encoding, buffer, values, best_effort=0):
 
 _extractor_map = {}
 def new_extractor(encoding, buffer, values):
-    encoding = string.lower(encoding)
+    encoding = str.lower(encoding)
     klass = _extractor_map.get(encoding, Extractor)
     return klass(buffer, values)
 
@@ -170,7 +171,8 @@ def add_extractor_class(klass):
 
 
 class Extractor:
-    VERSION_CHARS = string.letters + string.digits + "_.:-"
+    string_letters = ''.join(map(chr,range(97,123))) + ''.join(map(chr,range(65,91)))
+    VERSION_CHARS = string_letters + string.digits + "_.:-"
 
     Encodings = ()
 
@@ -195,7 +197,7 @@ class Extractor:
         self.parse_VersionInfo()
         attrname, encoding = self.get_opt_pseudo_attr()
         if attrname == "encoding":
-            self.values.encoding = string.lower(encoding)
+            self.values.encoding = str.lower(encoding)
             attrname, standalone = self.get_opt_pseudo_attr()
             if attrname == "standalone":
                 if standalone not in ("yes", "no"):
@@ -230,10 +232,11 @@ class Extractor:
         pseudo-attribute."""
         attrname = ''
         value = ''
+        string_letters = ''.join(map(chr,range(97,123))) + ''.join(map(chr,range(65,91)))
         self.require_whitespace("pseudo-attribute")
         while 1:
             c = self.get_ascii(1)
-            if c in string.letters:
+            if c in string_letters:
                 attrname = attrname + c
                 self.discard_chars(1)
             else:
@@ -574,7 +577,7 @@ class ISO8859Extractor(Extractor):
         if not m:
             return None
         self.buffer = self.buffer[m.end():]
-        return string.lstrip(m.group())[1:-1]
+        return str.lstrip(m.group())[1:-1]
 
     def parse_doctype(self):
         self.require_ascii("<!DOCTYPE", "doctype declaration")
@@ -598,7 +601,7 @@ class ISO8859Extractor(Extractor):
     
     def skip_to_doctype(self):
         while self.buffer:
-            self.buffer = string.lstrip(self.buffer)
+            self.buffer = str.lstrip(self.buffer)
             if self.buffer[:4] == "<!--":
                 self.skip_comment()
             elif self.buffer[:2] == "<?":
@@ -607,20 +610,20 @@ class ISO8859Extractor(Extractor):
                 break
 
     def skip_pi(self):
-        pos = string.find(self.buffer, "?>", 2)
+        pos = str.find(self.buffer, "?>", 2)
         if pos < 0:
             raise ParseError("could not scan over processing instruction")
         self.buffer = self.buffer[pos + 2:]
 
     def skip_comment(self):
-        pos = string.find(self.buffer, "-->", 4)
+        pos = str.find(self.buffer, "-->", 4)
         if pos < 0:
             raise ParseError("could not scan over comment")
         self.buffer = self.buffer[pos + 4:]
 
     def skip_whitespace(self):
         old_buffer = self.buffer
-        self.buffer = string.lstrip(old_buffer)
+        self.buffer = str.lstrip(old_buffer)
         return len(old_buffer) - len(self.buffer)
 
     def get_ascii(self, count):
@@ -639,7 +642,7 @@ class ISO8859Extractor(Extractor):
         self.buffer = self.buffer[count:]
 
     def lower(self, str):
-        return string.lower(str)
+        return str.lower(str)
 
 
 class ISO8859_1_Extractor(ISO8859Extractor):
@@ -730,12 +733,12 @@ class EBCDICExtractor(Extractor):
 
     __EBCDIC_TO_ASCII = tuple(_m)
 
-    __translation = string.maketrans(string.join(__ASCII_TO_EBCDIC, ''),
-                                     string.join(__EBCDIC_TO_ASCII, ''))
+    __translation = str.maketrans(str.join(__ASCII_TO_EBCDIC, ''),
+                                     str.join(__EBCDIC_TO_ASCII, ''))
 
     def get_ascii(self, count):
         buffer = self.buffer[:count]
-        return string.translate(buffer, self.__translation)
+        return str.translate(buffer, self.__translation)
 
 add_extractor_class(EBCDICExtractor)
 
@@ -743,25 +746,25 @@ add_extractor_class(EBCDICExtractor)
 def ascii_to_ucs2be(s):
     L = map(None, s)
     L.insert(0, '')
-    return string.join(L, '\0')
+    return str.join(L, '\0')
 
 
 def ascii_to_ucs2le(s):
     L = map(None, s)
     L.append('')
-    return string.join(L, '\0')
+    return str.join(L, '\0')
 
 
 def ascii_to_ucs4be(s):
     L = map(None, s)
     L.insert(0, '')
-    return string.join(L, '\0\0\0')
+    return str.join(L, '\0\0\0')
 
 
 def ascii_to_ucs4le(s):
     L = map(None, s)
     L.append('')
-    return string.join(L, '\0\0\0')
+    return str.join(L, '\0\0\0')
 
 
 class UCS2Extractor(Extractor):

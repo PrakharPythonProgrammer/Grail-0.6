@@ -4,7 +4,7 @@ __version__ = '$Revision: 2.8 $'
 import formatter
 import grailutil
 import Reader
-import string
+
 
 
 def parse_text_plain(*args, **kw):
@@ -13,7 +13,7 @@ def parse_text_plain(*args, **kw):
     if ctype:
         ctype, opts = grailutil.conv_mimetype(ctype)
         if opts.get('format'):
-            how = string.lower(opts['format'])
+            how = str.lower(opts['format'])
             if how == "flowed":
                 import FlowingText
                 return apply(FlowingText.FlowingTextParser, args, kw)

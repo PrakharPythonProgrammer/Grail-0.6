@@ -34,7 +34,7 @@ import bookmarks
 import errno
 import getopt
 import os
-import string
+
 import sys
 
 
@@ -83,14 +83,14 @@ class Options:
                 self.export = 1
             elif opt == "--export":
                 self.export = 1
-                fields = string.split(arg, ",")
+                fields = str.split(arg, ",")
                 print(fields)
                 for f in fields:
                     fname = self.__export_field_map[f]
                     if not fname in self.export_fields:
                         self.export_fields.append(fname)
             elif opt == "--search":
-                map(self.keywords.append, string.split(arg, ","))
+                map(self.keywords.append, str.split(arg, ","))
                 self.search = 1
 
 
@@ -160,7 +160,7 @@ def main():
         from . import search
         from .search import KeywordSearch
         search_options = KeywordSearch.KeywordOptions()
-        search_options.set_keywords(string.join(options.keywords))
+        search_options.set_keywords(str.join(options.keywords))
         matcher = search.get_matcher("Keyword", search_options)
         root = search.find_nodes(root, matcher)
         if root is None:

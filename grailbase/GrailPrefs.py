@@ -8,7 +8,7 @@ __version__ = "$Revision: 2.33 $"
 
 import os
 import sys
-import string
+
 if __name__ == "__main__":
     sys.path.insert(0, '../utils')
 import utils
@@ -201,7 +201,7 @@ class AllPreferences:
     def GetGroup(self, group):
         """Get a list of ((group,cmpnt), value) tuples in group."""
         got = []
-        prefix = string.lower(group) + '--'
+        prefix = str.lower(group) + '--'
         l = len(prefix)
         for it in self.items():
             if it[0][0] == group:
@@ -267,7 +267,7 @@ class AllPreferences:
 
 def make_key(group, cmpnt):
     """Produce a key from preference GROUP, COMPONENT strings."""
-    return string.lower(group + '--' + cmpnt)
+    return str.lower(group + '--' + cmpnt)
                     
 
 def typify(val, type_name):
@@ -278,11 +278,11 @@ def typify(val, type_name):
         if type_name == 'string':
             return val
         elif type_name == 'int':
-            return string.atoi(val)
+            return int(val)
         elif type_name == 'float':
-            return string.atof(val)
+            return float(val)
         elif type_name == 'Boolean':
-            i = string.atoi(val)
+            i = int(val)
             if i not in (0, 1):
                 raise TypeError('%s should be Boolean' % repr(val))
             return i

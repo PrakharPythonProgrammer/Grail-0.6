@@ -4,7 +4,7 @@ __version__ = '$Revision: 2.2 $'
 import os
 import mimetypes
 import re
-import string
+
 import utils
 
 
@@ -34,7 +34,7 @@ class Application:
         return self.__loaders[name]
 
     def add_loader(self, name, loader):
-        localdir = string.join(string.split(name, "."), os.sep)
+        localdir = str.join(str.split(name, "."), os.sep)
         userdir = os.path.join(self.graildir, localdir)
         loader.add_directory(userdir)
         self.__loaders[name] = loader
@@ -62,5 +62,5 @@ class Application:
         """
         if self.__data_scheme_re.match(url) >= 0:
             scheme = self.__data_scheme_re.group(1) or "text/plain"
-            return string.lower(scheme), self.__data_scheme_re.group(3)
+            return str.lower(scheme), self.__data_scheme_re.group(3)
         return mimetypes.guess_type(url)

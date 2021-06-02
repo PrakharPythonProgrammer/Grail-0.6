@@ -1,5 +1,4 @@
 from . import Outliner
-import string
 
 from bookmarks.nodes import norm_uri
 
@@ -107,7 +106,7 @@ class BookmarkNode(Outliner.OutlinerNode):
         self._title = '------------------------------'
 
     def set_title(self, title=''):
-        self._title = string.strip(title)
+        self._title = str.strip(title)
     def set_add_date(self, add_date=None):
         self._add_date = add_date
     def set_last_visited(self, lastv):
@@ -132,7 +131,7 @@ class BookmarkNode(Outliner.OutlinerNode):
         self._idref = id
 
     def set_description(self, description=''):
-        self._desc = string.strip(description)
+        self._desc = str.strip(description)
     def set_uri(self, uri_string=''):
         self._uri = norm_uri(uri_string)
         if self._uri:

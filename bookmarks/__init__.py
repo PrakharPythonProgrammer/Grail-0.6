@@ -1,5 +1,5 @@
 import os
-import string
+
 import sys
 import urllib
 
@@ -58,7 +58,7 @@ for c in "!=&'\"":
 
 def _prepstring(s):
     """Return HTML/XML safe copy of a string."""
-    return string.join(map(__tr_map.get, s), '')
+    return str.join(map(__tr_map.get, s), '')
 
 
 

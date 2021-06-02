@@ -5,10 +5,9 @@ import bookmarks.nodes
 import FileDialog
 import os
 import stat
-import string
 import sys
 import time
-import tk_tools
+from utils import tktools
 import re
 
 from tkinter import *
@@ -85,10 +84,10 @@ class FileDialogExtras:
                           command=self.set_for_grail)
         netscapebtn = Button(frame, text='Netscape',
                              command=self.set_for_netscape)
-        tk_tools.unify_button_widths(grailbtn, netscapebtn)
+        tktools.unify_button_widths(grailbtn, netscapebtn)
         netscapebtn.pack(side=RIGHT, padx='1m', pady='1m')
         grailbtn.pack(side=RIGHT)
-        tk_tools.unify_button_widths(
+        tktools.unify_button_widths(
             self.ok_button, self.filter_button, self.cancel_button)
 
     def _set_to_file(self, path):
@@ -139,12 +138,12 @@ class BMSaveDialog(FileDialog.SaveFileDialog, FileDialogExtras):
     def export(self):
         return self.__export.get()
 
-    __charmap_out = string.maketrans(" ", "-")
-    __charmap_in = string.maketrans("-", " ")
+    __charmap_out = str.maketrans(" ", "-")
+    __charmap_in = str.maketrans("-", " ")
     def get_filetype(self):
         f = self.__filetype.get()
-        f = string.translate(f, self.__charmap_out)
-        f = string.lower(f)
+        f = str.translate(f, self.__charmap_out)
+        f = str.lower(f)
         return f
 
     def set_filetype(self, filetype):
@@ -159,8 +158,8 @@ class BMSaveDialog(FileDialog.SaveFileDialog, FileDialogExtras):
         if pat != oldpat:
             self.set_filter(dir, pat)
         if filetype not in ("HTML", "XBEL"):
-            filetype = string.capwords(
-                string.translate(filetype, self.__charmap_in))
+            filetype = str.title(
+                str.translate(filetype, self.__charmap_in))
         self.__filetype.set(filetype)
 
 
@@ -237,7 +236,7 @@ class BookmarksIO:
                 fp = open(cachename)
                 fp.readline()           # skip header
                 fp.readline()           # skip embedded file name
-                mtime = int(string.strip(fp.readline()))
+                mtime = int(str.strip(fp.readline()))
                 fp.close()
             except IOError:
                 pass
@@ -327,7 +326,7 @@ class BookmarksIO:
 class IOErrorDialog:
     def __init__(self, master, where, errmsg):
         msg = 'Bookmark file error encountered %s:' % where
-        self._frame = tk_tools.make_toplevel(master, msg)
+        self._frame = tktools.make_toplevel(master, msg)
         self._frame.protocol('WM_DELETE_WINDOW', self.close)
         label = Label(self._frame, text=msg)
         label.pack()
@@ -394,7 +393,7 @@ class TkListboxViewer(OutlinerViewer):
 class BookmarksDialog:
     def __init__(self, master, controller):
         # create the basic controls of the dialog window
-        self._frame = tk_tools.make_toplevel(master, class_='Bookmarks')
+        self._frame = tktools.make_toplevel(master, class_='Bookmarks')
         self._frame.title("Grail Bookmarks")
         self._frame.iconname("Bookmarks")
         self._frame.protocol('WM_DELETE_WINDOW', controller.hide)
@@ -564,7 +563,7 @@ class BookmarksDialog:
         self._frame.bind("N", self._controller.next_cmd)
 
     def _create_listbox(self):
-        self._listbox, frame = tk_tools.make_list_box(self._frame,
+        self._listbox, frame = tktools.make_list_box(self._frame,
                                                      60, 24, 1, 1)
         self._listbox.config(font='fixed')
         # bind keys
@@ -676,12 +675,12 @@ class BookmarksDialog:
 
 class DetailsDialog:
     def __init__(self, master, node, controller):
-        self._frame = tk_tools.make_toplevel(master, class_='Detail',
+        self._frame = tktools.make_toplevel(master, class_='Detail',
                                             title="Bookmark Details")
         self._frame.protocol('WM_DELETE_WINDOW', self.cancel)
         self._node = node
         self._controller = controller
-        fr, top, bottom = tk_tools.make_double_frame(self._frame)
+        fr, top, bottom = tktools.make_double_frame(self._frame)
         self._create_form(top)
         self._create_buttonbar(bottom)
         self._frame.bind('<Return>', self.done)
@@ -711,7 +710,7 @@ class DetailsDialog:
         self.revert()
 
     def _add_field(self, master, label, width, height=1):
-        entry, frame, label = tk_tools.make_labeled_form_entry(
+        entry, frame, label = tktools.make_labeled_form_entry(
             master, label, width, height, 12, takefocus=0)
         return entry
 
@@ -720,7 +719,7 @@ class DetailsDialog:
         donebtn = Button(top, name='ok', command=self.done)
         applybtn = Button(top, name='apply', command=self.apply)
         cancelbtn = Button(top, name='cancel', command=self.cancel)
-        tk_tools.unify_button_widths(donebtn, applybtn, cancelbtn)
+        tktools.unify_button_widths(donebtn, applybtn, cancelbtn)
         donebtn.pack(side=LEFT, in_=btnbar)
         applybtn.pack(side=LEFT, padx='1m', in_=btnbar)
         cancelbtn.pack(side=RIGHT, in_=btnbar)
@@ -1021,7 +1020,7 @@ class BookmarksController(OutlinerController):
         try:
             list = self._listbox.curselection()
             if len(list) > 0:
-                selection = string.atoi(list[0])
+                selection = int(list[0])
                 return self.viewer().node(selection), selection
         except AttributeError: pass
         return node, selection
@@ -1341,7 +1340,7 @@ class BookmarksController(OutlinerController):
             else:
                 cre = re.compile(pattern)
         elif not case_flag:
-            pattern = string.lower(pattern)
+            pattern = str.lower(pattern)
         # depth-first search for the next (or previous) node
         # containing the pattern.  Handle wrapping.
         sv = OutlinerViewer(self._root,
@@ -1378,10 +1377,10 @@ class BookmarksController(OutlinerController):
             else:
                 continue
             if not re_flag and not case_flag:
-                text = string.lower(text)
+                text = str.lower(text)
             # literal match
             if not re_flag:
-                if string.find(text, pattern) >= 0:
+                if str.find(text, pattern) >= 0:
                     break
             # re match
             elif cre.search(text) >= 0:

@@ -19,7 +19,7 @@ components of its group.
 
 """
 
-import string
+
 import re
 
 validpat = "^\([-a-z0-9_]*\)--\([-a-z0-9_]*\):\(.*\)$"
@@ -43,7 +43,7 @@ def parseprefs(fp):
             # It looks line a continuation line.
             if group:
                 # Continue the previous line
-                value = string.strip(line)
+                value = str.strip(line)
                 if value:
                     if group[cn]:
                         group[cn] = group[cn] + "\n " + value
@@ -52,15 +52,15 @@ def parseprefs(fp):
         elif valid.match(line) > 0:
             # It's a header line.
             groupname, cn, value = valid.group(1, 2, 3)
-            groupname = string.lower(groupname)
-            cn = string.lower(cn)
-            value = string.strip(value)
+            groupname = str.lower(groupname)
+            cn = str.lower(cn)
+            value = str.strip(value)
             if not groups.has_key(groupname):
                 groups[groupname] = group = {}
             else:
                 group = groups[groupname]
             group[cn] = value # XXX Override a previous value
-        elif string.strip(line) != "":
+        elif str.strip(line) != "":
             # It's a bad line.  Ignore it.
             if debug:
                 print("Error at", lineno, ":", repr(line))

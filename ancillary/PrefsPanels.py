@@ -19,9 +19,9 @@ typify = grailbase.GrailPrefs.typify
 
 import urllib
 from tkinter import *
-import tk_tools
+from utils import tktools
 from utils import grailutil
-import string, re, regsub
+, re, regsub
 
 
 
@@ -177,7 +177,7 @@ class Framework:
         else:
             if variable:
                 raise ValueError("multi-line entry fields may not specify a variable")
-            entry, garbage = tk_tools.make_text_box(frame,
+            entry, garbage = tktools.make_text_box(frame,
                                                    width=entry_width,
                                                    height=entry_height,
                                                    vbar=1)
@@ -300,11 +300,11 @@ class Framework:
         self.poll_modified()
 
     def create_widget(self):
-        widget = self.widget = tk_tools.make_toplevel(
+        widget = self.widget = tktools.make_toplevel(
             self.frame, class_='Preferences')
         widget.title(self.title)
         widget.iconname("Grail Prefs")
-        tk_tools.install_keybindings(widget)
+        tktools.install_keybindings(widget)
         widget.bind('<Return>', self.done_cmd)
         widget.bind('<Key>', self.poll_modified)
         widget.bind("<Alt-w>", self.cancel_cmd)
@@ -317,7 +317,7 @@ class Framework:
 
         width=80                        # Of the settings frame.
 
-        fr, container, self.dispose_bar = tk_tools.make_double_frame(widget)
+        fr, container, self.dispose_bar = tktools.make_double_frame(widget)
 
         # Do this before the panel container, so the buttons are squoze last:
         self.create_disposition_bar(self.dispose_bar)
@@ -355,7 +355,7 @@ class Framework:
         self.factory_defaults_btn = Button(barbottom,
                                            command=self.factory_defaults_cmd,
                                            text="Defaults")
-        tk_tools.unify_button_widths(done_btn, help_btn, cancel_btn,
+        tktools.unify_button_widths(done_btn, help_btn, cancel_btn,
                                     self.apply_btn, self.revert_btn,
                                     self.factory_defaults_btn)
         done_btn.pack(side=LEFT)
@@ -543,7 +543,7 @@ class PrefsPanelsMenu:
                     # [module name, class name, directory, instance]
                     self.panels[nm] = [modnm, clnm, moddir, None]
         raworder = self.app.prefs.Get('preferences', 'panel-order')
-        order = string.split(raworder)
+        order = str.split(raworder)
         keys = self.panels.keys()
         ordered = []
         for name in order:
@@ -582,7 +582,7 @@ class PrefsPanelsMenu:
                     name = regsub.gsub("_", " ", modname_matcher.group(1))
                     class_name = regsub.gsub("_", "",
                                              modname_matcher.group(1))
-                    got[name] = ((string.strip(name), class_name, entry, dir))
+                    got[name] = ((str.strip(name), class_name, entry, dir))
         return got.values()
                     
     def do_post(self, name):
@@ -604,7 +604,7 @@ class PrefsPanelsMenu:
         try:
             sys.path.insert(0, entry[2])
             try:
-                modnm = entry[0][:string.index(entry[0], '.')]
+                modnm = entry[0][:str.index(entry[0], '.')]
                 mod = __import__(modnm)
                 if reload:
                     reload(mod)

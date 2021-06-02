@@ -6,7 +6,7 @@ __version__ = '$Revision: 1.10 $'
 import bookmarks
 import bookmarks.iso8601
 import bookmarks.nodes
-import string
+
 
 
 class CaptureError(Exception):
@@ -83,14 +83,14 @@ def normalize_capture(data, preserve=0, StringType=type("")):
         if not preserve:
             # remove leading blanks:
             while (content and type(content[0]) is StringType
-                   and string.strip(content[0]) == ""):
+                   and str.strip(content[0]) == ""):
                 del content[0]
             # remove trailing blanks
             cindexes = range(len(content))
             cindexes.reverse()
             for ci in cindexes:
                 citem = content[ci]
-                if type(citem) is StringType and not string.strip(citem):
+                if type(citem) is StringType and not str.strip(citem):
                     del content[ci]
                 else:
                     break
@@ -98,7 +98,7 @@ def normalize_capture(data, preserve=0, StringType=type("")):
             # assume this is element-only:
             for citem in content:
                 if type(citem) is StringType:
-                    if string.strip(citem):
+                    if str.strip(citem):
                         preserve = 1
         if not preserve:
             # All internal strings are blank; remove them.
@@ -151,7 +151,7 @@ class DocumentHandler:
         self.new_bookmark(attrs)
         node = self.__node
         self.handle_id(node, attrs)
-        node.set_uri(string.strip(attrs.get("href", "")))
+        node.set_uri(str.strip(attrs.get("href", "")))
         self.__store_date(node, attrs, "added",    "set_add_date")
         self.__store_date(node, attrs, "visited",  "set_last_visited")
         self.__store_date(node, attrs, "modified", "set_last_modified")
@@ -162,7 +162,7 @@ class DocumentHandler:
     def start_desc(self, attrs):
         self.save_bgn()
     def end_desc(self):
-        desc = string.strip(self.save_end())
+        desc = str.strip(self.save_end())
         if desc:
             if self.__node:
                 self.__node.set_description(desc)
@@ -211,7 +211,7 @@ class DocumentHandler:
     def new_folder(self, attrs={}):
         if self.__folder is not None:
             self.__context.append(self.__folder)
-        folded = string.lower(attrs.get("folded", "no")) == "yes"
+        folded = str.lower(attrs.get("folded", "no")) == "yes"
         self.__folder = bookmarks.nodes.Folder()
         self.__store_node = self.__folder
         if self.__context:
@@ -278,7 +278,7 @@ class DocumentHandler:
 
     def save_end(self):
         s, self.__buffer = self.__buffer, ""
-        return string.join(string.split(s))
+        return str.join(str.split(s))
 
     def handle_data(self, data):
         if self.capturing():

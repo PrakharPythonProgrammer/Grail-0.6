@@ -15,7 +15,7 @@ same directory as this file.
 import AsyncImage
 from utils import grailutil
 import os
-import string
+
 import sys
 import tempfile
 import tkinter
@@ -57,7 +57,7 @@ class PILGifParser(pil_interface):
         if self.buf:
             self.label.config(text="<decoding>")
             self.label.update_idletasks()
-            data = string.joinfields(self.buf, "")
+            data = str.join(self.buf, "")
             self.buf = None             # free lots of memory!
             try:
                 self.im = im = Image.open(StringIO(data))

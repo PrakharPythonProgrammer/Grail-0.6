@@ -6,7 +6,7 @@ __version__ = "$Revision: 1.14 $"
 import PrefsPanels
 
 from tkinter import *
-import tk_tools
+from utils import tktools
 
 
 class CachePanel(PrefsPanels.Framework):
@@ -89,7 +89,7 @@ class CachePanel(PrefsPanels.Framework):
                         e.get, self.widget_set_func(e))
 
         # cache directory
-        e, l, f = tk_tools.make_labeled_form_entry(frame, "Directory:")
+        e, l, f = tktools.make_labeled_form_entry(frame, "Directory:")
         self.RegisterUI('disk-cache', 'directory', 'string',
                         e.get, self.widget_set_func(e))
 

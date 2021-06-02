@@ -6,7 +6,7 @@ __version__ = '$Revision: 1.3 $'
 import bookmarks
 import bookmarks.nodes
 from . import html_scraper
-import string
+
 
 import sgml.SGMLParser
 
@@ -38,7 +38,7 @@ class Parser(html_scraper.Parser):
         else:
             self.__folder.expand()
         if attrs.has_key('add_date'):
-            self.__folder.set_add_date(string.atoi(attrs['add_date']))
+            self.__folder.set_add_date(int(attrs['add_date']))
         return self.__folder
 
     def start_h1(self, attrs):
@@ -110,13 +110,13 @@ class Parser(html_scraper.Parser):
             if attrs.has_key('href'):
                 node.set_uri(attrs['href'])
             if attrs.has_key('add_date'):
-                node.set_add_date(string.atoi(attrs['add_date']))
+                node.set_add_date(int(attrs['add_date']))
             if attrs.has_key('last_modified'):
-                node.set_last_modified(string.atoi(attrs['last_modified']))
+                node.set_last_modified(int(attrs['last_modified']))
             if attrs.has_key('last_visit'):
-                node.set_last_visited(string.atoi(attrs['last_visit']))
+                node.set_last_visited(int(attrs['last_visit']))
             if attrs.has_key('aliasid'):
-                id = string.strip(attrs["aliasid"])
+                id = str.strip(attrs["aliasid"])
                 self.__idmap[id] = node
                 node.set_id(id)
                 if self.__missing_ids.has_key(id):

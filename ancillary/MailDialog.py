@@ -13,10 +13,10 @@ __version__ = '$Revision: 2.5 $'
 import cgi
 from utils import grailutil
 import os
-import plone.rfc822
-import string
+import plone.email
+
 import time
-import tk_tools
+from utils import tktools
 
 from tkinter import *
 from urllib import urllib, urlunparse
@@ -75,13 +75,13 @@ class MailDialog:
         headers = cgi.parse_qs(query)
         # create widgets
         self.master = master
-        self.root = tk_tools.make_toplevel(self.master,
+        self.root = tktools.make_toplevel(self.master,
                                           title="Mail Dialog")
         self.root.protocol("WM_DELETE_WINDOW", self.cancel_command)
         self.root.bind("<Alt-w>", self.cancel_command)
         self.root.bind("<Alt-W>", self.cancel_command)
-        fr, top, botframe = tk_tools.make_double_frame(self.root)
-        self.text, fr = tk_tools.make_text_box(top, 80, 24)
+        fr, top, botframe = tktools.make_double_frame(self.root)
+        self.text, fr = tktools.make_text_box(top, 80, 24)
         self.text.tag_config('SUSPICIOUS_HEADER', foreground='red')
         self.send_button = Button(botframe,
                                   text="Send",
@@ -91,7 +91,7 @@ class MailDialog:
                                     text="Cancel",
                                     command=self.cancel_command)
         self.cancel_button.pack(side=RIGHT)
-        tk_tools.unify_button_widths(self.send_button, self.cancel_button)
+        tktools.unify_button_widths(self.send_button, self.cancel_button)
         hinfo = _make_sequence_dict(COMMON_HEADERS)
         variables = {
             'to':       address,
@@ -107,7 +107,7 @@ class MailDialog:
             variables["content-transfer-encoding"] = "7bit"
         # move default set of query'd headers into variables
         for header, vlist in headers.items():
-            header = string.lower(header)
+            header = str.lower(header)
             if header != 'body':
                 if header not in DISALLOWED_HEADERS:
                     variables[header] = vlist[0]        # toss duplicates
@@ -125,7 +125,7 @@ class MailDialog:
         for x, header in hseq:
             if variables.has_key(header):
                 s = "%s: %s\n" \
-                    % (string.capwords(header, '-'), variables[header])
+                    % (str.title(header, '-'), variables[header])
                 self.text.insert(END, s)
         # insert newline
         self.text.insert(END, '\n', ())
@@ -155,7 +155,7 @@ class MailDialog:
         fn = os.path.join(grailutil.getgraildir(), "mail-headers")
         d = {}
         if os.path.isfile(fn):
-            msg = rfc822.Message(open(fn))
+            msg = email.Message(open(fn))
             for k, v in msg.items():
                 d[k] = v
         return d

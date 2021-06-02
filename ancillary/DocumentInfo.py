@@ -3,19 +3,18 @@
 __version__ = '$Revision: 2.16 $'
 
 import re
-import string
 import tkinter
-import tk_tools
+from utils import tktools
 import urllib
 from urllib.parse import urlparse
 
-FIELD_BREAKER = string.maketrans("&", "\n")
+FIELD_BREAKER = str.maketrans("&", "\n")
 MAX_TEXT_FIELD_LINES = 10
 
 
 class DocumentInfoDialog:
     def __init__(self, master, context, class_="DocumentInfo"):
-        root = tk_tools.make_toplevel(master, class_=class_,
+        root = tktools.make_toplevel(master, class_=class_,
                                      title="Document Info")
         self.root = root
         self.app = context.app
@@ -26,7 +25,7 @@ class DocumentInfoDialog:
         for seq in ("<Alt-W>", "<Alt-w>", "<Return>"):
             root.bind(destroy)
         root.protocol("WM_DELETE_WINDOW", destroy)
-        frame, self.__topfr, botfr = tk_tools.make_double_frame(root)
+        frame, self.__topfr, botfr = tktools.make_double_frame(root)
         #
         # Info display
         #
@@ -50,12 +49,12 @@ class DocumentInfoDialog:
             s = "%s%s:\t%s\n" % (s, k, v)
         stretch = self.add_text_field("Response headers", s, "headers")
         if query:
-            query = string.translate(query, FIELD_BREAKER)
+            query = str.translate(query, FIELD_BREAKER)
             stretch = stretch or \
                       self.add_text_field("Query fields", query, "query")
         postdata = context.get_postdata()
         if postdata:
-            postdata = string.translate(postdata, FIELD_BREAKER)
+            postdata = str.translate(postdata, FIELD_BREAKER)
             stretch = stretch or \
                       self.add_text_field("POST fields", postdata, "postdata")
         #
@@ -69,7 +68,7 @@ class DocumentInfoDialog:
         btn.focus_set()
         #
         del self.__topfr                # loose the reference
-        tk_tools.set_transient(root, master)
+        tktools.set_transient(root, master)
         root.update_idletasks()
         reqwidth = root.winfo_reqwidth()
         reqheight = root.winfo_reqheight()
@@ -117,7 +116,7 @@ class DocumentInfoDialog:
         if value and value[-1] != "\n":
             value = value + "\n"
         maxlines = 1 + map(None, value).count("\n")
-        text, frame = tk_tools.make_text_box(
+        text, frame = tktools.make_text_box(
             fr, takefocus=0, width=60, vbar=1,
             height=min(MAX_TEXT_FIELD_LINES, maxlines))
         frame.pack(side=tkinter.LEFT, expand=1, fill=tkinter.BOTH)

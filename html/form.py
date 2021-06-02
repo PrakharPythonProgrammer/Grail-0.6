@@ -2,10 +2,10 @@
 
 ATTRIBUTES_AS_KEYWORDS = 1
 
-import string
+
 from tkinter import *
 import urllib
-import tk_tools
+from utils import tktools
 import ImageWindow
 
 # ------ Forms
@@ -37,7 +37,7 @@ def end_form(parser):
 
 def do_input(parser, attrs):
     try:
-        type = string.lower(attrs['type'])
+        type = str.lower(attrs['type'])
         del attrs['type']
     except KeyError:
         type = ''
@@ -49,8 +49,8 @@ def start_select(parser, attrs):
     except KeyError:
         name = ''
     try:
-        size = string.atoi(attrs['size'])
-    except (KeyError, string.atoi_error):
+        size = int(attrs['size'])
+    except (KeyError, ValueError):
         size = 0
     multiple = attrs.has_key('multiple')
     select_bgn(parser, name, size, multiple)
@@ -72,12 +72,12 @@ def start_textarea(parser, attrs):
     except KeyError:
         name = ''
     try:
-        rows = string.atoi(attrs['rows'])
-    except (KeyError, string.atoi_error):
+        rows = int(attrs['rows'])
+    except (KeyError, ValueError):
         rows = 0
     try:
-        cols = string.atoi(attrs['cols'])
-    except (KeyError, string.atoi_error):
+        cols = int(attrs['cols'])
+    except (KeyError, ValueError):
         cols = 0
     textarea_bgn(parser, name, rows, cols)
 
@@ -194,8 +194,8 @@ class FormInfo:
             self.reset_command()
 
     def do_input(self, type, options, bgcolor):
-        type = string.lower(type) or 'text'
-        classname = 'Input' + string.upper(type[0]) + type[1:]
+        type = str.lower(type) or 'text'
+        classname = 'Input' + str.upper(type[0]) + type[1:]
         if hasattr(self, classname):
             klass = getattr(self, classname)
             instance = klass(self, options, bgcolor)
@@ -203,8 +203,8 @@ class FormInfo:
             print("*** Form with <INPUT TYPE=%s> not supported ***" % type)
 
     def submit_command(self):
-        enctype = string.lower(self.enctype)
-        method = string.lower(self.method)
+        enctype = str.lower(self.enctype)
+        method = str.lower(self.method)
         if method not in ('get', 'post'):
             print("*** Form with unknown method:", repr(method))
             print("Default to method=GET")
@@ -302,10 +302,10 @@ class FormInfo:
                 body.write(v)
         mw.lastpart()
         fp.seek(0)
-        import rfc822
-        headers = rfc822.Message(fp)
+        import email
+        headers = email.Message(fp)
         ctype = headers['content-type']
-        ctype = string.join(string.split(ctype)) # Get rid of newlines
+        ctype = str.join(str.split(ctype)) # Get rid of newlines
         data = fp.read()
         return ctype, data
 
@@ -400,11 +400,11 @@ class FormInfo:
             self.entry.bind('<Return>', self.return_event)
             if self.size:
                 size = self.size
-                i = string.find(size, ',')
+                i = str.find(size, ',')
                 if i >= 0: size = size[:i]
                 try:
-                    width = string.atoi(size)
-                except string.atoi_error:
+                    width = int(size)
+                except ValueError:
                     pass
                 else:
                     self.entry['width'] = width
@@ -655,7 +655,7 @@ class Select:
     def make_list(self, size):
         self.v = None
         needvbar = len(self.options) > size
-        self.w, self.frame = tk_tools.make_list_box(self.viewer.text,
+        self.w, self.frame = tktools.make_list_box(self.viewer.text,
                                                    height=size,
                                                    vbar=needvbar, pack=0)
         self.w['exportselection'] = 0
@@ -738,7 +738,7 @@ class Select:
         self.option = (value, selected)
 
     def end_option(self):
-        data = string.strip(self.parser.save_end())
+        data = str.strip(self.parser.save_end())
         if self.option:
             value, selected = self.option
             self.option = None
@@ -762,7 +762,7 @@ class Textarea:
         self.parser.pop_nofill()
         if data[:1] == '\n': data = data[1:]
         if data[-1:] == '\n': data = data[:-1]
-        self.w, self.frame = tk_tools.make_text_box(self.viewer.text,
+        self.w, self.frame = tktools.make_text_box(self.viewer.text,
                                                    width=self.cols,
                                                    height=self.rows,
                                                    hbar=1, vbar=1, pack=0)
@@ -790,9 +790,9 @@ class Textarea:
         self.w.insert(END, value)
 
 def quote(s):
-    w = string.splitfields(s, ' ')
+    w = str.split(s, ' ')
     w = map(urllib.quote, w)
-    return string.joinfields(w, '+')
+    return str.join(w, '+')
 
 
 class InputImageWindow(Frame):

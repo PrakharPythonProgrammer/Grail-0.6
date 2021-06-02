@@ -1,10 +1,10 @@
 """Preference panel to control applet privileges."""
 
-import string
+
 import urllib
 from tkinter import *
 
-import tk_tools
+from utils import tktools
 
 import PrefsPanels
 
@@ -43,7 +43,7 @@ class AppletsPanel(PrefsPanels.Framework):
         self.label = Label(frame, text=LABEL, anchor=W)
         self.label.pack(fill=X)
 
-        self.textbox, self.textframe = tk_tools.make_text_box(frame,
+        self.textbox, self.textframe = tktools.make_text_box(frame,
                                                              width=40,
                                                              height=10)
         self.textbox.bind('<Return>', self.return_in_textbox)
@@ -55,12 +55,12 @@ class AppletsPanel(PrefsPanels.Framework):
 
     def getgroups(self):
         data = self.textbox.get("1.0", END)
-        words = string.split(data)
-        return string.joinfields(words, "\n ")
+        words = str.split(data)
+        return str.join(words, "\n ")
 
     def setgroups(self, data):
-        words = string.split(data)
-        data = string.joinfields(words, "\n")
+        words = str.split(data)
+        data = str.join(words, "\n")
         self.textbox.delete("1.0", END)
         self.textbox.insert("1.0", data)
 

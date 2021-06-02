@@ -2,7 +2,7 @@
 
 __version__ = '$Revision: 1.3 $'
 
-import string
+
 
 
 class KeywordEditor:
@@ -29,7 +29,7 @@ class KeywordMatcher:
         return self.__match(folder), 1
 
     __s = ".,-!@#$%^&*(){}[]|+=?'\""
-    __tr = string.maketrans(__s, " " * len(__s))
+    __tr = str.maketrans(__s, " " * len(__s))
 
     def __match(self, node):
         keywords = self.__keywords
@@ -37,8 +37,8 @@ class KeywordMatcher:
             return 0
         text = "%s %s" % (node.description(), node.title())
         if not self.__case_sensitive:
-            text = string.lower(text)
-        words = string.split(string.translate(text, self.__tr))
+            text = str.lower(text)
+        words = str.split(str.translate(text, self.__tr))
         if not words:
             return 0
         d = {}
@@ -78,9 +78,9 @@ class KeywordOptions:
     def set_keywords(self, keywords=""):
         if keywords != self.__keywords_text:
             self.__keywords_text = keywords
-            kwlist = string.split(keywords)
+            kwlist = str.split(keywords)
             if not self.__case_sensitive:
-                kwlist = map(string.lower, kwlist)
+                kwlist = map(str.lower, kwlist)
             self.__keywords = tuple(kwlist)
 
     def case_sensitive(self):

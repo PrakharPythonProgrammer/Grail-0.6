@@ -1,7 +1,7 @@
 """Support for Netscape's <FRAMESET> tag (and <FRAME> and <NOFRAMES>)."""
 
 
-import string
+
 from tkinter import *
 
 
@@ -42,7 +42,7 @@ def do_frame(parser, attrs):
         if name == "marginwidth": marginwidth = value
         if name == "scrolling": scrolling = value
         if name == "noresize": noresize = value
-    scrolling = string.lower(scrolling)
+    scrolling = str.lower(scrolling)
     # Make scrolling either "auto" or a boolean
     if scrolling in ("a", "au", "aut", "auto"):
         scrolling = "auto"
@@ -133,7 +133,7 @@ class FrameSet:
     sizeprog = re.compile("[ \t]*\([0-9]*\)\([%*]?\)")
 
     def calculate_sizes(self, sizes, total):
-        rawlist = string.splitfields(sizes, ",")
+        rawlist = str.split(sizes, ",")
         sizelist = []
         fixed = nfixed = 0
         percent = npercent = 0
@@ -151,7 +151,7 @@ class FrameSet:
                 number = 1
             else:
                 try:
-                    number = string.atoi(number)
+                    number = int(number)
                 except:
                     # XXX report error?
                     number, type = 1, '*'
@@ -208,7 +208,7 @@ class FrameSet:
 
     def do_margin(self, viewer, attr, value):
         try:
-            mw = string.atoi(value)
+            mw = int(value)
         except ValueError:
             pass
         else:

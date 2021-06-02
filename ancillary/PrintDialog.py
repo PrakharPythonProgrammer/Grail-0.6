@@ -37,9 +37,9 @@ import os
 import printing.paper
 import printing.settings
 import Reader
-import string
+
 import sys
-import tk_tools
+from utils import tktools
 
 
 USER_DATA_DIR = grailutil.abspath(
@@ -99,9 +99,9 @@ plain text if you elect to continue."""
         self.__url = url
         self.__title = title
         self.__infp = infp
-        top = self.__top = tk_tools.make_toplevel(context.browser.root)
+        top = self.__top = tktools.make_toplevel(context.browser.root)
         top.title("Print Action")
-        fr, topfr, botfr = tk_tools.make_double_frame(top)
+        fr, topfr, botfr = tktools.make_double_frame(top)
         Label(topfr, bitmap="warning", foreground='red'
               ).pack(side=LEFT, fill=Y, padx='2m')
         # font used by the Tk4 dialog.tcl script:
@@ -119,8 +119,8 @@ plain text if you elect to continue."""
         b1.pack(side=RIGHT)
         b2 = Button(botfr, text="Print", command=self.doit)
         b2.pack(side=LEFT)
-        tk_tools.unify_button_widths(b1, b2)
-        tk_tools.set_transient(top, context.browser.root)
+        tktools.unify_button_widths(b1, b2)
+        tktools.set_transient(top, context.browser.root)
 
     def doit(self, event=None):
         self.__top.destroy()
@@ -142,7 +142,7 @@ plain text if you elect to continue."""
 class RealPrintDialog:
 
     def __init__(self, context, url, title, infp, ctype):
-        import tk_tools
+        from utils import tktools
         #
         self.infp = infp
         self.ctype = ctype
@@ -156,7 +156,7 @@ class RealPrintDialog:
         #
         self.title = title
         self.master = self.context.root
-        self.root = tk_tools.make_toplevel(self.master,
+        self.root = tktools.make_toplevel(self.master,
                                           title="Print Dialog",
                                           class_="PrintDialog")
         # do this early in case we're debugging:
@@ -165,13 +165,13 @@ class RealPrintDialog:
         self.root.bind("<Alt-W>", self.cancel_event)
         self.cursor_widgets = [self.root]
 
-        fr, top, botframe = tk_tools.make_double_frame(self.root)
+        fr, top, botframe = tktools.make_double_frame(self.root)
 
         #  Print to file controls:
-        generalfr = tk_tools.make_group_frame(
+        generalfr = tktools.make_group_frame(
             top, "general", "General options:", fill=X)
 
-        self.cmd_entry, dummyframe = tk_tools.make_form_entry(
+        self.cmd_entry, dummyframe = tktools.make_form_entry(
             generalfr, "Print command:")
         self.cmd_entry.insert(END, settings.printcmd)
         self.add_entry(self.cmd_entry)
@@ -194,13 +194,13 @@ class RealPrintDialog:
             fr = Frame(generalfr)
             fr.pack(fill=X)
             self.orientation = StringVar(top)
-            self.orientation.set(string.capitalize(settings.orientation))
+            self.orientation.set(str.capitalize(settings.orientation))
             opts = printing.paper.paper_rotations.keys()
             opts.sort()
-            opts = tuple(map(string.capitalize, opts))
+            opts = tuple(map(str.capitalize, opts))
             Label(fr, text="Orientation: ", width=13, anchor=E).pack(side=LEFT)
             Frame(fr, width=3).pack(side=LEFT)
-            menu = apply(OptionMenu, (fr, self.orientation) + opts)
+            menu = OptionMenu(fr, self.orientation) + opts
             width = reduce(max, map(len, opts), 6)
             menu.config(anchor=W, highlightthickness=0, width=width)
             menu.pack(expand=1, fill=NONE, anchor=W, side=LEFT)
@@ -227,9 +227,9 @@ class RealPrintDialog:
         cancel_button = Button(botframe, text="Cancel",
                                command=self.cancel_command)
         cancel_button.pack(side=RIGHT)
-        tk_tools.unify_button_widths(ok_button, cancel_button)
+        tktools.unify_button_widths(ok_button, cancel_button)
 
-        tk_tools.set_transient(self.root, self.master)
+        tktools.set_transient(self.root, self.master)
         self.check_command()
 
     def get_type_extension(self):
@@ -279,7 +279,7 @@ class RealPrintDialog:
                                           "Please enter a print command")
                 return
             try:
-                if string.find(cmd, '%s') != -1:
+                if str.find(cmd, '%s') != -1:
                     import tempfile
                     tempname = tempfile.mktemp()
                     fp = open(tempname, 'w')
@@ -301,8 +301,8 @@ class RealPrintDialog:
         sts = fp.close()
         if not sts:
             try:
-                cmd_parts = string.splitfields(cmd, '%s')
-                cmd = string.joinfields(cmd_parts, tempname)
+                cmd_parts = str.split(cmd, '%s')
+                cmd = str.join(cmd_parts, tempname)
                 sts = os.system(cmd)
                 os.unlink(tempname)
             except NameError:           # expected on tempname except on NT
@@ -360,7 +360,7 @@ class RealPrintDialog:
         if self.ctype == "application/postscript":
             return
         settings.set_fontsize(self.fontsize.get())
-        settings.orientation = string.lower(self.orientation.get())
+        settings.orientation = str.lower(self.orientation.get())
         if self.mod.update_settings:
             self.mod.update_settings(self, settings)
 

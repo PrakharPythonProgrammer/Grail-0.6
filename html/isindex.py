@@ -1,6 +1,6 @@
 from tkinter import Entry
 from grailutil import extract_keyword
-import string
+
 import urllib
 
 ATTRIBUTES_AS_KEYWORDS = 1
@@ -18,7 +18,7 @@ def do_isindex(parser, attrs):
 class IndexWidget:
 
     def __init__(self, parser, prompt, url):
-        self.query_url = string.joinfields(string.split(url), '')
+        self.query_url = str.join(str.split(url), '')
         formatter = parser.formatter
         viewer = parser.viewer
         self.context = viewer.context
@@ -35,13 +35,13 @@ class IndexWidget:
     def submit(self, event):
         data = self.w.get()
         url = self.query_url or self.context.get_baseurl()
-        i = string.find(url, '?')
+        i = str.find(url, '?')
         if i >= 0:
             url = url[:i]
         url = url + '?' + quote(data)
         self.context.load(url)
 
 def quote(s):
-    w = string.splitfields(s, ' ')
+    w = str.split(s, ' ')
     w = map(urllib.quote, w)
-    return string.joinfields(w, '+')
+    return str.join(w, '+')

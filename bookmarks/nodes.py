@@ -2,7 +2,7 @@
 
 import copy
 import os
-import string
+
 import sys
 import time
 import urllib
@@ -23,16 +23,16 @@ def norm_uri(uri):
     scheme, netloc, path, params, query, fragment \
             = urlparse(uri)
     if scheme == "http" and ':' in netloc:
-        loc = string.splitfields(netloc, ':')
+        loc = str.split(netloc, ':')
         try:
-            port = string.atoi(loc[-1], 10)
+            port = int(loc[-1], 10)
         except:
             pass
         else:
             if port == 80:
                 del loc[-1]
-                netloc = string.joinfields(loc, ':')
-    return urllib.urlunparse((scheme, string.lower(netloc), path,
+                netloc = str.join(loc, ':')
+    return urllib.urlunparse((scheme, str.lower(netloc), path,
                                 params, query, fragment))
 
 
@@ -45,7 +45,7 @@ class Node:
         pass
 
     def get_nodetype(self):
-        return string.split(self.__class__.__name__, ".")[-1]
+        return str.split(self.__class__.__name__, ".")[-1]
 
     def clone(self):
         return copy.deepcopy(self)

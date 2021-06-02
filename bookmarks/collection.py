@@ -13,7 +13,7 @@ __version__ = '$Revision: 1.6 $'
 import copy
 from . import nodes                            # sibling
 from . import search                           # sibling sub-package
-import string
+
 import urllib
 from . import walker                           # sibling
 from urllib.parse import urlparse
@@ -30,9 +30,9 @@ def _parse_uri(uri):
         host = uri[1]
         if host[-3:] == ":80":
             host = host[:-3]
-        uri[1] = string.lower(host)
+        uri[1] = str.lower(host)
     else:
-        uri[1] = string.lower(uri[1])
+        uri[1] = str.lower(uri[1])
     return tuple(uri)
 
 
@@ -233,7 +233,7 @@ class CopyWalker(walker.TreeWalker):
         if self.__needed_ids:
             raise RuntimeError(
                   "copied tree cannot resolve all referenced IDs: " \
-                  + string.join(self.__needed_ids))
+                  + str.join(self.__needed_ids))
         return self.__new_root
 
     def add_node(self, node):
