@@ -1,6 +1,6 @@
 from utils.Assert import Assert
 from . import nullAPI
-import string
+
 
 
 class data_access(nullAPI.null_access):
@@ -37,15 +37,15 @@ class data_access(nullAPI.null_access):
 
 def parse(url):
     ctype, data, encoding = None, "", "raw"
-    pos = string.find(url, ';')
+    pos = str.find(url, ';')
     if pos >= 0:
-        ctype = string.lower(string.strip(url[:pos]))
+        ctype = str.lower(str.strip(url[:pos]))
         if ctype:
             ctype = ctype
         url = url[pos + 1:]
-    pos = string.find(url, ',')
+    pos = str.find(url, ',')
     if pos >= 0:
-        encoding = string.lower(string.strip(url[:pos]))
+        encoding = str.lower(str.strip(url[:pos]))
         url = url[pos + 1:]
     data = url
     if data and encoding == "base64":

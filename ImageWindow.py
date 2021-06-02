@@ -120,7 +120,6 @@ class ImageWindow(Frame):
     # table width calculation interface
 
     def table_geometry(self):
-        import string
         bw = self.borderwidth
         if self.image:
             w = self.image.width() + 2 * bw

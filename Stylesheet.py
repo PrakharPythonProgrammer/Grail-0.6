@@ -5,7 +5,6 @@ command and sheet-specific values as, effectively, class attributes with
 dictionary values suitable for feeding to the text widget for tag
 configuration."""
 
-import string
 
 class UndefinedStyle(Exception): pass
 
@@ -48,7 +47,7 @@ class Stylesheet:
     def __getattr__(self, composite):
         """Make the self.attr dict keys look like class attributes."""
         try:
-            attr = string.splitfields(composite, '.')[0]
+            attr = str.split(composite, '.')[0]
             return self.attrs[attr]
         except IndexError:
             raise AttributeError()
@@ -57,7 +56,7 @@ class Stylesheet:
         """Get the size name and a dictionary of size name/values.
 
         Detects unregistered sizes and uses registered default-size."""
-        allsizes = string.split(self.prefs.Get('styles', 'all-sizes'))
+        allsizes = str.split(self.prefs.Get('styles', 'all-sizes'))
         sname = self.sizename
         if sname not in allsizes:
             sname = self.prefs.Get('styles', 'default-size')
@@ -65,9 +64,9 @@ class Stylesheet:
                 raise UndefinedStyle("Bad preferences file,"
                                        + " can't get valid size.")
         sdict = {}
-        slist = string.split(self.prefs.Get('styles', sname + '-sizes'))
-        atoi = string.atoi
-        for k in string.split(self.prefs.Get('styles', 'size-names')):
+        slist = str.split(self.prefs.Get('styles', sname + '-sizes'))
+        atoi = int
+        for k in str.split(self.prefs.Get('styles', 'size-names')):
             sdict[k] = atoi(slist[0])
             del slist[0]
         return sname, sdict
@@ -84,7 +83,7 @@ class Stylesheet:
         """Get the family name and a dictionary of size name/values.
 
         Detects unregistered families and uses registered default-family."""
-        allfams = string.split(self.prefs.Get('styles', 'all-families'))
+        allfams = str.split(self.prefs.Get('styles', 'all-families'))
         tname = self.family
         if tname not in allfams:
             tname = self.prefs.Get('styles', 'default-family')
@@ -113,7 +112,7 @@ class Stylesheet:
         """Incorporate entries in preferences GetGroup list to self.attrs."""
         attrs = self.attrs
         for (group, composite), val in glist:
-            fields = string.splitfields(composite, '-')
+            fields = str.split(composite, '-')
             d = attrs
             while fields:
                 f = fields[0]

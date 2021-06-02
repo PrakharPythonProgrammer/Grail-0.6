@@ -3,7 +3,7 @@
 __version__ = '$Revision: 1.6 $'
 
 import os
-import string
+
 import sys
 
 
@@ -109,10 +109,10 @@ def conv_fontsize(spec):
 
     """
     if '/' in spec:
-        spec = string.splitfields(spec, '/')
+        spec = str.split(spec, '/')
         if len(spec) != 2:
             raise ValueError("illegal font size specification")
     else:
         spec = [spec, spec]
-    spec = map(string.atof, map(string.strip, spec))
+    spec = map(float, map(str.strip, spec))
     return tuple(spec)

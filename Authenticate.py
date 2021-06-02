@@ -4,8 +4,7 @@ To start, this is used by the HTTP api to perform basic access authorization.
 """
 
 from tkinter import *
-import tk_tools
-import string
+from utils import tktools
 import urllib
 from urllib.parse import urlparse
 
@@ -103,7 +102,7 @@ class AuthenticationManager:
         pass
 
     def basic_cookie(self, str):
-        return "Basic " + string.strip(base64.encodestring(str))
+        return "Basic " + str.strip(base64.encodestring(str))
 
     def basic_user_dialog(self, data):
         scheme, netloc, path, \
@@ -120,15 +119,15 @@ class AuthenticationManager:
 
         challenge = headers['www-authenticate']
         # <authscheme> realm="<value>" [, <param>="<value>"] ...
-        parts = string.splitfields(challenge, ',')
+        parts = str.split(challenge, ',')
         p = parts[0]
-        i = string.find(p, '=')
+        i = str.find(p, '=')
         if i < 0: return
         key, value = p[:i], p[i+1:]
-        keyparts = string.split(string.lower(key))
+        keyparts = str.split(str.lower(key))
         if not(len(keyparts) == 2 and keyparts[1] == 'realm'): return
         authscheme = keyparts[0]
-        value = string.strip(value)
+        value = str.strip(value)
         if len(value) >= 2 and value[0] == value[-1] and value[0] in '\'"':
             value = value[1:-1]
 
@@ -136,17 +135,17 @@ class AuthenticationManager:
 class LoginDialog:
 
     def __init__(self, master, netloc, realmvalue):
-        self.root = tk_tools.make_toplevel(master,
+        self.root = tktools.make_toplevel(master,
                                           title="Authentication Dialog")
         self.prompt = Label(self.root,
                             text="Enter user authentication\nfor %s on %s" %
                             (realmvalue, netloc))
         self.prompt.pack(side=TOP)
-        self.user_entry, dummy = tk_tools.make_form_entry(self.root, "User:")
+        self.user_entry, dummy = tktools.make_form_entry(self.root, "User:")
         self.user_entry.focus_set()
         self.user_entry.bind('<Return>', self.user_return_event)
         self.passwd_entry, dummy = \
-                           tk_tools.make_form_entry(self.root, "Password:")
+                           tktools.make_form_entry(self.root, "Password:")
         self.passwd_entry.config(show="*")
         self.passwd_entry.bind('<Return>', self.ok_command)
         self.ok_button = Button(self.root, text="OK", command=self.ok_command)
@@ -157,7 +156,7 @@ class LoginDialog:
 
         self.user_passwd = None
 
-        tk_tools.set_transient(self.root, master)
+        tktools.set_transient(self.root, master)
 
         self.root.grab_set()
 
@@ -171,8 +170,8 @@ class LoginDialog:
         self.passwd_entry.focus_set()
 
     def ok_command(self, event=None):
-        user = string.strip(self.user_entry.get())
-        passwd = string.strip(self.passwd_entry.get())
+        user = str.strip(self.user_entry.get())
+        passwd = str.strip(self.passwd_entry.get())
         if not user:
             self.root.bell()
             return

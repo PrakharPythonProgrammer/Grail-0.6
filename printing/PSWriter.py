@@ -3,7 +3,7 @@
 __version__ = '$Revision: 1.10 $'
 
 import formatter
-import string
+
 import utils
 
 
@@ -174,4 +174,4 @@ class PSWriter(formatter.AbstractWriter):
                 append(c)
                 pos = pos + 1
         self.__detab_pos = pos
-        return string.joinfields(s, '')
+        return str.join(s, '')

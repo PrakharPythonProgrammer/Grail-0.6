@@ -25,7 +25,7 @@ PSFont_Courier_Bold.py.
 import sys
 import os
 import getopt
-import string
+
 
 
 
@@ -37,10 +37,10 @@ def usage(status):
 
 
 def splitline(line):
-    idx = string.find(line, ' ')
+    idx = str.find(line, ' ')
     keyword = line[:idx]
-    rest = string.strip(line[idx+1:])
-    return string.lower(keyword), rest
+    rest = str.strip(line[idx+1:])
+    return str.lower(keyword), rest
 
 
 
@@ -53,17 +53,17 @@ def read_unicode_mapping(filename, dict=None):
         line = fp.readline()
         if not line:
             break
-        line = string.strip(line)
+        line = str.strip(line)
         if line and line[0] == "#":
             continue
-        parts = string.splitfields(line, "#")
+        parts = str.split(line, "#")
         if len(parts) != 3:
             continue
-        parts[0:1] = string.split(parts[0])
+        parts[0:1] = str.split(parts[0])
         if len(parts) != 4:
             continue
-        unicode = string.atoi(parts[0], 16)
-        adobe_name = string.strip(parts[3])
+        unicode = int(parts[0], 16)
+        adobe_name = str.strip(parts[3])
         if unicode < 256 and not result.has_key(adobe_name):
             result[adobe_name] = unicode
     return result
@@ -89,7 +89,7 @@ import PSFont
 font = PSFont.PSFont('%(fontname)s', '%(fullname)s',
 """
 
-FORMAT = string.join(['%4d'] * 8, ', ') + ','
+FORMAT = str.join(['%4d'] * 8, ', ') + ','
 
 
 def parse(filename, outdir):
@@ -117,7 +117,7 @@ def parse(filename, outdir):
 
     outfile = os.path.join(
         outdir,
-        string.join(['PSFont'] + string.split(tdict['fontname'], '-'),
+        str.join(['PSFont'] + str.split(tdict['fontname'], '-'),
                     '_') + '.py')
 
     # read the character metrics into the list
@@ -127,10 +127,10 @@ def parse(filename, outdir):
             break
         keyword, rest = splitline(line)
         if keyword == 'c':
-            info = string.split(rest)
-            charnum = string.atoi(info[0])
+            info = str.split(rest)
+            charnum = int(info[0])
             charname = info[6]
-            width = string.atoi(info[3])
+            width = int(info[3])
             if charset.has_key(charname):
                 cwidths[charset[charname]] = width
             elif 0 <= charnum < 256:

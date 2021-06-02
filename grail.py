@@ -30,7 +30,6 @@ for path in 'utils', 'pythonlib', 'ancillary', 'applets', script_dir:
     sys.path.insert(0, os.path.join(grail_root, path))
 
 import getopt
-import string
 import urllib
 import tempfile
 import posixpath
@@ -42,7 +41,7 @@ import grailbase.utils
 grailbase.utils._grail_root = grail_root
 from utils import grailutil
 from tkinter import *
-import tk_tools
+from utils import tktools
 import BaseApplication
 import grailbase.GrailPrefs
 import Stylesheet
@@ -124,7 +123,7 @@ def main(args=None):
     from utils import Safetkinter
     Safetkinter._castrate(app.root.tk)
 
-    tk_tools.install_keybindings(app.root)
+    tktools.install_keybindings(app.root)
 
     # Make everybody who's still using urllib.urlopen go through the cache
     urllib.urlopen = app.open_url_simple
@@ -141,7 +140,7 @@ def main(args=None):
         except ImportError as e:
             # Only catch this if grailrc itself doesn't import,
             # otherwise propogate.
-            if string.split(e.args[0])[-1] != "grailrc":
+            if str.split(e.args[0])[-1] != "grailrc":
                 raise
         except:
             app.exception_dialog('during import of startup file')

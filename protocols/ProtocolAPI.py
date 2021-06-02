@@ -20,7 +20,7 @@ non-proxy usage, the url parameter is a string.)
 """
 
 # import regsub
-import string
+
 import socket
 from urllib import splittype, splithost, splitport
 from urllib.parse import urlparse
@@ -31,7 +31,7 @@ from . import grailutil
 VALID_PROXIES = ('http_proxy', 'ftp_proxy')
 
 def protocol_joiner(scheme):
-    scheme = string.lower(scheme)
+    scheme = str.lower(scheme)
     sanitized = regsub.gsub("[^a-zA-Z0-9]", "_", scheme)
     modname = sanitized + "API"
     app = grailutil.get_grailapp()
@@ -44,7 +44,7 @@ def protocol_access(url, mode, params, data=None):
     scheme, resturl = splittype(url)
     if not scheme:
         raise IOError("protocol error", "no scheme identifier in URL", url)
-    scheme = string.lower(scheme)
+    scheme = str.lower(scheme)
     sanitized = regsub.gsub("[^a-zA-Z0-9]", "_", scheme)
     #
     # Check first to see if proxies are enabled
@@ -98,9 +98,9 @@ def protocol_access(url, mode, params, data=None):
             
         do_proxy = 1
         if no_proxy:
-            list = map(string.strip, string.split(no_proxy, ","))
+            list = map(str.strip, str.split(no_proxy, ","))
             url_host, url_remains = splithost(resturl)
-            url_host = string.lower(url_host or '')
+            url_host = str.lower(url_host or '')
             if proxy_exception(url_host, list):
                 do_proxy = 0
             else:
@@ -111,7 +111,7 @@ def protocol_access(url, mode, params, data=None):
             proxy_scheme, proxy_resturl = splittype(proxy)
             proxy_host, proxy_remains = splithost(proxy_resturl)
             resturl = (proxy_host, url)
-            scheme = string.lower(proxy_scheme)
+            scheme = str.lower(proxy_scheme)
             sanitized = regsub.gsub("[^a-zA-Z0-9]", "_", scheme)
 ##          print "Sending", url
 ##          print "     to", scheme, "proxy", proxy_host

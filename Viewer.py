@@ -3,10 +3,8 @@
 import sys
 from tkinter import *
 from typing import Tuple
-import tk_tools
+from utils import tktools
 import formatter
-import string
-from string import strip
 from Context import Context, SimpleContext
 from Cursors import *
 from types import StringType
@@ -42,7 +40,7 @@ class WidthMagic:
         #  Getting the 'padx' option of the text widget needs to be done
         #  here for an as-yet undetermined reason.
         return int(self.__text.winfo_width() - self.__removable
-                   - (2 * string.atoi(self.__text["padx"])))
+                   - (2 * int(self.__text["padx"])))
 
     def get_requested_widths(self):
         return self.__abswidth, self.__percentwidth
@@ -205,7 +203,7 @@ class Viewer(formatter.AbstractWriter):
                                                       height=height,
                                                       hbar=bars, vbar=bars)
         else:
-            self.text, self.frame = tk_tools.make_text_box(self.master,
+            self.text, self.frame = tktools.make_text_box(self.master,
                                                       width=width,
                                                       height=height,
                                                       hbar=bars, vbar=bars,
@@ -299,7 +297,7 @@ class Viewer(formatter.AbstractWriter):
                             fontname = self.stylesheet.styles[tag]['font']
                             fontname = self.text.tk.call('font', 'create',
                                                          '-family', fontname)
-                            if string.find(fontname, 'dingbat') == -1:
+                            if str.find(fontname, 'dingbat') == -1:
                                 use_font_dingbats = 0
                         except TclError:
                             pass            # pre-8.0 Tk
@@ -460,7 +458,7 @@ class Viewer(formatter.AbstractWriter):
         self.text['state'] = NORMAL
 
     def freeze(self, update=0):
-        if self.pendingdata and strip(self.pendingdata):
+        if self.pendingdata and str.strip(self.pendingdata):
             self.text.insert(END, self.pendingdata, self.flowingtags)
             self.pendingdata = ''
         if self.smoothscroll:
@@ -488,7 +486,7 @@ class Viewer(formatter.AbstractWriter):
         self.text.tk.call('tkScrollByUnits', self.text.vbar, 'v', -1)
 
     def new_tags(self, doit_now = 0):
-        if self.pendingdata and strip(self.pendingdata):
+        if self.pendingdata and str.strip(self.pendingdata):
             self.text.insert(END, self.pendingdata, self.flowingtags)
             self.pendingdata = ''
         self.flowingtags = filter(
@@ -637,10 +635,10 @@ class Viewer(formatter.AbstractWriter):
                 ghist = self.context.app.global_history
                 title, when = ghist.lookup_url(absurl)
                 if title:
-                    message = string.join(string.split(title))
+                    message = str.join(str.split(title))
             self.text.tag_remove('hover', '0.1', END)
             ranges = self.find_tag_ranges()
-            split = string.split
+            split = str.split
             point = map(int, split(self.text.index(CURRENT), '.'))
             for start, end in ranges:
                 startv = map(int, split(start, '.'))
@@ -714,7 +712,7 @@ class Viewer(formatter.AbstractWriter):
             self.remove_temp_tag(histify=1)
 
     def split_target(self, url):
-        i = string.find(url, TARGET_SEPARATOR)
+        i = str.find(url, TARGET_SEPARATOR)
         if i < 0: return url, ""
         return url[:i], url[i+1:]
 
@@ -950,7 +948,7 @@ class ViewerMenu:
     def set_image_url(self, url):
         self.__image_url = url or ""
         url = self.__context.get_baseurl(url)
-        if len(url) < 5 or string.lower(url[:5]) != "data:":
+        if len(url) < 5 or str.lower(url[:5]) != "data:":
             from posixpath import basename
             self.__image_file = basename(urllib(url)[2])
         else:
@@ -992,8 +990,8 @@ class ViewerMenu:
         self.__viewer.text.selection_own()
 
     def __selection_handler(self, offset, maxbytes):
-        offset = string.atoi(offset)
-        maxbytes = string.atoi(maxbytes)
+        offset = int(offset)
+        maxbytes = int(maxbytes)
         endpos = min(maxbytes + offset, len(self.__selection))
         return self.__selection[offset:endpos]
 

@@ -7,8 +7,8 @@ parse_text_html = printing.PSParser.PrintingHTMLParser
 
 def add_options(dialog, settings, top):
     from tkinter import X
-    import tk_tools
-    htmlfr = tk_tools.make_group_frame(top, "html", "HTML options:", fill=X)
+    from utils import tktools
+    htmlfr = tktools.make_group_frame(top, "html", "HTML options:", fill=X)
     #  Image printing controls:
     dialog.__imgchecked = dialog.new_checkbox(
 	htmlfr, "Print images", settings.imageflag)

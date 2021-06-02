@@ -13,7 +13,7 @@ XXX Main deficiencies:
 """
 
 
-import string
+
 import re
 import regsub
 
@@ -88,13 +88,13 @@ class ftp_access:
         if port:
             try:
                 port = int(port)
-            except string.atoi_error:
+            except ValueError:
                 raise IOError('ftp error', 'bad port')
         else:
             port = ftplib.FTP_PORT
         path, attrs = splitattr(path)
         self.url = "ftp://%s%s" % (netloc, path)
-        dirs = string.splitfields(path, '/')
+        dirs = str.split(path, '/')
         dirs, file = dirs[:-1], dirs[-1]
         self.content_length = None
         if not file:
@@ -111,19 +111,19 @@ class ftp_access:
             else:
                 type = 'i'
         if dirs and not dirs[0]: dirs = dirs[1:]
-        key = (user, host, port, string.joinfields(dirs, '/'))
+        key = (user, host, port, str.join(dirs, '/'))
         self.debuglevel = None
         try:
             if not ftpcache.has_key(key):
                 ftpcache[key] = []
             for attr in attrs:
-                [attr, value] = map(string.lower, splitvalue(attr))
+                [attr, value] = map(str.lower, splitvalue(attr))
                 if attr == 'type' and value in ('a', 'i', 'd'):
                     type = value
                 elif attr == 'debug':
                     try:
                         self.debuglevel = int(value)
-                    except string.atoi_error:
+                    except ValueError:
                         pass
             candidates = ftpcache[key]
             for cand in candidates:
@@ -190,7 +190,7 @@ class ftp_access:
                     del self.lines[-1]
                 self.lines.append(None) # Mark the end
         else:
-            lines = string.splitfields(data, '\n')
+            lines = str.split(data, '\n')
             if self.debuglevel > 3:
                 for line in lines: print("*addl*", repr(line))
             if self.lines:
@@ -306,7 +306,7 @@ class ftpwrapper:
 
     def retrfile(self, file, type):
         if type == 'd': cmd = 'TYPE A'; isdir = 1
-        else: cmd = 'TYPE ' + string.upper(type); isdir = 0
+        else: cmd = 'TYPE ' + str.upper(type); isdir = 0
         try:
             self.ftp.voidcmd(cmd)
         except ftplib.all_errors:

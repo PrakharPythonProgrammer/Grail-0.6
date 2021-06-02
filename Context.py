@@ -2,7 +2,6 @@
 
 from ancillary import History
 import Reader
-import string
 from utils import grailutil
 import time
 import math
@@ -13,8 +12,9 @@ from Cursors import *
 from grailbase.uricontext import URIContext
 from urllib import urljoin, urllib, urlunparse, urldefrag
 
+string_letters = ''.join(chr,range(97,123)) + ''.join(chr,range(65,91))
 
-VALID_TARGET_STARTS = string.letters + '_'
+VALID_TARGET_STARTS = string_letters + '_'
 
 # TBD: horrible hack.  search down for reason. -bwarsaw
 LAST_CONTEXT = None
@@ -391,7 +391,7 @@ class Context(URIContext):
         if not scheme:
             raise IOError("protocol error",
                             "no scheme identifier in URL", url)
-        scheme = string.lower(scheme)
+        scheme = str.lower(scheme)
         sanitized = regsub.gsub("[^a-zA-Z0-9]", "_", scheme)
         modname = sanitized + "API"
         try:
@@ -426,13 +426,13 @@ class Context(URIContext):
         if urllib.splittype(url)[0] == "data":
             default = ""
         else:
-            urlasfile = string.splitfields(url, '/')
+            urlasfile = str.split(url, '/')
             default = urlasfile[-1]
             # strip trailing query
-            i = string.find(default, '?')
+            i = str.find(default, '?')
             if i > 0: default = default[:i]
             # strip trailing fragment
-            i = string.rfind(default, '#')
+            i = str.rfind(default, '#')
             if i > 0: default = default[:i]
             # maybe bogus assumption?
             if not default: default = 'index.html'

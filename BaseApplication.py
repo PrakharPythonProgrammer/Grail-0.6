@@ -10,7 +10,6 @@ __version__ = '$Revision: 2.17 $'
 
 import keyword
 import os
-import string
 
 import grailbase.app
 import grailbase.mtloader

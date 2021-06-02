@@ -3,7 +3,7 @@
 __version__ = '$Revision: 1.13 $'
 
 import os
-import string
+
 import types
 import urllib
 
@@ -96,7 +96,7 @@ class PrintingHTMLParser(HTMLParser):
         """Add page number of element start to internal database."""
         (scheme, netloc, path, params, query, fragment) = \
                  urlparse(self.context.get_url())
-        netloc = string.lower(netloc)
+        netloc = str.lower(netloc)
         url = urllib.urlunparse(
             (scheme, netloc, path, params, query, name))
         pageno = self.formatter.writer.ps.get_pageno()
@@ -168,7 +168,7 @@ class PrintingHTMLParser(HTMLParser):
                 if self._anchors.has_key(href): return
                 self._anchors[href] = len(self._anchor_sequence) + 1
                 title = extract_keyword('title', attrs, '')
-                title = string.join(string.split(title))
+                title = str.join(str.split(title))
                 self._anchor_sequence.append((href, title))
         else:
             self._inanchor = 0
@@ -242,7 +242,7 @@ class PrintingHTMLParser(HTMLParser):
             op = spec[0]
             spec = spec[1:]
         try:
-            spec = string.atoi(spec)
+            spec = int(spec)
         except ValueError:
             return "+", 0
         if op:
@@ -390,7 +390,7 @@ class PrintingHTMLParser(HTMLParser):
             image.set_width(width)
         elif height:
             image.set_height(height)
-        self.formatter.writer.send_eps_data(image, string.lower(align or ''))
+        self.formatter.writer.send_eps_data(image, str.lower(align or ''))
         self.formatter.assert_line_data()
 
     def header_bgn(self, tag, level, attrs):

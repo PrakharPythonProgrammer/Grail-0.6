@@ -8,7 +8,7 @@ Usage:  pinfo.py [profile-file] [callees | callers | stats]
 __version__ = '$Revision: 2.8 $'
 
 
-import os, pstats, string, sys
+import os, pstats, sys
 
 legal_sorts = 'calls', 'cumulative', 'file', 'module', 'pcalls', 'line', \
               'name', 'nfl', 'stdname', 'time'
@@ -25,7 +25,7 @@ if sys.argv[1:]:
         fileName = args[0]
         del args[0]
     if args:
-        args = string.splitfields(string.joinfields(args, ','), ',')
+        args = str.split(str.join(args, ','), ',')
         if args and args[0] in legal_reports:
             report = args[0]
             del args[0]
@@ -36,7 +36,7 @@ if sys.argv[1:]:
         if new_sorts:
             sorts = tuple(new_sorts)
         for i in range(len(args)):
-            try: args[i] = string.atoi(args[i])
+            try: args[i] = int(args[i])
             except: pass
         restrictions = tuple(filter(None, args))
 

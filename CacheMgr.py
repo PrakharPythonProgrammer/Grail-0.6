@@ -2,7 +2,6 @@ from Cache import SharedItem, SharedAPI
 from utils.Assert import Assert
 from urllib.parse import urlparse
 import urllib
-import string
 import os
 import time
 from utils import ht_time
@@ -31,7 +30,7 @@ try:
 except ImportError:
     # This is for users of Python 1.5.1:
     def guess_extension(type):
-        type = string.lower(type)
+        type = str.lower(type)
         for ext, stype in mimetypes.types_map.items():
             if type == stype:
                 return ext
@@ -40,11 +39,11 @@ except ImportError:
 
 def parse_cache_control(s):
     def parse_directive(s):
-        i = string.find(s, '=')
+        i = str.find(s, '=')
         if i >= 0:
             return (s[:i], s[i+1:])
         return (s, '')
-    elts = string.splitfields(s, ',')
+    elts = str.split(s, ',')
     return map(parse_directive, elts)
 
 class CacheManager:
@@ -338,7 +337,7 @@ class CacheManager:
                 if k in  ('no-cache', 'no-store'):
                     return 0
                 if k == 'max-age':
-                    expires = string.atoi(v)
+                    expires = int(v)
 
         return 1
 
@@ -370,19 +369,19 @@ class CacheManager:
 
         """
         scheme, netloc, path, params, query, fragment = urlparse(url)
-        i = string.find(netloc, '@')
+        i = str.find(netloc, '@')
         if i > 0:
             userpass = netloc[:i]
             netloc = netloc[i+1:]    # delete the '@'
         else:
             userpass = ""
-        scheme = string.lower(scheme)
-        netloc = string.lower(netloc)
-        i = string.find(netloc, ':')
+        scheme = str.lower(scheme)
+        netloc = str.lower(netloc)
+        i = str.find(netloc, ':')
         if i >= 0:
             try:
-                port = string.atoi(netloc[i+1:])
-            except string.atoi_error:
+                port = int(netloc[i+1:])
+            except ValueError:
                 port = None
         else:
             port = None
@@ -440,11 +439,11 @@ class DiskCacheEntry:
     def parse(self,parsed_rep):
         """Reads transaction log entry.
         """
-        vars = string.splitfields(parsed_rep,'\t')
+        vars = str.split(parsed_rep,'\t')
         self.key = vars[0]
         self.url = vars[1]
         self.file = vars[2]
-        self.size = string.atoi(vars[3])
+        self.size = int(vars[3])
         self.type = vars[7]
         try:
             self.encoding = vars[8]
@@ -475,7 +474,7 @@ class DiskCacheEntry:
         elif self.string_date.match(rep) == 1:
             setattr(self,var,HTTime(str=rep))
         else:
-            setattr(self,var,HTTime(secs=string.atof(rep)))
+            setattr(self,var,HTTime(secs=float(rep)))
 
     def unparse(self):
         """Return entry for transaction log.
@@ -485,7 +484,7 @@ class DiskCacheEntry:
         stuff = [self.key, self.url, self.file, self.size, self.date,
                  self.lastmod, self.expires, self.type, self.encoding,
                  self.transfer_encoding]
-        s = string.join(map(str, stuff), '\t')
+        s = str.join(map(str, stuff), '\t')
         return s
 
     def get(self):

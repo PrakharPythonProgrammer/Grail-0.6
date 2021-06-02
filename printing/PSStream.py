@@ -5,7 +5,7 @@ import utils                            # || module
 import os
 import regsub
 import settings
-import string
+
 import sys
 import time
 import urllib
@@ -49,7 +49,7 @@ def get_userheader():
         if filename:
             templates.append(USERHEADER_INFO % fn)
             templates.append(open(filename).read())
-    return string.join(templates, '\n')
+    return str.join(templates, '\n')
 
 
 # Regular expressions.
@@ -127,7 +127,7 @@ class PSStream:
     __titles = None
     def set_title(self, title):
         # replace all whitespace sequences with a single space
-        title = string.join(string.split(title))
+        title = str.join(str.split(title))
         if self.__titles is None:
             self.__titles = [title]
         else:
@@ -488,7 +488,7 @@ class PSStream:
         append = linestr.append
         xpos = self._xpos
         # must break line; just do it by "words" as best we understand them
-        words = string.splitfields(data, ' ')
+        words = str.split(data, ' ')
         wordcnt = len(words) - 1
         space_width = self._space_width
         for word, width in map(None, words, map(text_width, words)):
@@ -548,7 +548,8 @@ class PSStream:
                                             / average_charwidth)
                         s = word[:chars_on_line]
                         # ugly!
-                        if s and s[-1] in string.letters:
+                        string_letters = ''.join(map(chr,range(97,123))) + ''.join(map(chr,range(65,91)))
+                        if s and s[-1] in string_letters:
                             s = s + "-"
                         append(s)
                         self._xpos = text_width(s)
@@ -574,7 +575,7 @@ class PSStream:
         self._xpos = xpos
 
     def push_string(self, data):
-        lines = string.splitfields(data, '\n')
+        lines = str.split(data, '\n')
         linecnt = len(lines) - 1
         for line in lines:
             # do flowing text
@@ -679,7 +680,7 @@ class PSStream:
         if linestr is None:
             linestr = self._linestr
         # handle quoted characters
-        cooked = cook(string.joinfields(linestr, ''))
+        cooked = cook(str.join(linestr, ''))
         if not cooked:
             return
         # TBD: handle ISO encodings

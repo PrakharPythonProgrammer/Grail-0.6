@@ -5,7 +5,6 @@ from utils import SafeDialog
 from utils import Safetkinter
 import os
 from rexec import RExec, RHooks
-import string
 import sys
 import tempfile
 import types
@@ -109,7 +108,7 @@ class PseudoFile:
     def readline(self):
         while '\n' not in self.buf and not self.done:
             self.fill()
-        i = string.find(self.buf, '\n')
+        i = str.find(self.buf, '\n')
         if i < 0:
             i = len(self.buf)
         else:

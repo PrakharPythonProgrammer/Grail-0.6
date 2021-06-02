@@ -2,7 +2,6 @@
 
 import os
 import re
-import string
 import urllib
 from urllib.parse import urlparse
 from tkinter import *
@@ -106,7 +105,7 @@ class AppletLoader:
         if mode == "some":
             key = get_key(self.context)
             rawgroups = prefs.Get("applets", "groups")
-            groups = map(string.lower, string.split(rawgroups))
+            groups = map(str.lower, str.split(rawgroups))
             if key not in groups:
                 return 0
         if self.code:                   # <APP> or <APPLET>
@@ -123,14 +122,14 @@ class AppletLoader:
     def set_param(self, name, value):
         """Set the value for a named parameter for the widget."""
         try:
-            value = string.atoi(value, 0)
-        except string.atoi_error:
+            value = int(value, 0)
+        except ValueError:
             try:
-                value = string.atol(value, 0)
-            except string.atol_error:
+                value = int(value, 0)
+            except ValueError:
                 try:
-                    value = string.atof(value)
-                except string.atof_error:
+                    value = float(value)
+                except ValueError:
                     pass
         self.params[name] = value
 
@@ -288,7 +287,7 @@ class AppletLoader:
         if type == imp.PY_SOURCE:
             import linecache
             lines = file.readlines()
-            data = string.joinfields(lines, '')
+            data = str.join(lines, '')
             linecache.cache[filename] = (len(data), 0, lines, filename)
             code = compile(data, filename, 'exec')
             m = rexec.hooks.add_module(mod)
@@ -568,17 +567,17 @@ def _get_key(context):
     app = context.app
     prefs = app.prefs
     rawgroups = prefs.Get("applets", "groups")
-    groups = map(string.lower, string.split(rawgroups))
+    groups = map(str.lower, str.split(rawgroups))
     list = []
     for group in groups:
-        list.append((-len(group), string.lower(group)))
+        list.append((-len(group), str.lower(group)))
     list.sort()
     groups = []
     for length, group in list:
         groups.append(group)
     scheme, netloc, path, params, query, fragment = urlparse(url)
     if scheme and netloc and scheme in urllib.uses_netloc:
-        netloc = string.lower(netloc)
+        netloc = str.lower(netloc)
         user, host = urllib.splituser(netloc)
         if user: return netloc          # User:passwd present -- don't mess
         netloc, port = urllib.splitport(netloc) # Port is ignored

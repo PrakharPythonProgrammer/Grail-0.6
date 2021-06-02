@@ -1,7 +1,6 @@
 """Base reader class -- read from a URL in the background."""
 
 import sys
-import string
 import tkinter
 # from tkinter import *
 from urllib.parse import urlparse
@@ -104,7 +103,7 @@ class BaseReader:
         if self.api and not self.shorturl:
             tuple = urlparse(self.api._url_)
             path = tuple[2]
-            i = string.rfind(path[:-1], '/')
+            i = str.rfind(path[:-1], '/')
             if i >= 0:
                 path = path[i+1:]
             self.shorturl = path or self.api._url_
@@ -120,8 +119,8 @@ class BaseReader:
         self.maxbytes = 0
         if headers.has_key('content-length'):
             try:
-                self.maxbytes = string.atoi(headers['content-length'])
-            except string.atoi_error:
+                self.maxbytes = int(headers['content-length'])
+            except ValueError:
                 pass
         self.update_status()
 

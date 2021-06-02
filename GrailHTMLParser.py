@@ -9,8 +9,7 @@ from tkinter import *
 import os
 from typing import Tuple
 import urllib
-import string
-import tk_tools
+from utils import tktools
 import formatter
 import Viewer
 import utils.grailutil as grailutil
@@ -199,9 +198,9 @@ class GrailHTMLParser(HTMLParser):
         hspace = extract('hspace', attrs, 0, conv=int)
         vspace = extract('vspace', attrs, 0, conv=int)
         # not sure how to assert(value[0] == '#')
-        usemap = extract('usemap', attrs, conv=string.strip)
+        usemap = extract('usemap', attrs, conv=str.strip)
         if usemap:
-            if usemap[0] == '#': value = string.strip(usemap[1:])
+            if usemap[0] == '#': value = str.strip(usemap[1:])
             from ImageMap import MapThunk
             usemap = MapThunk(self.context, usemap)
             if border is None: border = 2
@@ -329,7 +328,7 @@ class GrailHTMLParser(HTMLParser):
         if not key:
             self.badhtml = 1
             return
-        content = extract_keyword("content", attrs, conv=string.strip)
+        content = extract_keyword("content", attrs, conv=str.strip)
         item = (name, http_equiv, content)
         if self._metadata.has_key(key):
             self._metadata[key].append(item)
@@ -356,16 +355,16 @@ class GrailHTMLParser(HTMLParser):
         id = None
         has_key = attrs.has_key
         #
-        href = string.strip(attrs.get("urn", ""))
+        href = str.strip(attrs.get("urn", ""))
         scheme, resturl = urllib.splittype(href)
         if scheme == "urn":
             scheme, resturl = urllib.splittype(resturl)
         if scheme not in ("doi", "hdl", "ietf"):
             # this is an unknown URN scheme or there wasn't a URN
-            href = string.strip(attrs.get("href", ""))
+            href = str.strip(attrs.get("href", ""))
         name = extract_keyword('name', attrs,
                                conv=grailutil.conv_normstring)
-        if has_key('type'): type = string.lower(attrs['type'] or '')
+        if has_key('type'): type = str.lower(attrs['type'] or '')
         if has_key('target'): target = attrs['target']
         if has_key('id'): id = attrs['id']
         self.anchor_bgn(href, name, type, target, id)
@@ -373,10 +372,10 @@ class GrailHTMLParser(HTMLParser):
         # to the history until the last possible moment.  We need a non-history
         # way to do this; a resources database would be much better.
         if has_key('title'):
-            title = string.join(string.split(attrs['title'] or ''))
+            title = str.join(str.split(attrs['title'] or ''))
             if title:
                 url = self.context.get_baseurl(
-                    string.joinfields(string.split(href), ''))
+                    str.join(str.split(href), ''))
                 old_title, when = self.app.global_history.lookup_url(url)
                 if not old_title:
                     # Only do this if there's not already a title in the
@@ -435,7 +434,7 @@ class GrailHTMLParser(HTMLParser):
         Coordinates are stored differently depending on the shape of
         the object.
 
-        Raise string.atoi_error when bad numbers occur.
+        Raise ValueError when bad numbers occur.
         Raise IndexError when not enough coordinates are specified.
         
         """
@@ -443,7 +442,7 @@ class GrailHTMLParser(HTMLParser):
 
         coords = []
 
-        terms = map(int, regsub.split(string.strip(text), '[, ]+'))
+        terms = map(int, regsub.split(str.strip(text), '[, ]+'))
 
         if shape == 'poly':
             # list of (x,y) tuples
@@ -507,7 +506,7 @@ class GrailHTMLParser(HTMLParser):
         cls = extract_attribute('class', keywords, '', delete=1)
         src = extract_attribute('src', keywords, delete=1)
         if '.' in cls:
-            i = string.rfind(cls, '.')
+            i = str.rfind(cls, '.')
             mod = cls[:i]
             cls = cls[i+1:]
         else:
@@ -558,7 +557,7 @@ class GrailHTMLParser(HTMLParser):
     def list_handle_src(self, attrs):
         if not self.app.prefs.GetBoolean("browser", "load-images"):
             return
-        src = string.joinfields(string.split(attrs['src']), '')
+        src = str.join(str.split(attrs['src']), '')
         image = self.context.get_async_image(src, self.reload)
         if image: attrs['type'] = image
 
@@ -568,7 +567,7 @@ class GrailHTMLParser(HTMLParser):
     def make_format(self, format, default='disc', listtype=None):
         fmt = format or default
         if type(fmt) is StringVar:
-            fmt = string.lower(fmt)
+            fmt = str.lower(fmt)
         if fmt in ('disc', 'circle', 'square'):
             if listtype == 'ul':
                 img = self.load_dingbat(fmt)
@@ -769,9 +768,9 @@ class DynamicReloader:
 
     def parse(self, spec):
         if ";" in spec:
-            pos = string.find(spec, ";")
+            pos = str.find(spec, ";")
             spec = "%s %s" % (spec[:pos], spec[pos + 1:])
-        specitems = string.split(spec)
+        specitems = str.split(spec)
         if not specitems:
             return None, None
         try:
@@ -782,7 +781,7 @@ class DynamicReloader:
             return None, None
         if len(specitems) > 1:
             specurl = specitems[1]
-            if len(specurl) >= 4 and string.lower(specurl[:4]) == "url=":
+            if len(specurl) >= 4 and str.lower(specurl[:4]) == "url=":
                 specurl = specurl[4:]
             url = self.__context.get_baseurl(specurl)
         else:

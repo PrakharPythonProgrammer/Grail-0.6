@@ -1,7 +1,7 @@
 __version__ = '$Revision: 1.5 $'
 
 import Reader
-import string
+
 
 
 class PrintingTextParser(Reader.TextParser):
@@ -21,7 +21,7 @@ class PrintingTextParser(Reader.TextParser):
     def feed(self, data):
         data = self.__buffer + data
         self.__buffer = ''
-        strings = string.splitfields(data, "\f")
+        strings = str.split(data, "\f")
         if strings:
             for s in strings[:-1]:
                 self.write_page(s)
@@ -29,7 +29,7 @@ class PrintingTextParser(Reader.TextParser):
 
     __first = 1
     def write_page(self, data):
-        data = string.rstrip(data)
+        data = str.rstrip(data)
         if self.__strip_blanks:
             data = self.strip_blank_lines(data)
             # discard blank pages:
@@ -43,13 +43,13 @@ class PrintingTextParser(Reader.TextParser):
         self.viewer.send_literal_data(data)
 
     def strip_blank_lines(self, data):
-        lines = map(string.rstrip, string.splitfields(data, "\n"))
+        lines = map(str.rstrip, str.split(data, "\n"))
         while lines:
-            if string.strip(lines[0]) == "":
+            if str.strip(lines[0]) == "":
                 del lines[0]
             else:
                 break
-        return string.joinfields(lines, "\n")
+        return str.join(lines, "\n")
 
 
 def parse_text(writer, settings, context):
@@ -59,13 +59,13 @@ def parse_text(writer, settings, context):
 
 def add_options(dialog, settings, top):
     import tkinter
-    import tk_tools
-    textfr = tk_tools.make_group_frame(top, "textoptions",
+    from utils import tktools
+    textfr = tktools.make_group_frame(top, "textoptions",
                                       "Text options:", fill=tkinter.X)
     #  The titleentry widget is used to set the title for text/plain
     #  documents; the title is printed in the page headers and
     #  possibly on an accounting page if your site uses them.
-    dialog.__titleentry, dummyframe = tk_tools.make_form_entry(textfr, "Title:")
+    dialog.__titleentry, dummyframe = tktools.make_form_entry(textfr, "Title:")
     if dialog.title:
         dialog.__titleentry.insert(tkinter.END, dialog.title)
     dialog.add_entry(dialog.__titleentry)

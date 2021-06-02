@@ -4,11 +4,10 @@ from utils import grailutil
 from utils import ht_time
 import os
 import sys
-import string
 import urllib
 from urllib.parse import urlparse
 from tkinter import *
-import tk_tools
+from utils import tktools
 from BaseReader import BaseReader
 import copy
 import re
@@ -68,8 +67,8 @@ class TextLineendWrapper:
         if self.__last_was_cr and data[0:1] == '\n':
             data = data[1:]
         self.__last_was_cr = data[-1:] == '\r'
-        data = string.replace(data, '\r\n', '\n')
-        data = string.replace(data, '\r', '\n')
+        data = str.replace(data, '\r\n', '\n')
+        data = str.replace(data, '\r', '\n')
         self.__parser.feed(data)
 
     def close(self):
@@ -98,12 +97,12 @@ class QuotedPrintableWrapper:
         if self.__last_was_cr and data[0:1] == '\n':
             data = data[1:]
         self.__last_was_cr = data[-1:] == '\r'
-        data = string.replace(data, '\r\n', '\n')
-        data = string.replace(data, '\r', '\n')
+        data = str.replace(data, '\r\n', '\n')
+        data = str.replace(data, '\r', '\n')
 
         # now get the real buffer
         data = self.__buffer + data
-        pos = string.find(data, '=')
+        pos = str.find(data, '=')
         if pos == -1:
             self.__parser.feed(data)
             self.__buffer = ''
@@ -137,7 +136,7 @@ class QuotedPrintableWrapper:
                 data = data[1:]
                 print("invalid quoted-printable encoding -- skipping '='")
             # now look for the next '=':
-            pos = string.find(data, '=')
+            pos = str.find(data, '=')
             if pos == -1:
                 s = s + data
                 data = ''
@@ -171,12 +170,12 @@ class Base64Wrapper:
         if self.__last_was_cr and data[0:1] == '\n':
             data = data[1:]
         self.__last_was_cr = data[-1:] == '\r'
-        data = string.replace(data, '\r\n', '\n')
-        data = string.replace(data, '\r', '\n')
+        data = str.replace(data, '\r\n', '\n')
+        data = str.replace(data, '\r', '\n')
 
         # now get the real buffer
         data = self.__buffer + data
-        lines = string.split(data, '\n')
+        lines = str.split(data, '\n')
         if len(lines) > 1:
             data = lines[-1]
             del lines[-1]
@@ -192,7 +191,7 @@ class Base64Wrapper:
                     stuff = stuff + bin
                 del lines[0]
             lines.append(data)
-            data = string.join(lines, '\n')
+            data = str.join(lines, '\n')
             if stuff:
                 self.__parser.feed(stuff)
         self.__buffer = data
@@ -329,7 +328,7 @@ class GzipWrapper:
     def __read_zstring(self, data):
         """Attempt to read a null-terminated string."""
         if '\0' in data:
-            stuff = data[:string.index(data, '\0')]
+            stuff = data[:str.index(data, '\0')]
             return data[len(stuff) + 1:], 1, stuff
         return data, 0, None
 
@@ -377,9 +376,9 @@ else:
 def get_encodings(headers):
     content_encoding = transfer_encoding = None
     if headers.has_key("content-encoding"):
-        content_encoding = string.lower(headers["content-encoding"])
+        content_encoding = str.lower(headers["content-encoding"])
     if headers.has_key("content-transfer-encoding"):
-        transfer_encoding = string.lower(headers["content-transfer-encoding"])
+        transfer_encoding = str.lower(headers["content-transfer-encoding"])
     return content_encoding, transfer_encoding
 
 
@@ -469,7 +468,7 @@ class Reader(BaseReader):
         tuple = tuple[:-1] + ("",)
         if self.user_passwd:
             netloc = tuple[1]
-            i = string.find(netloc, '@')
+            i = str.find(netloc, '@')
             if i >= 0: netloc = netloc[i+1:]
             netloc = self.user_passwd + '@' + netloc
             tuple = (tuple[0], netloc) + tuple[2:]
@@ -561,8 +560,8 @@ class Reader(BaseReader):
         if headers.has_key('content-type'):
             content_type = headers['content-type']
             if ';' in content_type:
-                content_type = string.strip(
-                    content_type[:string.index(content_type, ';')])
+                content_type = str.strip(
+                    content_type[:str.index(content_type, ';')])
         else:
             content_type, encoding = self.app.guess_type(self.url)
             if not content_encoding:
@@ -638,7 +637,7 @@ class Reader(BaseReader):
             label.pack(before=fd.filter)
             # give it a default filename on which save within the
             # current directory
-            urlasfile = string.splitfields(self.url, '/')
+            urlasfile = str.split(self.url, '/')
             fn = fd.go(default=urlasfile[-1], key="save")
             if not fn:
                 # User canceled.  Stop the transfer.
@@ -684,7 +683,7 @@ class Reader(BaseReader):
 
         cred_headers = {}
         for k in headers.keys():
-            cred_headers[string.lower(k)] = headers[k]
+            cred_headers[str.lower(k)] = headers[k]
         cred_headers['request-uri'] = self.url
 
         if self.params.has_key('Authorization'):
@@ -765,17 +764,17 @@ class Reader(BaseReader):
 class LoginDialog:
 
     def __init__(self, master, netloc, realmvalue):
-        self.root = tk_tools.make_toplevel(master,
+        self.root = tktools.make_toplevel(master,
                                           title="Authentication Dialog")
         self.prompt = Label(self.root,
                             text="Enter user authentication\nfor %s on %s" %
                             (realmvalue, netloc))
         self.prompt.pack(side=TOP)
-        self.user_entry, dummy = tk_tools.make_form_entry(self.root, "User:")
+        self.user_entry, dummy = tktools.make_form_entry(self.root, "User:")
         self.user_entry.focus_set()
         self.user_entry.bind('<Return>', self.user_return_event)
         self.passwd_entry, dummy = \
-                           tk_tools.make_form_entry(self.root, "Password:")
+                           tktools.make_form_entry(self.root, "Password:")
         self.passwd_entry.config(show="*")
         self.passwd_entry.bind('<Return>', self.ok_command)
         self.ok_button = Button(self.root, text="OK", command=self.ok_command)
@@ -786,7 +785,7 @@ class LoginDialog:
 
         self.user_passwd = None
 
-        tk_tools.set_transient(self.root, master)
+        tktools.set_transient(self.root, master)
 
         self.root.grab_set()
 
@@ -800,8 +799,8 @@ class LoginDialog:
         self.passwd_entry.focus_set()
 
     def ok_command(self, event=None):
-        user = string.strip(self.user_entry.get())
-        passwd = string.strip(self.passwd_entry.get())
+        user = str.strip(self.user_entry.get())
+        passwd = str.strip(self.passwd_entry.get())
         if not user:
             self.root.bell()
             return
@@ -854,7 +853,7 @@ class TransferDisplay:
         url = old_context.get_url()
         headers = old_context.get_headers()
         self.app = old_context.browser.app
-        self.root = tk_tools.make_toplevel(
+        self.root = tktools.make_toplevel(
             old_context.browser.master, class_="GrailTransfer")
         self.root.protocol("WM_DELETE_WINDOW", self.stop)
         import Context
@@ -874,13 +873,13 @@ class TransferDisplay:
         #
         self.content_length = None
         if headers.has_key('content-length'):
-            self.content_length = string.atoi(headers['content-length'])
+            self.content_length = int(headers['content-length'])
         self.create_widgets(url, filename, self.content_length)
         #
         if restart:
             reader.restart(reader.url)
         reader.bufsize = 8096
-        tk_tools.set_transient(self.root, old_context.browser.master)
+        tktools.set_transient(self.root, old_context.browser.master)
         history = old_context.app.global_history
         if not history.inhistory_p(url):
             history.remember_url(url)
@@ -888,7 +887,7 @@ class TransferDisplay:
 
     def create_widgets(self, url, filename, content_length):
         """Create the widgets in the Toplevel instance."""
-        fr, topfr, botfr = tk_tools.make_double_frame(self.root)
+        fr, topfr, botfr = tktools.make_double_frame(self.root)
         Label(topfr, text="Downloading %s" % os.path.basename(filename)
               ).pack(anchor=W, pady='1m')
         Frame(topfr, borderwidth=1, height=2, relief=SUNKEN
@@ -942,8 +941,8 @@ class TransferDisplay:
         f.pack(pady='1m')
 
         self.__progbar = Frame(f, width=1, background=DARK_BLUE,
-                               height=string.atoi(f.cget('height'))
-                               - 2*string.atoi(f.cget('borderwidth')))
+                               height=int(f.cget('height'))
+                               - 2*int(f.cget('borderwidth')))
         self.__progbar.place(x=0, y=0)
 
     def stop(self):

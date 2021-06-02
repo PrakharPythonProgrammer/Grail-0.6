@@ -1,6 +1,5 @@
 """Support for client-side image maps."""
 
-import string
 
 class Shape:
     """shaped regions for client-side image maps."""

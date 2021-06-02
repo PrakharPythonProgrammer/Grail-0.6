@@ -13,7 +13,7 @@ This module has its origins in code contributed by Fredrik Lundh
 
 """
 
-import string
+
 import operator
 import array
 

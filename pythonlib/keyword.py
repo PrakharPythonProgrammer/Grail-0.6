@@ -66,7 +66,7 @@ def main():
     while 1:
         line = fp.readline()
         if not line: break
-        if string.find(line, '{1, "') > -1 and strprog.search(line) > -1:
+        if str.find(line, '{1, "') > -1 and strprog.search(line) > -1:
             lines.append("        '" + strprog.group(1) + "',\n")
     fp.close()
     lines.sort()
@@ -87,7 +87,7 @@ def main():
 
     # write the output file
     fp = open(optfile, 'w')
-    fp.write(string.join(format, ''))
+    fp.write(str.join(format, ''))
     fp.close()
 
 if __name__ == "__main__": main()

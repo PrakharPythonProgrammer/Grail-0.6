@@ -15,7 +15,7 @@ XXX Main deficiencies:
 """
 
 
-import string
+
 import http.client
 from urllib import splithost
 import email
@@ -74,7 +74,7 @@ class MyHTTP(http.client.HTTP):
             return 200, "OK", self.headers
         errcode, errmsg = replyprog.group(1, 2)
         errcode = int(errcode)
-        errmsg = string.strip(errmsg)
+        errmsg = str.strip(errmsg)
         self.headers = email.Message(self.file, 0)
         return errcode, errmsg, self.headers
 
@@ -121,14 +121,14 @@ class http_access:
             host, selector = splithost(resturl)
         if not host:
             raise IOError("no host specified in URL")
-        i = string.find(host, '@')
+        i = str.find(host, '@')
         if i >= 0:
             user_passwd, host = host[:i], host[i+1:]
         else:
             user_passwd = None
         if user_passwd:
             import base64
-            auth = string.strip(base64.encodestring(user_passwd))
+            auth = str.strip(base64.encodestring(user_passwd))
         else:
             auth = None
         self.h = MyHTTP(host)
@@ -143,7 +143,7 @@ class http_access:
             if encodings:
                 encodings.sort()
                 self.h.putheader(
-                    'Accept-Encoding', string.join(encodings, ", "))
+                    'Accept-Encoding', str.join(encodings, ", "))
         for key, value in params.items():
             if key[:1] != '.':
                 self.h.putheader(key, value)
@@ -184,7 +184,7 @@ class http_access:
         if '\n' not in new:
             return "receiving server response", 0
         if not self.line1seen:
-            i = string.find(self.readahead, '\n')
+            i = str.find(self.readahead, '\n')
             if i < 0:
                 return "receiving server response", 0
             self.line1seen = 1

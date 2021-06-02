@@ -2,12 +2,11 @@
 
 
 import os
-import string
 import sys
 from utils import grailutil
 
 from tkinter import *
-import tk_tools
+from utils import tktools
 
 from Viewer import Viewer
 
@@ -20,7 +19,7 @@ FIRST_LOGO_IMAGE = LOGO_IMAGES + "T1.gif"
 TITLE_PREFIX = "Grail: "
 
 
-# If we have an icon file, replace tk_tools.make_toplevel so that it gets
+# If we have an icon file, replace tktools.make_toplevel so that it gets
 # set up as the icon, otherwise don't do anything magic.
 #
 _mydir = os.path.dirname(grailutil.abspath(__file__))
@@ -41,8 +40,8 @@ if _iconxbm_file:
             except TclError: pass
         return w
     #
-    tk_tools_make_toplevel = tk_tools.make_toplevel
-    tk_tools.make_toplevel = make_toplevel
+    tk_tools_make_toplevel = tktools.make_toplevel
+    tktools.make_toplevel = make_toplevel
 
 
 class Browser:
@@ -74,7 +73,7 @@ class Browser:
         # sure what the correct thing to do is.  Setting it to `grail'
         # is definitely *not* the right thing to do since this causes
         # all sorts of problems.
-        self.root = tk_tools.make_toplevel(self.master, class_='Grail')
+        self.root = tktools.make_toplevel(self.master, class_='Grail')
         self._window_title("Grail: New Browser")
         if geometry:
             self.root.geometry(geometry)
@@ -123,7 +122,7 @@ class Browser:
 
     def create_menu(self, name):
         menu = Menu(self.mbar, name=name)
-        self.mbar.add_cascade(label=string.capitalize(name), menu=menu)
+        self.mbar.add_cascade(label=str.capitalize(name), menu=menu)
         setattr(self, name + "menu", menu)
         getattr(self, "create_menu_" + name)(menu)
 
@@ -134,18 +133,18 @@ class Browser:
         underline = None
         if len(accelerator) == 1:
             # do a lot to determine the underline position
-            underline = string.find(label, accelerator)
+            underline = str.find(label, accelerator)
             if underline == -1:
-                accelerator = string.lower(accelerator)
-                underline = string.find(label, accelerator)
+                accelerator = str.lower(accelerator)
+                underline = str.find(label, accelerator)
                 if underline == -1:
                     underline = None
-                accelerator = string.upper(accelerator)
+                accelerator = str.upper(accelerator)
         menu.add_command(label=label, command=command, underline=underline,
                          accelerator="Alt-" + accelerator)
         self.root.bind("<Alt-%s>" % accelerator, command)
         if len(accelerator) == 1:
-            self.root.bind("<Alt-%s>" % string.lower(accelerator), command)
+            self.root.bind("<Alt-%s>" % str.lower(accelerator), command)
 
     def create_menu_file(self, menu):
         self._menucmd(menu, "New Window", "N", self.new_command)
@@ -209,9 +208,9 @@ class Browser:
         if self.__helpspec is not None:
             return self.__helpspec
         raw = self.app.prefs.Get('browser', 'help-menu')
-        lines = filter(None, map(string.strip, string.split(raw, '\n')))
-        lines = map(string.split, lines)
-        self.__helpspec = tuple(map(string.join, lines))
+        lines = filter(None, map(str.strip, str.split(raw, '\n')))
+        lines = map(str.split, lines)
+        self.__helpspec = tuple(map(str.join, lines))
         return self.__helpspec
 
     def create_urlbar(self):
@@ -228,7 +227,7 @@ class Browser:
         msg_frame.pack(fill=X, side=BOTTOM, in_=self.topframe)
         msg_frame.propagate(OFF)
         fontspec = self.app.prefs.Get('presentation', 'message-font')
-        fontspec = string.strip(fontspec) or None
+        fontspec = str.strip(fontspec) or None
         self.msg = Label(self.root, font=fontspec, name="status")
         self.msg.pack(fill=X, in_=msg_frame)
 
@@ -318,7 +317,7 @@ class Browser:
     # <Return> in URL entry field
 
     def load_from_entry(self, event):
-        url = string.strip(self.entry.get())
+        url = str.strip(self.entry.get())
         if url:
             self.context.load(grailutil.complete_url(url))
         else:
@@ -367,7 +366,7 @@ class Browser:
         except TclError:
             self.root.bell()
             return
-        uri = string.joinfields(string.split(selection), '')
+        uri = str.join(str.split(selection), '')
         self.context.load(grailutil.complete_url(uri))
 
     def view_source_command(self, event=None):

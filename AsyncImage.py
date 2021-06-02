@@ -2,7 +2,6 @@ from FileReader import TempFileReader
 from tkinter import *
 from utils import grailutil
 import os
-import string
 
 TkPhotoImage = PhotoImage
 
@@ -47,7 +46,7 @@ class ImageTempFileReader(TempFileReader):
             if headers.has_key('www-authenticate'):
                 cred_headers = {}
                 for k in headers.keys():
-                    cred_headers[string.lower(k)] = headers[k]
+                    cred_headers[str.lower(k)] = headers[k]
                 cred_headers['request-uri'] = self.image.url
                 self.stop()
                 credentials = self.image.context.app.auth.request_credentials(
