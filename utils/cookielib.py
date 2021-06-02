@@ -6,9 +6,9 @@ This can be used to implement client-side cookie handling.
 __author__ = "Fred L. Drake, Jr. <fdrake@acm.org>"
 __version__ = '$Revision: 2.1 $'
 
-import string
-import time
 
+import time
+import string
 
 class Error(Exception):
     def __init__(self, message, *args):
@@ -88,10 +88,10 @@ class CookieDB:
             lineno = lineno + 1
             if line[0] == '#':
                 continue
-            line = string.strip(line)
+            line = str.strip(line)
             if not line:
                 continue
-            parts = string.split(line, '\t')
+            parts = str.split(line, '\t')
             if len(parts) != 7:
                 raise FormatError("wrong number of fields", lineno)
             domain, isdomain, path, secure, expires, name, value = parts
@@ -113,7 +113,7 @@ class CookieDB:
                 expires = repr(cookie.expires)[:-1]
                 l = [cookie.domain, isdomain, cookie.path, secure,
                      expires, cookie.name, cookie.value]
-                s = string.join(l, '\t')
+                s = str.join(l, '\t')
                 fp.write(s + '\n')
 
     def set_cookie(self, cookie):
@@ -168,15 +168,15 @@ class CookieDB:
                 break
 
     def lookup(self, domain, path='/', secure=0):
-        domain = string.lower(domain)
-        hostparts = string.split(domain, '.')
+        domain = str.lower(domain)
+        hostparts = str.split(domain, '.')
         results = self.__match_path(domain, path)
         minparts = 3
         if is_special_domain(hostparts[-1]):
             minparts = 2
         while len(hostparts) > minparts:
             del hostparts[0]
-            key = string.join([''] + hostparts, '.')
+            key = str.join([''] + hostparts, '.')
             results[len(results):] = self.__match_path(key, path)
         if not secure:
             results = filter(lambda c: not c.secure, results)
@@ -283,7 +283,7 @@ class Cookie:
 
     def __init__(self, domain, path, secure, expires,
                  name, value, others=None):
-        self.domain = domain and string.lower(domain)
+        self.domain = domain and str.lower(domain)
         self.isdomain = domain and domain[0] == '.'
         self.path = path
         self.secure = secure
@@ -309,14 +309,14 @@ del re
 
 def parse_cookies(s):
     results = []
-    s = string.strip(s)
+    s = str.strip(s)
     while s:
         c, s = parse_cookie(s)
         results.append(c)
-        s = string.strip(s)
+        s = str.strip(s)
         if s:
             if s[0] == ",":
-                s = string.strip(s[1:])
+                s = str.strip(s[1:])
             else:
                 raise ValueError("illegal cookie separator")
     return results
@@ -337,14 +337,14 @@ def parse_cookie(s):
     value, pos = _get_value(s, pos)
     if value is None:
         raise ValueError("no value for cookie")
-    s = string.strip(s[pos:])
+    s = str.strip(s[pos:])
     pos = 0
     if s and s[0] == ';':
         # look for parameters
         pos = 1
     while s:
         k, pos = _get_name(s, pos)
-        k = string.lower(k)
+        k = str.lower(k)
         if k == "expires":
             expires, pos = _get_value(s, pos, _date_rx)
             if expires is None:
@@ -358,7 +358,7 @@ def parse_cookie(s):
         elif k == 'path':
             path = v
         elif k == 'domain':
-            domain = string.lower(v)
+            domain = str.lower(v)
         elif k == 'max-age':
             max_age = int(v)
         elif k == 'expires':
@@ -367,16 +367,16 @@ def parse_cookie(s):
         else:
             others[k] = v
         #
-        s = string.strip(s[pos:])
+        s = str.strip(s[pos:])
         pos = 0
         if s and s[0] != ';':
             break
         if s:
             # discard ';'
-            s = string.strip(s[1:])
+            s = str.strip(s[1:])
     if domain and domain[0] == '.':
         minparts = 3
-        hostparts = string.split(domain, '.')
+        hostparts = str.split(domain, '.')
         del hostparts[0]
         if hostparts[-1] in SPECIAL_DOMAINS:
             minparts = 2
@@ -420,7 +420,7 @@ _months = { 'jan' : 1, 'feb' : 2, 'mar' : 3, 'apr' : 4,
 	    'sep' : 9, 'oct' : 10, 'nov' : 11, 'dec' : 12 }
 
 def _month_to_num(month):
-    m = string.lower(month)
+    m = str.lower(month)
     return _months[m]
 
 def _2dyear_to_4dyear(yy):
@@ -444,37 +444,37 @@ def _parse_date(str):
 
     # first we need to determine the format
     if ',' in str:
-	    noday = string.strip(str[string.find(str, ',')+1:])
+	    noday = str.strip(str[str.find(str, ',')+1:])
     if '-' in str:
 	    # Format...... Weekday, 00-Mon-00 00:00:00 GMT (rfc850)
-	    mday = string.atoi(noday[0:2])
+	    mday = int(noday[0:2])
 	    mon = _month_to_num(noday[3:6])
-	    year = _2dyear_to_4dyear(string.atoi(noday[7:9]))
-	    hour = string.atoi(noday[10:12])
-	    min = string.atoi(noday[13:15])
-	    sec = string.atoi(noday[16:18])
+	    year = _2dyear_to_4dyear(int(noday[7:9]))
+	    hour = int(noday[10:12])
+	    min = int(noday[13:15])
+	    sec = int(noday[16:18])
     else:
 	    # Format...... Wkd, 00 Mon 0000 00:00:00 GMT (rfc1123)
-	    mday = string.atoi(noday[0:2])
-	    mon = _month_to_num(noday[3:6])
-	    year = string.atoi(noday[7:11])
-	    hour = string.atoi(noday[12:14])
-	    min = string.atoi(noday[15:17])
-	    sec = string.atoi(noday[18:20])
+        mday = int(noday[0:2])
+        mon = _month_to_num(noday[3:6])
+        year = int(noday[7:11])
+        hour = int(noday[12:14])
+        min = int(noday[15:17])
+        sec = int(noday[18:20])
 
-    gmt = (year, mon, mday, hour, min, sec, 0, 0, 0)
-    secs = time.mktime(gmt)
-    return secs - time.timezone
+        gmt = (year, mon, mday, hour, min, sec, 0, 0, 0)
+        secs = time.mktime(gmt)
+        return secs - time.timezone
 	# could be raw digits
     if str[0] in string.digits:
-	    return time.time() + string.atoi(str)
+	    return time.time() + int(str)
     else:
 	    mon = _month_to_num(str[4:7])
-	    mday = string.atoi(str[8:10])
-	    year = string.atoi(str[-4:])
-	    hour = string.atoi(str[11:13])
-	    min = string.atoi(str[14:16])
-	    sec = string.atoi(str[17:19])
+	    mday = int(str[8:10])
+	    year = int(str[-4:])
+	    hour = int(str[11:13])
+	    min = int(str[14:16])
+	    sec = int(str[17:19])
 
 	    ### do we assume this is GMT time or not?
 	    ### let's assume it is

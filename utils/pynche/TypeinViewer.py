@@ -13,7 +13,7 @@ you must hit Return or Tab to select the color.
 """
 
 from tkinter import *
-import string
+
 import re
 
 class TypeinViewer:
@@ -75,9 +75,9 @@ class TypeinViewer:
         # figure out what the contents value is in the current base
         try:
             if self.__hexp.get():
-                v = string.atoi(contents, 16)
+                v = int(contents, 16)
             else:
-                v = string.atoi(contents)
+                v = int(contents)
         except ValueError:
             v = None
         # if value is not legal, delete the last character inserted and ring
@@ -105,11 +105,11 @@ class TypeinViewer:
         greenstr = self.__y.get()
         bluestr = self.__z.get()
         if self.__hexp.get():
-            red = string.atoi(redstr, 16)
-            green = string.atoi(greenstr, 16)
-            blue = string.atoi(bluestr, 16)
+            red = int(redstr, 16)
+            green = int(greenstr, 16)
+            blue = int(bluestr, 16)
         else:
-            red, green, blue = map(string.atoi, (redstr, greenstr, bluestr))
+            red, green, blue = map(int, (redstr, greenstr, bluestr))
         self.__sb.update_views(red, green, blue)
 
     def update_yourself(self, red, green, blue):

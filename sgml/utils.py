@@ -5,8 +5,8 @@ This module is safe for 'from sgml.utils import *'.
 """
 __version__ = '$Revision: 1.4 $'
 
-
 import string
+
 _string = string
 del string
 

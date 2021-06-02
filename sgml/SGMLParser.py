@@ -4,7 +4,7 @@ __version__ = "$Revision: 1.27 $"
 
 from . import SGMLLexer
 from . import SGMLHandler
-import string
+
 
 SGMLError = SGMLLexer.SGMLError
 

@@ -18,7 +18,7 @@ _months = { 'jan' : 1, 'feb' : 2, 'mar' : 3, 'apr' : 4,
             'sep' : 9, 'oct' : 10, 'nov' : 11, 'dec' : 12 }
 
 def _month_to_num(month):
-    m = string.lower(month)
+    m = str.lower(month)
     return _months[m]
 
 def _2dyear_to_4dyear(yy):
@@ -42,23 +42,23 @@ def parse(str):
 
     # first we need to determine the format
     if ',' in str:
-        noday = string.strip(str[string.find(str, ',')+1:])
+        noday = str.strip(str[str.find(str, ',')+1:])
         if '-' in str:
             # Format...... Weekday, 00-Mon-00 00:00:00 GMT (rfc850)
-            mday = string.atoi(noday[0:2])
+            mday = int(noday[0:2])
             mon = _month_to_num(noday[3:6])
-            year = _2dyear_to_4dyear(string.atoi(noday[7:9]))
-            hour = string.atoi(noday[10:12])
-            min = string.atoi(noday[13:15])
-            sec = string.atoi(noday[16:18])
+            year = _2dyear_to_4dyear(int(noday[7:9]))
+            hour = int(noday[10:12])
+            min = int(noday[13:15])
+            sec = int(noday[16:18])
         else:
             # Format...... Wkd, 00 Mon 0000 00:00:00 GMT (rfc1123)
-            mday = string.atoi(noday[0:2])
+            mday = int(noday[0:2])
             mon = _month_to_num(noday[3:6])
-            year = string.atoi(noday[7:11])
-            hour = string.atoi(noday[12:14])
-            min = string.atoi(noday[15:17])
-            sec = string.atoi(noday[18:20])
+            year = int(noday[7:11])
+            hour = int(noday[12:14])
+            min = int(noday[15:17])
+            sec = int(noday[18:20])
 
         gmt = (year, mon, mday, hour, min, sec, 0, 0, 0)
         secs = time.mktime(gmt)
@@ -66,14 +66,14 @@ def parse(str):
     else:
         # could be raw digits
         if str[0] in string.digits:
-            return time.time() + string.atoi(str)
+            return time.time() + int(str)
         else:
             mon = _month_to_num(str[4:7])
-            mday = string.atoi(str[8:10])
-            year = string.atoi(str[-4:])
-            hour = string.atoi(str[11:13])
-            min = string.atoi(str[14:16])
-            sec = string.atoi(str[17:19])
+            mday = int(str[8:10])
+            year = int(str[-4:])
+            hour = int(str[11:13])
+            min = int(str[14:16])
+            sec = int(str[17:19])
             
             ### do we assume this is GMT time or not?
             ### let's assume it is
@@ -89,7 +89,7 @@ def unparse(secs):
     # puts the string in asctime() format, must convert 
     day = str[0:3]
     mon = str[4:7]
-    mday = string.atoi(str[8:10])
+    mday = int(str[8:10])
     dtime = str[11:19]
     year = str[20:24]
     return "%s, %02d %s %s %s GMT" % (day, mday, mon, year, dtime)

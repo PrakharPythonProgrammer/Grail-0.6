@@ -2,9 +2,9 @@
 __version__ = '$Revision: 1.12 $'
 
 import re
-import string
-from .SGMLLexer import *
 
+from .SGMLLexer import *
+import string
 
 _entref_exp = re.compile("&\(\(#\|\)[a-zA-Z0-9][-.a-zA-Z0-9]*\)\(;\|\)")
 
@@ -20,13 +20,13 @@ _chartable = map(chr, range(256))
 for i in range(256):
     if chr(i) in string.whitespace:
         _chartable[i] = " "
-_chartable = string.joinfields(_chartable, '')
+_chartable = str.join(_chartable, '')
 
 
 def replace(data, entities = None):
     """Perform general entity replacement on a string.
     """
-    data = string.translate(data, _chartable)
+    data = str.translate(data, _chartable)
     if '&' in data and entities:
         value = None
         pos = _entref_exp.search(data)
@@ -34,8 +34,8 @@ def replace(data, entities = None):
             ref, term = _entref_exp.group(1, 3)
             if entities.has_key(ref):
                 value = entities[ref]
-            elif _named_chars.has_key(string.lower(ref)):
-                value = _named_chars[string.lower(ref)]
+            elif _named_chars.has_key(str.lower(ref)):
+                value = _named_chars[str.lower(ref)]
             if value is not None:
                 data = data[:pos] + value + data[pos+len(ref)+len(term)+1:]
                 pos = pos + len(value)

@@ -3,7 +3,7 @@ of HTML/SGML element start/end events.
 """
 __version__ = '$Revision: 1.4 $'
 
-import string
+
 
 import grailbase.extloader
 from . import SGMLParser
@@ -25,7 +25,7 @@ class TagExtensionLoader(grailbase.extloader.ExtensionLoader):
             as_list = not mod.ATTRIBUTES_AS_KEYWORDS
         handlers = {}
         for name, function in mod.__dict__.items():
-            parts = string.split(name, "_")
+            parts = str.split(name, "_")
             if len(parts) != 2:
                 continue
             if not (parts[0] and parts[1]):

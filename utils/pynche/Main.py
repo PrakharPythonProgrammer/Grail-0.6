@@ -53,7 +53,7 @@ __version__ = '0.1'
 
 import sys
 import os
-import string
+
 import getopt
 import ColorDB
 from PyncheWidget import PyncheWidget
@@ -78,11 +78,11 @@ RGB_TXT = [
 
 
 def docstring():
-    return string.rstrip(__doc__ % globals())
+    return str.rstrip(__doc__ % globals())
 
 
 def usage(status, msg=''):
-    print docstring()
+    print(docstring())
     if msg:
         print msg
     sys.exit(status)

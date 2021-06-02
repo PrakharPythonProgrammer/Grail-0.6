@@ -264,8 +264,8 @@ class SGMLLexer(SGMLLexerBase):
                 self.cleanup()
 
     def normalize(self, norm):
-        prev = ((self._normfunc is string.lower) and 1) or 0
-        self._normfunc = (norm and string.lower) or (lambda s: s)
+        prev = ((self._normfunc is str.lower) and 1) or 0
+        self._normfunc = (norm and str.lower) or (lambda s: s)
         return prev
 
     def restrict(self, constrain):
@@ -276,7 +276,7 @@ class SGMLLexer(SGMLLexerBase):
     def setliteral(self, tag):
         self.literal = 1
         re = "%s%s[%s]*%s" % (ETAGO, tag, string.whitespace, TAGC)
-        if self._normfunc is string.lower:
+        if self._normfunc is str.lower:
             self._lit_etag_re = re.compile(re, re.casefold)
         else:
             self._lit_etag_re = re.compile(re)
@@ -306,7 +306,7 @@ class SGMLLexer(SGMLLexerBase):
                     self.literal = 0
                     continue
                 else:
-                    pos = string.rfind(rawdata, "<", i)
+                    pos = str.rfind(rawdata, "<", i)
                     if pos >= 0:
                         self.lex_data(rawdata[i:pos])
                         i = pos
@@ -360,7 +360,8 @@ class SGMLLexer(SGMLLexerBase):
                         i = i + 3
                         continue
                     if self._strict:
-                        if rawdata[i+2] in string.letters:
+                        string_letters = ''.join(map(chr,range(97,123))) + ''.join(map(chr,range(65,91)))
+                        if rawdata[i+2] in string_letters:
                             k = self.parse_declaration(i)
                             if k > -1:
                                 i = i + k
@@ -392,7 +393,7 @@ class SGMLLexer(SGMLLexerBase):
                     if name[0] in '0123456789':
                         #  Character reference:
                         try:
-                            self.lex_charref(string.atoi(name), terminator)
+                            self.lex_charref(int(name), terminator)
                         except ValueError:
                             self.lex_data("&#%s%s" % (name, terminator))
                     else:
@@ -469,7 +470,7 @@ class SGMLLexer(SGMLLexerBase):
         if j < 0:
             if end:
                 if MDC in rawdata[i:]:
-                    j = string.find(rawdata, MDC, i)
+                    j = str.find(rawdata, MDC, i)
                     self.lex_comment(rawdata[i+4: j])
                     return j + len(MDC) - i
                 self.lex_comment(rawdata[i+4:])
@@ -627,15 +628,15 @@ class SGMLLexer(SGMLLexerBase):
             if k > 0:
                 s = md_name.group(1)
                 try:
-                    strs.append(string.atoi(s))
-                except string.atoi_error:
+                    strs.append(int(s))
+                except ValueError:
                     strs.append(self._normfunc(s))
                 i = i + k
                 continue
-        k = string.find(rawdata, end_target, i)
+        k = str.find(rawdata, end_target, i)
         if end_target == ']>':
             if k < 0:
-                k = string.find(rawdata, '>', i)
+                k = str.find(rawdata, '>', i)
             else:
                 k = k + 1
         if k >= 0:

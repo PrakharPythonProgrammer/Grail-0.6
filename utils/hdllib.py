@@ -60,7 +60,7 @@ from hashlib import md5 # md5 has been deprecated since Python 2.5 use hashlib i
 import os
 import select
 import socket
-import string
+
 import time
 import xdrlib
 
@@ -651,7 +651,7 @@ class HashTable:
         admin_port = u.unpack_int()
         secondary_slot_no = u.unpack_int()
 
-        ipaddr = string.joinfields(map(repr, map(ord, ip_address)), '.')
+        ipaddr = str.join(map(repr, map(ord, ip_address)), '.')
 
         if self.debug:
             print("Hash bucket index:", index)
@@ -715,7 +715,7 @@ class HashTable:
 
         if self.num_of_bits > 0:
             if hdl[:2] == '//': hdl = hdl[2:]
-            hdl = string.upper(hdl)
+            hdl = str.upper(hdl)
             digest = md5.new(hdl).digest()
             u = xdrlib.Unpacker(digest)
             index = u.unpack_uint()
@@ -961,10 +961,10 @@ def fetch_local_hash_table(hdl, ht=None, debug=DEBUG):
 def get_authority(hdl):
     """Return the authority name for a handle."""
     if hdl[:2] == "//": hdl = hdl[2:]
-    i = string.find(hdl, '/')
+    i = str.find(hdl, '/')
     if i >= 0:
         hdl = hdl[:i]
-    return string.lower(hdl)
+    return str.lower(hdl)
 
 
 # Test sets
@@ -1074,12 +1074,12 @@ def test(defargs = testsets[0]):
     for o, a in opts:
         if o == '-a': types = []
         if o == '-b': bootstrap = 1
-        if o == '-d': types.append(string.atoi(a))
+        if o == '-d': types.append(int(a))
         if o == '-f': filename = a
-        if o == '-i': interval = string.atof(a)
+        if o == '-i': interval = float(a)
         if o == '-l': local = 1
         if o == '-q': debug = 0
-        if o == '-t': timeout = string.atof(a)
+        if o == '-t': timeout = float(a)
         if o == '-s': server = a
         if o == '-v': debug = debug + 1
         if o == '-0': args = args + testsets[0]

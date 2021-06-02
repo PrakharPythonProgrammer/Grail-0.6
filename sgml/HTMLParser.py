@@ -12,7 +12,7 @@ if __name__ == '__main__':
 
 from . import htmlentitydefs
 import regsub
-from . import string
+from . 
 from . import SGMLHandler
 from . import SGMLLexer
 from . import SGMLParser
@@ -117,7 +117,7 @@ class HTMLParser(SGMLHandler.BaseSGMLHandler):
     def handle_data_head(self, data):
         if self.suppress_output:
             return
-        if string.strip(data):
+        if str.strip(data):
             self.inhead = 0
             self.set_data_handler(self.formatter.add_flowing_data)
             self.handle_data(data)
@@ -158,7 +158,7 @@ class HTMLParser(SGMLHandler.BaseSGMLHandler):
                 handler = self.formatter.add_flowing_data
             self.set_data_handler(handler)
         if not self.nofill:
-            data = string.join(string.split(data))
+            data = str.join(str.split(data))
         return data
 
     def push_nofill(self):
@@ -213,10 +213,10 @@ class HTMLParser(SGMLHandler.BaseSGMLHandler):
             return
         for k in URL_VALUED_ATTRIBUTES:
             if attrs.has_key(k) and attrs[k]:
-                s = string.strip(attrs[k])
+                s = str.strip(attrs[k])
                 # we really don't want to do this if this is a data: URL
-                if len(s) < 5 or string.lower(s[:5]) != "data:":
-                    s = string.joinfields(string.split(s), '')
+                if len(s) < 5 or str.lower(s[:5]) != "data:":
+                    s = str.join(str.split(s), '')
                 attrs[k] = s
         method(self, attrs)
         if attrs.has_key('id'):
@@ -245,7 +245,7 @@ class HTMLParser(SGMLHandler.BaseSGMLHandler):
         if not self.context:            # Ugly, but we don't want to duplicate
             return None                 # this method in each subclass!
         #
-        codetype = extract_keyword('codetype', attrs, conv=string.strip)
+        codetype = extract_keyword('codetype', attrs, conv=str.strip)
         if not codetype and attrs.has_key('classid'):
             codeurl = attrs['classid']
             codetype, opts = self.context.app.guess_type(codeurl)
@@ -254,7 +254,7 @@ class HTMLParser(SGMLHandler.BaseSGMLHandler):
             codetype, encoding = self.context.app.guess_type(codeurl)
         embedtype = codetype
         if not embedtype:
-            datatype = extract_keyword('type', attrs, conv=string.strip)
+            datatype = extract_keyword('type', attrs, conv=str.strip)
             if not datatype and attrs.has_key('data'):
                 dataurl = attrs['data']
                 datatype, encoding = self.context.app.guess_type(dataurl)
@@ -264,7 +264,7 @@ class HTMLParser(SGMLHandler.BaseSGMLHandler):
         #
         import copy
         message = extract_keyword('standby', attrs, '')
-        message = string.join(string.split(message))
+        message = str.join(str.split(message))
         info = self.context.app.find_type_extension(
             "filetypes", embedtype)
         embedder = info and info.embed
@@ -662,16 +662,16 @@ class HTMLParser(SGMLHandler.BaseSGMLHandler):
         if listtype == 'ol':
             if attrs.has_key('seqnum'):
                 try: top[2] = counter = \
-                              string.atoi(string.strip(attrs['seqnum']))
+                              int(str.strip(attrs['seqnum']))
                 except: top[2] = counter = counter+1
             elif attrs.has_key('value'):
                 try: top[2] = counter = \
-                              string.atoi(string.strip(attrs['value']))
+                              int(str.strip(attrs['value']))
                 except: top[2] = counter = counter+1
             else:
                 top[2] = counter = counter+1
             if attrs.has_key('skip'):
-                try: top[2] = counter = counter + string.atoi(attrs['skip'])
+                try: top[2] = counter = counter + int(attrs['skip'])
                 except: pass
         self.formatter.add_label_data(label, counter)
 
@@ -701,7 +701,7 @@ class HTMLParser(SGMLHandler.BaseSGMLHandler):
         elif listtype == 'ul':
             format = '*'
         else:
-            format = string.strip(format)
+            format = str.strip(format)
         return format
 
     def start_ol(self, attrs):
@@ -719,10 +719,10 @@ class HTMLParser(SGMLHandler.BaseSGMLHandler):
             label = '1.'
         start = 0
         if attrs.has_key('seqnum'):
-            try: start = string.atoi(attrs['seqnum']) - 1
+            try: start = int(attrs['seqnum']) - 1
             except: pass
         elif attrs.has_key('start'):
-            try: start = string.atoi(attrs['start']) - 1
+            try: start = int(attrs['start']) - 1
             except: pass
         self.list_stack.append(['ol', label, start,
                                 compact or attrs.has_key('compact'),
@@ -883,7 +883,7 @@ class HTMLParser(SGMLHandler.BaseSGMLHandler):
         if self.get_object():
             self.get_object().anchor(attrs)
             return
-        href = string.strip(attrs.get('href', ''))
+        href = str.strip(attrs.get('href', ''))
         name = extract_keyword('name', attrs, '', conv=conv_normstring)
         type = extract_keyword('type', attrs, '', conv=conv_normstring)
         self.anchor_bgn(href, name, type)
@@ -915,29 +915,29 @@ class HTMLParser(SGMLHandler.BaseSGMLHandler):
         height = None
         align = 'center'
         if attrs.has_key('size'):
-            try: height = string.atoi(attrs['size'])
+            try: height = int(attrs['size'])
             except: pass
             else: height = max(1, height)
         if attrs.has_key('align'):
-            try: align = string.lower(attrs['align'])
+            try: align = str.lower(attrs['align'])
             except: pass
         self.formatter.add_hor_rule(abswidth, percentwidth, height, align)
 
     def parse_width(self, str):
-        str = string.strip(str or '')
+        str = str.strip(str or '')
         if not str:
             return None, None
         wid = percent = None
         if str[-1] == '%':
-            try: percent = string.atoi(str[:-1])
+            try: percent = int(str[:-1])
             except: pass
             else: percent = min(1.0, max(0.0, (0.01 * percent)))
-        elif len(str) > 3 and string.lower(str[-3:]) == "pct":
-            try: percent = string.atoi(str[:-3])
+        elif len(str) > 3 and str.lower(str[-3:]) == "pct":
+            try: percent = int(str[:-3])
             except: pass
             else: percent = min(1.0, max(0.0, (0.01 * percent)))
         else:
-            try: wid = max(0, string.atoi(str))
+            try: wid = max(0, int(str))
             except: pass
             else: wid = wid or None
         if not (wid or percent):
@@ -954,18 +954,18 @@ class HTMLParser(SGMLHandler.BaseSGMLHandler):
         width = 0
         height = 0
         if attrs.has_key('align'):
-            align = string.lower(attrs['align'])
+            align = str.lower(attrs['align'])
         if attrs.has_key('alt'):
             alt = attrs['alt']
         if attrs.has_key('ismap'):
             ismap = 1
         if attrs.has_key('src'):
-            src = string.strip(attrs['src'])
+            src = str.strip(attrs['src'])
         if attrs.has_key('width'):
-            try: width = string.atoi(attrs['width'])
+            try: width = int(attrs['width'])
             except: pass
         if attrs.has_key('height'):
-            try: height = string.atoi(attrs['height'])
+            try: height = int(attrs['height'])
             except: pass
         self.handle_image(src, alt, ismap, align, width, height)
 
@@ -981,14 +981,14 @@ class HTMLParser(SGMLHandler.BaseSGMLHandler):
     # --- Grail magic: processing instructions!
 
     def handle_pi(self, stuff):
-        fields = string.split(string.lower(stuff))
+        fields = str.split(str.lower(stuff))
         if not fields or fields[0] != 'grail':
             self.unknown_pi(fields)
             return
         fields[0] = 'pi'
         width = len(fields)
         while width >= 2:
-            procname = string.joinfields(fields[:width], '_')
+            procname = str.join(fields[:width], '_')
             if hasattr(self, procname):
                 getattr(self, procname)(fields[width:])
                 return
@@ -1055,9 +1055,9 @@ class HTMLParser(SGMLHandler.BaseSGMLHandler):
         else:
             return taginfo
 
-    __tagmask = string.maketrans('-.', '__')
+    __tagmask = str.maketrans('-.', '__')
     def get_extension_taginfo(self, tag):
-        tag = string.translate(tag, self.__tagmask) # ??? why ???
+        tag = str.translate(tag, self.__tagmask) # ??? why ???
         for dev in self.get_devicetypes():
             try:
                 loader = self.context.app.get_loader("html." + dev)
@@ -1099,8 +1099,8 @@ class HTMLParser(SGMLHandler.BaseSGMLHandler):
             return
         self.badhtml = 1
         # if the name is not all lower case, try a lower case version:
-        if entname == string.upper(entname):
-            self.handle_entityref(string.lower(entname), terminator)
+        if entname == str.upper(entname):
+            self.handle_entityref(str.lower(entname), terminator)
         else:
             self.handle_data('%s%s%s' % (SGMLLexer.ERO, entname, terminator))
 
@@ -1216,12 +1216,12 @@ class HeaderNumber:
             i = i + 1
             numbers[i] = 0
         if attrs.has_key('skip'):
-            try: skip = string.atoi(attrs['skip'])
+            try: skip = int(attrs['skip'])
             except: skip = 0
         else:
             skip = 0
         if attrs.has_key('seqnum'):
-            try: numbers[level] = string.atoi(attrs['seqnum'])
+            try: numbers[level] = int(attrs['seqnum'])
             except: pass
             else: return
         numbers[level] = numbers[level] + 1 + skip
