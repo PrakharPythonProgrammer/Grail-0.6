@@ -5,7 +5,8 @@ ATTRIBUTES_AS_KEYWORDS = 1
 
 
 import re
-import grailutil
+from functools import reduce
+from utils import grailutil
 from tkinter import *
 from formatter import AbstractWriter, AbstractFormatter
 from Viewer import Viewer
@@ -411,10 +412,10 @@ class Table(AttrElem):
         self.parentviewer.register_reset_interest(self._reset)
         abswidth = None
         percentwidth = None
-        if type(self.Awidth) is TupleType:
+        if isinstance(self.Awidth,tuple):
             if self.Awidth[1] == '%':
                 percentwidth = float(self.Awidth[0]) / 100.0
-        elif type(self.Awidth) is FloatType:
+        elif isinstance(self.Awidth,float):
             abswidth = int(self.Awidth)
         else:
             percentwidth = 1.0
@@ -651,10 +652,10 @@ class Table(AttrElem):
         if self.Awidth is None:
             suggestedwidth = availablewidth
         # units in screen pixels
-        elif type(self.Awidth) in (IntType, FloatType):
+        elif isinstance(self.Awidth,int) or isinstance(self.Awidth,float):
             suggestedwidth = self.Awidth
         # other standard units
-        elif type(self.Awidth) is TupleType:
+        elif isinstance(self.Awidth,tuple):
             if self.Awidth[1] == '%':
                 suggestedwidth = availablewidth * self.Awidth[0] / 100.0
             # other standard units are not currently supported
@@ -1008,7 +1009,7 @@ class ContainedText(AttrElem):
         tw = self._tw
         # Set the padding before grabbing the width, but it could be
         # denoted as a percentage of the viewer width
-        if type(padding) == StringType:
+        if isinstance(padding,str):
             try:
                 # divide by 200 since padding is a percentage and we
                 # want to put equal amounts of pad on both sides of

@@ -2,7 +2,7 @@
 
 __version__ = '$Revision: 1.5 $'
 
-import grailutil
+from utils import grailutil
 import re
 import string
 
@@ -69,66 +69,66 @@ class parse_text_x_python:
 
 	def close(self):
 		self.show("Colorizing Python source text - parsing...")
-	import parser
-	try:
-		nodes = parser.ast2list(parser.suite(self.__source), 1)
-	except parser.ParserError as err:
-		self.__viewer.context.message(
-		"Syntax error in Python source: %s" % err)
-	self.setup_tags()
-	from types import IntType, ListType
-	ISTERMINAL = token.ISTERMINAL
-	wanted = self.__wanted_terminals.has_key
-	ws_width = self.__ws_width
-	tag_add = self.tag_add = self.__viewer.text.tag_add
-	colorize = self.colorize
-	prevline, prevcol = 0, 0
-	sourcetext = str.split(self.__source, "\n")
-	sourcetext.insert(0, '')
-	self.show("Colorizing Python source text - coloring...")
-	steps = 0
-	while nodes:
-		steps = steps + 1
-		if not (steps % 2000): self.show()
-		node = nodes[0]
-		del nodes[0]
-		if type(node) is ListType:
-			ntype = node[0]
-		if wanted(ntype):
-		   [ntype, nstr, lineno] = node
+		import parser
+		try:
+			nodes = parser.ast2list(parser.suite(self.__source), 1)
+		except parser.ParserError as err:
+			self.__viewer.context.message(
+			"Syntax error in Python source: %s" % err)
+		self.setup_tags()
+		from types import IntType, ListType
+		ISTERMINAL = token.ISTERMINAL
+		wanted = self.__wanted_terminals.has_key
+		ws_width = self.__ws_width
+		tag_add = self.tag_add = self.__viewer.text.tag_add
+		colorize = self.colorize
+		prevline, prevcol = 0, 0
+		sourcetext = str.split(self.__source, "\n")
+		sourcetext.insert(0, '')
+		self.show("Colorizing Python source text - coloring...")
+		steps = 0
+		while nodes:
+			steps = steps + 1
+			if not (steps % 2000): self.show()
+			node = nodes[0]
+			del nodes[0]
+			if type(node) is ListType:
+				ntype = node[0]
+			if wanted(ntype):
+		   		[ntype, nstr, lineno] = node
 		   # The parser spits out the line number the token ENDS on,
 		   # not the line it starts on!
-		   if ntype == token.STRING and "\n" in nstr:
-			   strlines = str.split(nstr, "\n")
-			   endpos = lineno, len(strlines[-1]), sourcetext[lineno]
-			   lineno = lineno - len(strlines) + 1
-		   else:
+		   	if ntype == token.STRING and "\n" in nstr:
+				strlines = str.split(nstr, "\n")
+				endpos = lineno, len(strlines[-1]), sourcetext[lineno]
+				lineno = lineno - len(strlines) + 1
+			else:
 			   endpos = ()
-		   if prevline != lineno:
-			   tag_add('python:comment',
-				   "%d.%d" % (prevline, prevcol), "%d.0" % lineno)
-			   prevcol = 0
-			   prevline = lineno
-			   sourceline = sourcetext[lineno]
-		   prevcol = prevcol + ws_width(sourceline, prevcol)
-		   colorize(ntype, nstr, lineno, prevcol)
+		   	if prevline != lineno:
+				tag_add('python:comment',
+					"%d.%d" % (prevline, prevcol), "%d.0" % lineno)
+				prevcol = 0
+				prevline = lineno
+				sourceline = sourcetext[lineno]
+		   		prevcol = prevcol + ws_width(sourceline, prevcol)
+		   		colorize(ntype, nstr, lineno, prevcol)
 		   # point prevline/prevcol to 1st char after token:
-		   if endpos:
-			   prevline, prevcol, sourceline = endpos
-		   else:
-			   prevcol = prevcol + len(nstr)
+		   	if endpos:
+				prevline, prevcol, sourceline = endpos
+		   	else:
+				prevcol = prevcol + len(nstr)
 		else:
 			nodes = node[1:] + nodes
-	# end of last token to EOF is a comment...
-	start = "%d.%d" % (prevline or 1, prevcol)
-	tag_add('python:comment', start, tkinter.END)
-	self.__viewer.context.message_clear()
-	self.tag_add = None
+		# end of last token to EOF is a comment...
+		start = "%d.%d" % (prevline or 1, prevcol)
+		tag_add('python:comment', start, tkinter.END)
+		self.__viewer.context.message_clear()
+		self.tag_add = None
 
 	def show(self, message=None):
 		if message:
 			self.__viewer.context.message(message)
-	self.__viewer.context.browser.root.update_idletasks()
+			self.__viewer.context.browser.root.update_idletasks()
 
 	# Each element in this table maps an identifier to a tuple of
 	# the tag it should be marked with and the tag the next token
@@ -189,21 +189,21 @@ class parse_text_x_python:
 			are not counted specially.
 
 		"""
-	start = "%d.%d" % (lineno, colno)
-	end = "%s + %d chars" % (start, len(nstr))
-	if self.__next_tag:
-		self.tag_add(self.__next_tag, start, end)
-		self.__next_tag = None
-	elif self.__keywords.has_key(nstr):
-		tag, self.__next_tag = self.__keywords[nstr]
-		self.tag_add(tag, start, end)
-	elif ntype == token.STRING:
-		qw = 1			# number of leading/trailing quotation
-		if nstr[0] == nstr[1]:	# marks -- `quote width'
-			qw = 3
-			start = "%d.%d" % (lineno, colno + qw)
-			end = "%s + %d chars" % (start, len(nstr) - (2 * qw))
-			self.tag_add("python:string", start, end)
+		start = "%d.%d" % (lineno, colno)
+		end = "%s + %d chars" % (start, len(nstr))
+		if self.__next_tag:
+			self.tag_add(self.__next_tag, start, end)
+			self.__next_tag = None
+		elif self.__keywords.has_key(nstr):
+			tag, self.__next_tag = self.__keywords[nstr]
+			self.tag_add(tag, start, end)
+		elif ntype == token.STRING:
+			qw = 1			# number of leading/trailing quotation
+			if nstr[0] == nstr[1]:	# marks -- `quote width'
+				qw = 3
+				start = "%d.%d" % (lineno, colno + qw)
+				end = "%s + %d chars" % (start, len(nstr) - (2 * qw))
+				self.tag_add("python:string", start, end)
 
 	# Set foreground colors from this tag==>color table:
 	__foregrounds = {
@@ -225,13 +225,13 @@ class parse_text_x_python:
 		of logical tags to physical style is accomplished in this method.
 
 		"""
-	self.__viewer.configure_fonttag('_tt_b')
-	self.__viewer.configure_fonttag('_tt_i')
-	text = self.__viewer.text
-	boldfont = text.tag_cget('_tt_b', '-font')
-	italicfont = text.tag_cget('_tt_i', '-font')
-	text.tag_config('python:string', font=italicfont)
-	for tag in ('python:class', 'python:def', 'python:define'):
-		text.tag_config(tag, font=boldfont)
-	for tag, color in self.__foregrounds.items():
-		text.tag_config(tag, foreground=color)
+		self.__viewer.configure_fonttag('_tt_b')
+		self.__viewer.configure_fonttag('_tt_i')
+		text = self.__viewer.text
+		boldfont = text.tag_cget('_tt_b', '-font')
+		italicfont = text.tag_cget('_tt_i', '-font')
+		text.tag_config('python:string', font=italicfont)
+		for tag in ('python:class', 'python:def', 'python:define'):
+			text.tag_config(tag, font=boldfont)
+		for tag, color in self.__foregrounds.items():
+			text.tag_config(tag, foreground=color)

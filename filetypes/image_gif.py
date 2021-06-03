@@ -23,9 +23,9 @@ import tkinter
 from formatter import AS_IS
 
 try:
-    from cStringIO import StringIO
+    from cStringIO import StringIO # Python 1 or 2
 except ImportError:
-    from StringIO import StringIO
+    from io import StringIO # Python 3
 
 
 ERROR_FILE = os.path.join("icons", "sadsmiley.gif")

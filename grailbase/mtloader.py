@@ -8,7 +8,7 @@ resources.  The last two are (currently) only used for printing.
 __version__ = '$Revision: 2.4 $'
 
 
-import extloader
+from . import extloader
 
 
 

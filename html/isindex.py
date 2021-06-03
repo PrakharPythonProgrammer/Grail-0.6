@@ -1,5 +1,5 @@
 from tkinter import Entry
-from grailutil import extract_keyword
+from utils.grailutil import extract_keyword
 
 import urllib
 

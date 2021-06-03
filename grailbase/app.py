@@ -12,7 +12,7 @@ class Application:
     def __init__(self, prefs=None):
         utils._grail_app = self
         if prefs is None:
-            import GrailPrefs
+            from . import GrailPrefs
             self.prefs = GrailPrefs.AllPreferences()
         else:
             self.prefs = prefs

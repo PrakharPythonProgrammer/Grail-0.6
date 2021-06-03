@@ -13,7 +13,7 @@ if __name__ == "__main__":
     sys.path.insert(0, '../utils')
 import utils
 
-import parseprefs
+from . import parseprefs
 
 USERPREFSFILENAME = 'grail-preferences'
 SYSPREFSFILENAME = os.path.join('data', 'grail-defaults')
@@ -263,7 +263,7 @@ class AllPreferences:
                     # in order:
                     if not did_callbacks.has_key(callback):
                         did_callbacks[callback] = 1
-                        apply(callback, ())
+                        callback()
 
 def make_key(group, cmpnt):
     """Produce a key from preference GROUP, COMPONENT strings."""
@@ -299,7 +299,7 @@ def test():
     Note that this test alters and then restores a setting in the user's
     prefs  file."""
     sys.path.insert(0, "../utils")
-    from testing import exercise
+    from utils.testing import exercise
     
     env = sys.modules[__name__].__dict__
 

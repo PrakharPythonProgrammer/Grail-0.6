@@ -257,7 +257,7 @@ class FormInfo:
         return data[1:]
 
     def make_form_data(self):
-        import StringIO
+        from io import StringIO
         import MimeWriter
         fp = StringIO.StringIO()
         mw = MimeWriter.MimeWriter(fp)
@@ -597,8 +597,8 @@ class FormInfo:
             self.entry.delete(0, END)
 
         def browse_command(self):
-            import FileDialog
-            fd = FileDialog.LoadFileDialog(self.browse)
+            from tkinter import filedialog
+            fd = filedialog.LoadFileDialog(self.browse)
             filename = fd.go(self.entry.get(), key="load")
             if filename:
                 self.set(filename)
@@ -644,8 +644,7 @@ class Select:
         self.v = StringVar(self.viewer.text)
         self.v.set(self.name)
         values = tuple(map(lambda v,s,t: t, self.options))
-        self.w = apply(OptionMenu,
-                       (self.viewer.text, self.v) + values)
+        self.w = OptionMenu(self.viewer.text, self.v) + values
         self.w["width"] = width
         self.w["highlightbackground"] = self.bgcolor
         self.reset_menu()
